@@ -2,15 +2,19 @@
   "categories": {
     "data": [
       {
+        "id": "2c75bfb3-22d5-4ed4-9a23-0a29aad7b011",
         "name": "Lanche"
       },
       {
+        "id": "6064204b-85ab-4a12-9929-36928777a04b",
         "name": "Acompanhamento"
       },
       {
+        "id": "acc6856d-869f-4b99-8a53-761b92c8c648",
         "name": "Bebida"
       },
       {
+        "id": "70c57828-29dd-4127-b982-100ffafae8fa",
         "name": "Sobremesa"
       }
     ]
