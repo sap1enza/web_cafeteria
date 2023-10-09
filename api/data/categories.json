@@ -1,0 +1,18 @@
+{
+  "categories": {
+    "data": [
+      {
+        "name": "Lanche"
+      },
+      {
+        "name": "Acompanhamento"
+      },
+      {
+        "name": "Bebida"
+      },
+      {
+        "name": "Sobremesa"
+      }
+    ]
+  }
+}
