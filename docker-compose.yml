@@ -15,6 +15,7 @@ services:
       MONGO_USER: root
       MONGO_PASS: projeto-pedido
       MONGO_PORT: 27017
+      MONGO_COLLECTION: admin
       HOST: 0.0.0.0
       CHOKIDAR_USEPOLLING: "true"
     depends_on:

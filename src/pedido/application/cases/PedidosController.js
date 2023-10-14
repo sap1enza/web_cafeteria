@@ -1,6 +1,6 @@
 import pedido from '../../domain/entity/pedido.js';
 import {StatusCodes} from "http-status-codes";
-import ResponseAPI from '../core/responseApis.js';
+import ResponseAPI from '../../../core/responseApis.js';
 
 class PedidosController {
 
@@ -25,15 +25,15 @@ class PedidosController {
 
     static criarPedido = (request, response) => {
         let data = new pedido(request.body);
-        data.save((err) => {
-            if (err) {
-                response.status(StatusCodes.INTERNAL_SERVER_ERROR)
-                .json(ResponseAPI.internalError(err.message));
-            } else {
-                response.status(StatusCodes.CREATED).json(
-                    ResponseAPI.success("Registro criado com sucesso.")
+        data.save().then((result) => {
+            response.status(StatusCodes.CREATED).json(
+                ResponseAPI.success("Registro criado com sucesso.")
+            );
+        })
+        .catch((err) => {
+            response.status(StatusCodes.INTERNAL_SERVER_ERROR).json(
+                    ResponseAPI.internalError(err.message)
                 );
-            }
         })
     }
 
@@ -51,8 +51,6 @@ class PedidosController {
             ResponseAPI.success("Registro excluido com sucesso.")
         );
     }
-
-
 }
 
 export default PedidosController

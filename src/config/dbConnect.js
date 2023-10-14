@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
 
-let host = "mongodb://userdev:userDevTester@mongo:27017/projeto-pedidos"
-// let host = "mongodb://userdev:userDevTester@localhost:27020/projeto-pedidos";
+let host = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_COLLECTION}`;
 
 mongoose.connect(host, {
     serverSelectionTimeoutMS: 5000
-  }).catch(err => {
-    console.log(err)
+}).then((resp) => {
+  console.log("Conexão estabelecida.")
+})
+.catch(err => {
+    console.log(err.message)
 });
 
 export default mongoose.connection;
