@@ -1,6 +1,6 @@
-const app = require("./config/express")();
-const port = app.get("port");
+import app from './src/app.js';
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-  console.log(`Running on port ${port}`);
+    console.log(`Servidor listen port : http://localhost:${port}`);
 });

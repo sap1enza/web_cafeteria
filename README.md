@@ -1,18 +1,49 @@
-# WEB CAFETERIA
+<h1>Tech Chalange</h1>
 
-![GitHub repo size](https://img.shields.io/github/repo-size/iuricode/README-template?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/iuricode/README-template?style=for-the-badge)
-![GitHub open issues](https://img.shields.io/github/issues/iuricode/README-template?style=for-the-badge)
+## Architecture
 
-> WEB Cafeteria app made from a Tech Challenge at FIAP Software Architecture Post-Graduation
+- `Architecture` : Hexagonal
 
-## 💻 Requirements
+  A aquitetura do segue o modelo de diretórios listado a baixo utilizado o NODE js como linguagem de progamação e MONGO como storage database.
 
-- Node `>= 14.0`
+```bash
+    --src/
+      |__ core/
+      |__contextoUm/
+        |__ application/
+        |__ domain/
+        |__ core/
+      ...
+    --tests/
+        |__contextoUm/
+            |__ application/
+            |__ domain/
+              |__ entity/
 
-## 🚀 Setup
-
+        ...
 ```
-npm install
-npm start
+
+## Install Application
+
+1. Docker DEVE estar instalado na sua maquina.
+
+2. Baixar o Projeto na sua maquina
+
+```bash
+git clone ....
+```
+
+3. Build Project
+   `Para Criar o projeto digite o codigo abaixo no console`
+
+```bash
+docker-compose up -d --build
+```
+
+## Running tests
+
+Aplicação realiza testes unitários com ...
+
+```bash
+    juntest ...
 ```
