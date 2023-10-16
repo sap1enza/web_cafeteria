@@ -25,6 +25,27 @@
 
 ## Data Base
 
+Banco de dados do projeto é feito com MariaDB, dentro do arquivo de conexão com o banco de dados exite um processo no qual já é criado toda a base de dados assim que for executado o build do projeto.
+Cada nova tabela desenvolvida DEVE ser adicionado o create no arquivo para que seja atualizado em todas as imagens.
+
+```bash
+  path: src/config/mariaDBConnect.js
+  example:
+  await db.query(`
+        CREATE TABLE IF NOT EXISTS  clients (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            name VARCHAR(200) not null,
+            email VARCHAR(245) not null unique,
+            cpf_cnpj VARCHAR(20) not null unique,
+            birthday date not null,
+            created datetime null,
+            modified datetime null
+        )  ENGINE=INNODB;
+
+        ...
+  `);
+```
+
 ## Install Application
 
 1. Docker DEVE estar instalado na sua maquina.
