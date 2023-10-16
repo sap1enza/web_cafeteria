@@ -18,8 +18,14 @@ services:
       MONGO_COLLECTION: admin
       HOST: 0.0.0.0
       CHOKIDAR_USEPOLLING: "true"
+      MARIADB_HOST: maria-db
+      MARIADB_USER: root
+      MARIADB_PASS: 12345678
+      MARIADB_DATABASE: projeto-pedidos
+      MARIADB_PORT: 3306
     depends_on:
       - mongo
+      - maria-db
 
   mongo:
     image: mongo
@@ -33,5 +39,19 @@ services:
     logging:
       driver: none
 
+  maria-db:
+    image: mariadb:latest
+    restart: unless-stopped
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    environment:
+      MARIADB_DATABASE: projeto-pedidos
+      MARIADB_USER: mariadb
+      MARIADB_PASSWORD: userMariaDbPass
+      MARIADB_ROOT_PASSWORD: 12345678
+    ports:
+      - 3321:3306
+
 volumes:
   mongo-data:
+  mariadb-data:

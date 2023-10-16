@@ -8,6 +8,11 @@ class ResponseAPI
         }
     }
 
+    static data = (item) => {
+        return item
+    }
+
+
     static success = (message) => {
         return {'message' : [message]}
     }

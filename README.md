@@ -23,6 +23,8 @@
         ...
 ```
 
+## Data Base
+
 ## Install Application
 
 1. Docker DEVE estar instalado na sua maquina.
@@ -30,7 +32,7 @@
 2. Baixar o Projeto na sua maquina
 
 ```bash
-git clone ....
+git clone https://github.com/sap1enza/web_cafeteria.git
 ```
 
 3. Build Project
