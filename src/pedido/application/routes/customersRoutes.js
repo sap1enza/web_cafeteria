@@ -1,13 +1,13 @@
 import express from "express";
-import ClientsController from "../cases/ClientsController.js";
+import CustomerController from "../cases/CustomerController.js";
 
 const router = express.Router();
 
-router.post("/clients", ClientsController.store);
-router.get("/clients/:id", ClientsController.findById);
-router.put("/clients/:id", ClientsController.update);
-router.delete("/clients/:id", ClientsController.delete);
-router.get("/clients", ClientsController.all);
+router.post("/customers", CustomerController.store);
+router.get("/customers/:id", CustomerController.findById);
+router.put("/customers/:id", CustomerController.update);
+router.delete("/customers/:id", CustomerController.delete);
+router.get("/customers", CustomerController.all);
 // router.post("/pedidos", PedidosController.criarPedido);
 // router.get("/pedidos/:id", PedidosController.buscarPedidoPorId);
 // router.delete("/pedidos/:id", PedidosController.deletarPedido);

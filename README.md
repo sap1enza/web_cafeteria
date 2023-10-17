@@ -32,7 +32,7 @@ Cada nova tabela desenvolvida DEVE ser adicionado o create no arquivo para que s
   path: src/config/mariaDBConnect.js
   example:
   await db.query(`
-        CREATE TABLE IF NOT EXISTS  clients (
+        CREATE TABLE IF NOT EXISTS  customers (
             id INT PRIMARY KEY AUTO_INCREMENT,
             name VARCHAR(200) not null,
             email VARCHAR(245) not null unique,

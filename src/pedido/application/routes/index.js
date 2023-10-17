@@ -1,6 +1,6 @@
 import express from "express";
 import pedidos from "./pedidosRoutes.js";
-import clients from "./clientsRoutes.js";
+import customers from "./customersRoutes.js";
 
 
 const router = (app) => {
@@ -10,7 +10,7 @@ const router = (app) => {
     app.use(
         express.json(),
         pedidos,
-        clients
+        customers
     );
 };
 

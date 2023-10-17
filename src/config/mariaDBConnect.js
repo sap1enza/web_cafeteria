@@ -14,7 +14,7 @@ try {
     console.log("SUCCESS:", `Conexão estabelecida host: ${process.env.MARIADB_HOST}:${process.env.MARIADB_PORT}`);
 
     await db.query(`
-        CREATE TABLE IF NOT EXISTS clients (
+        CREATE TABLE IF NOT EXISTS customers (
             id INT PRIMARY KEY AUTO_INCREMENT,
             name VARCHAR(200) not null,
             email VARCHAR(245) not null unique,

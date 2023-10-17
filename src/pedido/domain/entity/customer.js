@@ -1,4 +1,4 @@
-class Clients{
+class Customer{
 
     constructor (name, email, cpf_cnpj, birthday) {
         if (name == null) {
@@ -26,4 +26,4 @@ class Clients{
     }
 }
 
-export default Clients
+export default Customer
