@@ -31,7 +31,7 @@ class MysqlConnection
 
             CREATE TABLE IF NOT EXISTS categories (
                 id INT PRIMARY KEY AUTO_INCREMENT,
-                name VARCHAR(200) not null,
+                name VARCHAR(200) not null unique,
                 created datetime null,
                 modified datetime null
             )  ENGINE=INNODB;
