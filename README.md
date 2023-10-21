@@ -70,3 +70,14 @@ Aplicação realiza testes unitários com ...
 ```bash
     juntest ...
 ```
+
+## Autenticação
+
+Foi utilizado o JWT para autenticação de endpoints. O script a baixo retorna o token para autenticação, qual o typo de requisição e o tempo de expiração
+
+```bash
+curl -X 'POST' \
+  'http://localhost:3000/api/v1/user/auth' \
+  -H 'accept: application/json' \
+  -d ''
+```
