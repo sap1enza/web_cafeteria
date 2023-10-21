@@ -1,5 +1,6 @@
 #dir
 /node_modules
-
+/src
 #files
 package-lock.json
+.env

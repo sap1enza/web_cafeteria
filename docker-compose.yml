@@ -24,20 +24,20 @@ services:
       MARIADB_DATABASE: projeto-pedidos
       MARIADB_PORT: 3306
     depends_on:
-      - mongo
+      # - mongo
       - maria-db
 
-  mongo:
-    image: mongo
-    ports:
-      - "27020:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: projeto-pedido
-    volumes:
-      - mongo-data:/data/db
-    logging:
-      driver: none
+  # mongo:
+  #   image: mongo
+  #   ports:
+  #     - "27020:27017"
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: projeto-pedido
+  #   volumes:
+  #     - mongo-data:/data/db
+  #   logging:
+  #     driver: none
 
   maria-db:
     image: mariadb:latest

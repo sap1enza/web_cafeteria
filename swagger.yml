@@ -1,0 +1,152 @@
+openapi: '3.0.2'
+info:
+  title: Projeto Pedidos
+  version: '1.0'
+servers:
+  - url: http://localhost:3000/api/v1
+paths:
+  /customers:
+    get:
+      summary: Recupera uma lista de usuários.
+      description: Recupera uma lista de usuarios no sistema.
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          description: recupera os dados de um usuário pelo email especifico ou parcial
+      responses:
+        '200':
+          description: retorna uma lista de itens
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Customer'
+    post:
+      summary: Cria um novo usuário.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                cpf_cnpj:
+                  type: string
+                  format: number
+                  example: "000.000.000-00"
+              required:
+                - "name"
+                - "email"
+                - "cpf_cnpj"
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+  /customers/{id}:
+    get:
+      summary: Recupera um usuário pelo ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do cliente
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+    put:
+      summary: Atualiza os dados de um usuário.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do cliente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                cpf_cnpj:
+                  type: string
+                  format: number
+                  example: "000.000.000-00"
+              required:
+                - "name"
+                - "email"
+                - "cpf_cnpj"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'         
+    delete:
+      summary: Deleta um usuário.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do cliente
+      responses:
+        '204':
+          description: OK
+
+
+components:
+  securitySchemes:
+     BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+  schemas:
+    Customer:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: Admin
+        email:
+          type: string
+          format: email
+          example: admin@teste.com
+        cpf_cnpj:
+          type: string
+          format: number
+          example: "000.000.000-00"
+      required:
+        - "name"
+        - "email"
+        - "cpf_cnpj"
+
+security:
+  - BearerAuth: []

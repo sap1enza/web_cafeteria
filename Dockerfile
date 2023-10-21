@@ -1,15 +1,18 @@
-FROM node:18.18.0-alpine3.17
+FROM node:18.18.2
 
-WORKDIR /app
+WORKDIR /usr/src/apps
 
-COPY package.json ./
+COPY package*.json ./
+COPY tsconfig.json ./
+
+#RUN npm install typescript
 RUN npm install
+RUN npm install typescript -g
 
-COPY . .
+COPY . /usr/src/apps
 
-RUN rm package-lock.json
-
-RUN npm install cors
+RUN tsc
 
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+
+CMD ["npm", "start"]
