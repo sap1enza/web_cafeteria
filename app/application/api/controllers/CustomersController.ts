@@ -38,14 +38,13 @@ class CustomersController{
      * @param response 
      */
     public store = async (request, response) => {
-        let customer = new Customer(
-            request.body.name,
-            request.body.email,
-            request.body.cpf_cnpj
-        );
         try {
             
-            
+            let customer = new Customer(
+                request.body.name,
+                request.body.email,
+                request.body.cpf_cnpj
+            );
             
             try {
                 let data = await this.repository.store(customer);
@@ -127,6 +126,9 @@ class CustomersController{
      */
     public delete = async (request, response) => {
         try {
+            if (typeof request.params.cpfcnpj == 'undefined') {
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "CPF do registro é requido."));
+            }
             let data = await this.repository.delete(request.params.id);
             response.status(HttpStatus.NO_CONTENT).json({});
         } catch (err) {

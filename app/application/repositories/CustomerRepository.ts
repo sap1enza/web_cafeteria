@@ -1,13 +1,8 @@
 import Customer from "../../domain/entity/customer";
-import IDataBase from "../database/IDataBase";
+import IRepository from "./IReporitory";
 
-class CustomerRepository
+class CustomerRepository extends IRepository
 {
-    public db;
-
-    constructor (database: IDataBase) {
-        this.db = database;
-    }
 
     public getAll = async (params) => {
         let CONDITIONS = "";
@@ -26,7 +21,7 @@ class CustomerRepository
         return await this.db.find(`SELECT * FROM customers ${CONDITIONS};`);
     }
 
-    public update = async (customer: Customer, id) => {
+    public update = async (customer: Customer, id: BigInteger) => {
         await this.db.store(
             `UPDATE customers SET
                 name = ?,
@@ -58,7 +53,7 @@ class CustomerRepository
     public delete = async (id: BigInteger) => {
         return await this.db.delete(`DELETE FROM customers where id = ${id};`);
     }
-    public findById = async (id) => {
+    public findById = async (id: BigInteger) => {
         let data = await this.db.find(`SELECT * FROM customers where id = ${id};`);
         if (data.length>0) {
             return data[0];
