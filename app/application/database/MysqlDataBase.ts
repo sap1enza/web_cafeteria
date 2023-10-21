@@ -3,12 +3,13 @@ import MysqlConnection from '../core/mariadbConnection';
 
 class MysqlDataBase extends IDataBase {
 
-    db;
+    db: MysqlConnection = null;
 
     constructor(){
         super();
-        this.db = new MysqlConnection();
-        console.log("MYSQL CONN")
+        if (this.db==null) {
+            this.db = new MysqlConnection();
+        }
     }
 
     async store(query: string, data: any) {

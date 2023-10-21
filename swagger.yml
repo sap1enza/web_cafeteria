@@ -153,6 +153,101 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Customer'
+  /categories:
+    get:
+      summary: Recupera uma lista de categorias.
+      description: Recupera uma lista de categorias cadastrada no sistema.
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: recupera uma categoria pelo npme em especifico ou parcial
+      responses:
+        '200':
+          description: retorna uma lista de itens
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Category'
+    post:
+      summary: Cria um nova categoria.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - "name"
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+  /categories/{id}:
+    get:
+      summary: Recupera uma categoria pelo ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do categoria
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+    put:
+      summary: Atualiza os dados de uma categoria.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do categoria
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - "name"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+    delete:
+      summary: Deleta uma Categoria.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do Categoria
+      responses:
+        '204':
+          description: OK
 
 components:
   securitySchemes:
@@ -191,10 +286,32 @@ components:
           type: string
           format: number
           example: "000.000.000-00"
+        created:
+          type: string
+          format: datetime
+        modified:
+          type: string
+          format: datetime
       required:
         - "name"
         - "email"
         - "cpf_cnpj"
+    Category:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: Admin
+        created:
+          type: string
+          format: datetime
+        modified:
+          type: string
+          format: datetime
+      required:
+        - "name"
+
 
 security:
   - BearerAuth: []
