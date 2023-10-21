@@ -5,10 +5,14 @@ info:
 servers:
   - url: http://localhost:3000/api/v1
 paths:
+  #user
   /user/auth:
     post:
       summary: Retorna o token para autenticação.
       description: Infoma o token para autenticação o tempo de expiração e qual o tipo de utilização 
+      security: [] 
+      tags:
+        - "User"
       responses:
         '200':
           description: retorna um token para autenticação
@@ -18,10 +22,13 @@ paths:
                 type: array
                 items: 
                   $ref: '#/components/schemas/Auth'
+  #customer
   /customers:
     get:
       summary: Recupera uma lista de usuários.
       description: Recupera uma lista de usuarios no sistema.
+      tags:
+        - "Custormer"
       parameters:
         - in: query
           name: email
@@ -44,6 +51,8 @@ paths:
                   $ref: '#/components/schemas/Customer'
     post:
       summary: Cria um novo usuário.
+      tags:
+        - "Custormer"
       requestBody:
         required: true
         content:
@@ -74,6 +83,8 @@ paths:
   /customers/{id}:
     get:
       summary: Recupera um usuário pelo ID
+      tags:
+        - "Custormer"
       parameters:
         - in: path
           name: id
@@ -90,6 +101,8 @@ paths:
                 $ref: '#/components/schemas/Customer'
     put:
       summary: Atualiza os dados de um usuário.
+      tags:
+        - "Custormer"
       parameters:
         - in: path
           name: id
@@ -126,6 +139,8 @@ paths:
                 $ref: '#/components/schemas/Customer'         
     delete:
       summary: Deleta um usuário.
+      tags:
+        - "Custormer"
       parameters:
         - in: path
           name: id
@@ -139,6 +154,8 @@ paths:
   /customers/{cpfcnpj}/identify:
     get:
       summary: Recupera um usuário pelo número do documento
+      tags:
+        - "Custormer"
       parameters:
         - in: path
           name: cpfcnpj
@@ -153,10 +170,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Customer'
+  #category
   /categories:
     get:
       summary: Recupera uma lista de categorias.
       description: Recupera uma lista de categorias cadastrada no sistema.
+      tags:
+        - "Category"
       parameters:
         - in: query
           name: name
@@ -174,6 +194,8 @@ paths:
                   $ref: '#/components/schemas/Category'
     post:
       summary: Cria um nova categoria.
+      tags:
+        - "Category"
       requestBody:
         required: true
         content:
@@ -195,6 +217,8 @@ paths:
   /categories/{id}:
     get:
       summary: Recupera uma categoria pelo ID
+      tags:
+        - "Category"
       parameters:
         - in: path
           name: id
@@ -211,6 +235,8 @@ paths:
                 $ref: '#/components/schemas/Category'
     put:
       summary: Atualiza os dados de uma categoria.
+      tags:
+        - "Category"
       parameters:
         - in: path
           name: id
@@ -238,6 +264,8 @@ paths:
                 $ref: '#/components/schemas/Category'
     delete:
       summary: Deleta uma Categoria.
+      tags:
+        - "Category"
       parameters:
         - in: path
           name: id
@@ -312,6 +340,5 @@ components:
       required:
         - "name"
 
-
 security:
-  - BearerAuth: []
+  - BearerAuth: [JWT]
