@@ -7,19 +7,19 @@
   A aquitetura do segue o modelo de diretórios listado a baixo utilizado o NODE js como linguagem de progamação e MONGO como storage database.
 
 ```bash
-    --src/
-      |__ core/
-      |__contextoUm/
+    --app/
         |__ application/
+            |__ api/
+                |__ controllers/
+                |__ routes/
+            |__ core/
+            |__ database/
+            |__ repositories/
         |__ domain/
-        |__ core/
-      ...
-    --tests/
-        |__contextoUm/
-            |__ application/
-            |__ domain/
-              |__ entity/
-
+            |__ cases/
+            |__ entity/
+        |__ tests/
+            ...
         ...
 ```
 
