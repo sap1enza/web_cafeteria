@@ -15,6 +15,11 @@ paths:
           schema:
             type: string
           description: recupera os dados de um usuário pelo email especifico ou parcial
+        - in: query
+          name: cpf_cnpj
+          schema:
+            type: string
+          description: recupera os dados de um usuário pelo documento em especifico ou parcial
       responses:
         '200':
           description: retorna uma lista de itens
@@ -118,7 +123,23 @@ paths:
       responses:
         '204':
           description: OK
-
+  /customers/{cpfcnpj}/identify:
+    get:
+      summary: Recupera um usuário pelo número do documento
+      parameters:
+        - in: path
+          name: cpfcnpj
+          schema:
+            type: integer
+          required: true
+          description: CPF/CNPJ do cliente
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
 
 components:
   securitySchemes:

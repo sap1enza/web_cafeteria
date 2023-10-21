@@ -53,5 +53,5 @@ services:
       - 3321:3306
 
 volumes:
-  mongo-data:
+  # mongo-data:
   mariadb-data:

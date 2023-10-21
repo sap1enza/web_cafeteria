@@ -15,6 +15,10 @@ class CustomerRepository
             CONDITIONS += ` email LIKE '%${params.email}%' `;
         }
 
+        if (typeof params.cpf_cnpj != 'undefined' && params.cpf_cnpj != "") {
+            CONDITIONS += ` cpf_cnpj LIKE '%${params.cpf_cnpj}%' `;
+        }
+
         if (CONDITIONS != "") {
             CONDITIONS = ' WHERE ' + CONDITIONS;
         }
@@ -51,11 +55,20 @@ class CustomerRepository
             `, [customer.name, customer.email, customer.cpf_cnpj]); 
     }
 
-    public delete = async (id) => {
+    public delete = async (id: BigInteger) => {
         return await this.db.delete(`DELETE FROM customers where id = ${id};`);
     }
     public findById = async (id) => {
         let data = await this.db.find(`SELECT * FROM customers where id = ${id};`);
+        if (data.length>0) {
+            return data[0];
+        } else {
+            return null;
+        }
+    }
+
+    public findByCPF = async (cpf_cnpj: String) => {
+        let data = await this.db.find(`SELECT * FROM customers where cpf_cnpj = ${cpf_cnpj};`);
         if (data.length>0) {
             return data[0];
         } else {
