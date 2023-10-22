@@ -53,7 +53,7 @@ class ProductsController{
              
              try {
                  let data = await this.repository.store(product);
-                 response.status(HttpStatus.OK).json(ResponseAPI.list(data));
+                 response.status(HttpStatus.OK).json(ResponseAPI.data(data));
              } catch(err) {
                      response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
              }
@@ -70,13 +70,14 @@ class ProductsController{
      public update = async (request, response) => {
          try {
             let category = await this.categoryRepository.findById(request.body.category_id);
+            
             let product = new Product(
                 request.body.title,
                 request.body.value,
                 category,
                 request.body.description
             );
-            
+
              let data = await this.repository.update(product, request.params.id);
              response.status(HttpStatus.OK).json(ResponseAPI.data(data));
          } catch (err) {

@@ -43,11 +43,10 @@ class CategoriesController{
      */
     public store = async (request: Request, response: Response) => {
         try {
-            let category = new Category(request.params.name);
-            
+            let category = new Category(request.body.name);
             try {
                 let data = await this.repository.store(category);
-                response.status(HttpStatus.OK).json(ResponseAPI.list(data));
+                response.status(HttpStatus.OK).json(ResponseAPI.data(data));
             } catch(err) {
                     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
             }
@@ -64,8 +63,7 @@ class CategoriesController{
      */
     public update = async (request: Request, response: Response) => {
         try {
-            let category = new Category(request.params.name);
-            
+            let category = new Category(request.body.name);
             try {
                 let data = await this.repository.update(category, request.params.id);
                 response.status(HttpStatus.OK).json(ResponseAPI.list(data));

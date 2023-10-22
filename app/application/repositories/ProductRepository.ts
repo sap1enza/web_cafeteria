@@ -18,7 +18,7 @@ class ProductRepository extends IRepository{
     }
 
     public store = async(product: Product) => {
-        return await this.db.store(
+        let data = await this.db.store(
             `INSERT INTO products 
                 (title, value, description, category_id, created, modified) 
              VALUES 
@@ -30,7 +30,14 @@ class ProductRepository extends IRepository{
                     NOW(), 
                     NOW()
                 );
-            `, [product.title, product.value, product.description, product.category.id]); 
+            `, [product.title, product.value, product.description, product.category.id]);
+        return new Product(
+            product.title,
+            product.value,
+            product.category,
+            product.description,
+            parseInt(data.insertId)
+        );
     }
 
     public update = async (product: Product, id: BigInteger) => {
@@ -43,8 +50,13 @@ class ProductRepository extends IRepository{
                 modified = NOW()
              WHERE id = ?;
             `, [product.title, product.value, product.description, product.category.id, id]); 
-        product.id = id;
-        return product;
+        return new Product(
+            product.title,
+            product.value,
+            product.category,
+            product.description,
+            id
+        );
     }
 
     public delete = async (id: BigInteger) => {

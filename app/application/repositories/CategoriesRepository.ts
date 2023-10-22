@@ -27,7 +27,7 @@ class CategoriesRepository extends IRepository{
     }
 
     async store(params: Category) {
-        return await this.db.store(
+        let data = await this.db.store(
             `INSERT INTO categories 
                 (name,created, modified) 
              VALUES 
@@ -37,6 +37,10 @@ class CategoriesRepository extends IRepository{
                     NOW()
                 );
             `, [params.name]); 
+        return new Category(
+            params.name,
+            parseInt(data.insertId)
+        )
     }
 
     async delete(id) {
@@ -48,6 +52,7 @@ class CategoriesRepository extends IRepository{
         if (data.length>0) {
             return new Category(data[0].name, data[0].id);
         } 
+        return new Category();
     }
 
 }
