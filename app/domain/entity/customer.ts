@@ -8,7 +8,24 @@ class Customer{
         readonly name?: string, 
         readonly email?: string, 
         readonly cpf_cnpj? : string
-    ) {}
+    ) {
+        if (name==null || name=="") {
+            throw new Error("Nome é obrigatório.");
+        }
+        if (email==null || email=="") {
+            throw new Error("E-mail é obrigatório.");
+        }
+        if (!this.isValidEmail()) {
+            throw new Error("E-mail inválido.");
+        }
+        if (cpf_cnpj==null || cpf_cnpj=="") {
+            throw new Error("CPF é obrigatório.");
+        }
+        this.cpf_cnpj = String(cpf_cnpj).replace(".", "").replace("-", "");
+        if (!this.isValidCpf()) {
+            throw new Error("CPF inválido.");
+        }
+    }
 
     public isValidCpf() : boolean {
         return cpf.isValid(this.cpf_cnpj);

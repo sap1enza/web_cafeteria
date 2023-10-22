@@ -276,6 +276,124 @@ paths:
       responses:
         '204':
           description: OK
+  #category
+  /products:
+    get:
+      summary: Recupera uma lista de produtos.
+      description: Recupera uma lista de produtos cadastrada no sistema.
+      tags:
+        - "Product"
+      parameters:
+        - in: query
+          name: title
+          schema:
+            type: string
+          description: recupera um produto pelo titulo em especifico ou parcial
+      responses:
+        '200':
+          description: retorna uma lista de itens
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Product'
+    post:
+      summary: Cria um novo produto.
+      tags:
+        - "Product"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                value:
+                  type: number
+                  format: decimal
+                description:
+                  type: string
+              required:
+                - "name"
+                - "value"
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /products/{id}:
+    get:
+      summary: Recupera um produto pelo ID
+      tags:
+        - "Product"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do produto
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    put:
+      summary: Atualiza os dados de um produto.
+      tags:
+        - "Product"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do produto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                value:
+                  type: number
+                  format: decimal
+                description:
+                  type: string
+              required:
+                - "name"
+                - "value"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    delete:
+      summary: Deleta um produto.
+      tags:
+        - "Product"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do produto
+      responses:
+        '204':
+          description: OK
 
 components:
   securitySchemes:
@@ -339,6 +457,29 @@ components:
           format: datetime
       required:
         - "name"
-
+    Product:
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+          example: Teste
+        description:
+          type: string
+          example: Teste de produto
+        value: 
+          type: number
+          format: decimal
+          example: 0.00
+        created:
+          type: string
+          format: datetime
+        modified:
+          type: string
+          format: datetime
+      required:
+        - "id"
+        - "title"
+        - "value"
 security:
   - BearerAuth: [JWT]
