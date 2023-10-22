@@ -82,7 +82,7 @@ paths:
                 $ref: '#/components/schemas/cliente'
   /cliente/{id}:
     get:
-      summary: Recupera um usuário pelo ID
+      summary: Recupera um cliente pelo ID
       tags:
         - "Cliente"
       parameters:
@@ -100,7 +100,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/cliente'
     put:
-      summary: Atualiza os dados de um usuário.
+      summary: Atualiza os dados de um Cliente.
       tags:
         - "Cliente"
       parameters:
@@ -153,7 +153,7 @@ paths:
           description: OK
   /cliente/{cpfcnpj}/identify:
     get:
-      summary: Recupera um usuário pelo número do documento
+      summary: Recupera um cliente pelo número do documento
       tags:
         - "Cliente"
       parameters:
