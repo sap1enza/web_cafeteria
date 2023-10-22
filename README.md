@@ -68,7 +68,7 @@ docker-compose up -d --build
 Aplicação realiza testes unitários com ...
 
 ```bash
-    juntest ...
+    npm run test
 ```
 
 ## Autenticação

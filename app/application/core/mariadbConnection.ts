@@ -35,6 +35,18 @@ class MysqlConnection
             created datetime null,
             modified datetime null
         )  ENGINE=INNODB;`);
+
+        await this.connection.query(`
+            CREATE TABLE IF NOT EXISTS products (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                category_id INT not null,
+                title VARCHAR(200) not null unique,
+                description text null,
+                value decimal(19,2) not null default 0,
+                created datetime null,
+                modified datetime null
+            )  ENGINE=INNODB;
+        `);
     }
 
     public conn() {

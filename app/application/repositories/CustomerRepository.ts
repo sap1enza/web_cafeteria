@@ -53,6 +53,7 @@ class CustomerRepository extends IRepository
     public delete = async (id: BigInteger) => {
         return await this.db.delete(`DELETE FROM customers where id = ${id};`);
     }
+    
     public findById = async (id: BigInteger) => {
         let data = await this.db.find(`SELECT * FROM customers where id = ${id};`);
         if (data.length>0) {

@@ -311,6 +311,9 @@ paths:
               properties:
                 title:
                   type: string
+                category_id:
+                  type: number
+                  format: integer
                 value:
                   type: number
                   format: decimal
@@ -319,6 +322,7 @@ paths:
               required:
                 - "name"
                 - "value"
+                - "category_id"
       responses:
         '201':
           description: OK
@@ -365,6 +369,9 @@ paths:
               properties:
                 title:
                   type: string
+                category_id:
+                  type: number
+                  format: integer
                 value:
                   type: number
                   format: decimal
@@ -373,6 +380,7 @@ paths:
               required:
                 - "name"
                 - "value"
+                - "category_id"
       responses:
         '200':
           description: OK
@@ -464,6 +472,9 @@ components:
         title:
           type: string
           example: Teste
+        category_id:
+          type: number
+          format: integer
         description:
           type: string
           example: Teste de produto
@@ -481,5 +492,6 @@ components:
         - "id"
         - "title"
         - "value"
+        - "category_id"
 security:
   - BearerAuth: [JWT]

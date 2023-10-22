@@ -23,8 +23,7 @@ class CategoriesRepository extends IRepository{
                 modified = NOW()
              WHERE id = ?;
             `, [params.name, id]); 
-        params.id = id;
-        return params;
+        return new Category(params.name, id);
     }
 
     async store(params: Category) {
@@ -44,13 +43,11 @@ class CategoriesRepository extends IRepository{
         return await this.db.delete(`DELETE FROM categories where id = ${id};`);
     }
 
-    async findById(id) {
+    async findById(id) : Promise<Category> {
         let data = await this.db.find(`SELECT * FROM categories where id = ${id};`);
         if (data.length>0) {
-            return data[0];
-        } else {
-            return null;
-        }
+            return new Category(data[0].name, data[0].id);
+        } 
     }
 
 }

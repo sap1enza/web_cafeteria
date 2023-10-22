@@ -2,13 +2,12 @@ class Category{
     
     public name: string = null;
 
-    public id;
-
-    constructor(name: string) {
+    constructor(name: string, readonly id?: BigInteger) {
         if (name == null || name == "") {
             throw new Error("O nome da categoria é obrigatório.")
         }
         this.name = name;
+        this.id = id;
     }
 
 }
