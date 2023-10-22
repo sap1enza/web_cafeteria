@@ -1,7 +1,7 @@
-import Category from "../../domain/entity/category";
+import Categoria from "../../domain/entity/categoria";
 import IRepository from "./IReporitory";
 
-class CategoriesRepository extends IRepository{
+class CategoriaRepository extends IRepository{
     
     async getAll(params) {
         let CONDITIONS = "";
@@ -13,22 +13,22 @@ class CategoriesRepository extends IRepository{
             CONDITIONS = ' WHERE ' + CONDITIONS;
         }
 
-        return await this.db.find(`SELECT * FROM categories ${CONDITIONS};`);
+        return await this.db.find(`SELECT * FROM categoria ${CONDITIONS};`);
     }
 
-    async update(params: Category, id) {
+    async update(params: Categoria, id) {
         await this.db.store(
-            `UPDATE categories SET
+            `UPDATE categoria SET
                 name = ?,
                 modified = NOW()
              WHERE id = ?;
             `, [params.name, id]); 
-        return new Category(params.name, id);
+        return new Categoria(params.name, id);
     }
 
-    async store(params: Category) {
+    async store(params: Categoria) {
         let data = await this.db.store(
-            `INSERT INTO categories 
+            `INSERT INTO categoria 
                 (name,created, modified) 
              VALUES 
                 (
@@ -37,24 +37,24 @@ class CategoriesRepository extends IRepository{
                     NOW()
                 );
             `, [params.name]); 
-        return new Category(
+        return new Categoria(
             params.name,
             parseInt(data.insertId)
         )
     }
 
     async delete(id) {
-        return await this.db.delete(`DELETE FROM categories where id = ${id};`);
+        return await this.db.delete(`DELETE FROM categoria where id = ${id};`);
     }
 
-    async findById(id) : Promise<Category> {
-        let data = await this.db.find(`SELECT * FROM categories where id = ${id};`);
+    async findById(id) : Promise<Categoria> {
+        let data = await this.db.find(`SELECT * FROM categoria where id = ${id};`);
         if (data.length>0) {
-            return new Category(data[0].name, data[0].id);
+            return new Categoria(data[0].name, data[0].id);
         } 
-        return new Category();
+        return new Categoria();
     }
 
 }
 
-export default CategoriesRepository;
+export default CategoriaRepository;

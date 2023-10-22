@@ -1,6 +1,6 @@
 import {cpf} from 'cpf-cnpj-validator';
 
-class Customer{
+class Cliente{
 
     public id;
 
@@ -42,4 +42,4 @@ class Customer{
     }
 }
 
-export default Customer;
+export default Cliente;

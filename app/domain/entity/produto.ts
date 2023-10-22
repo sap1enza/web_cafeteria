@@ -1,14 +1,14 @@
-import Category from "./category";
+import Categoria from "./categoria";
 
-class Product{
+class Produto{
     constructor (
         readonly title, 
         readonly value,
-        readonly category: Category, 
+        readonly categoria: Categoria, 
         readonly description?,
         readonly id?
     ) {}
 
 }
 
-export default Product;
+export default Produto;

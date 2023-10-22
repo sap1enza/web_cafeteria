@@ -1,24 +1,24 @@
 import * as HttpStatus from 'http-status';
 import ResponseAPI from "../../core/ResponseAPI"
 import {Request, Response} from 'express';
-import CategoriesRepository from '../../repositories/CategoriesRepository';
+import CategoriaRepository from '../../repositories/CategoriaRepository';
 import MysqlDataBase from '../../database/MysqlDataBase';
-import Category from '../../../domain/entity/category';
+import Categoria from '../../../domain/entity/categoria';
 
 
 
-class CategoriesController{
+class CategoriaController{
 
     /**
      * 
      */
-    public repository: CategoriesRepository;
+    public repository: CategoriaRepository;
 
     /**
      * 
      */
     constructor() {
-        this.repository = new CategoriesRepository(new MysqlDataBase());
+        this.repository = new CategoriaRepository(new MysqlDataBase());
     }
 
     /**
@@ -43,9 +43,9 @@ class CategoriesController{
      */
     public store = async (request: Request, response: Response) => {
         try {
-            let category = new Category(request.body.name);
+            let categoria = new Categoria(request.body.name);
             try {
-                let data = await this.repository.store(category);
+                let data = await this.repository.store(categoria);
                 response.status(HttpStatus.OK).json(ResponseAPI.data(data));
             } catch(err) {
                     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
@@ -63,9 +63,9 @@ class CategoriesController{
      */
     public update = async (request: Request, response: Response) => {
         try {
-            let category = new Category(request.body.name);
+            let categoria = new Categoria(request.body.name);
             try {
-                let data = await this.repository.update(category, request.params.id);
+                let data = await this.repository.update(categoria, request.params.id);
                 response.status(HttpStatus.OK).json(ResponseAPI.list(data));
             } catch(err) {
                     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
@@ -115,4 +115,4 @@ class CategoriesController{
     }
 }
 
-export default new CategoriesController();
+export default new CategoriaController();

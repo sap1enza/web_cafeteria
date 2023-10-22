@@ -1,7 +1,7 @@
 import IRepository from "./IReporitory";
-import Product from '../../domain/entity/product';
+import Produto from '../../domain/entity/produto';
 
-class ProductRepository extends IRepository{
+class ProdutoRepository extends IRepository{
 
     public getAll = async (params: any) => {
         let CONDITIONS = "";
@@ -14,12 +14,12 @@ class ProductRepository extends IRepository{
             CONDITIONS = ' WHERE ' + CONDITIONS;
         }
 
-        return await this.db.find(`SELECT * FROM products ${CONDITIONS};`);
+        return await this.db.find(`SELECT * FROM produto ${CONDITIONS};`);
     }
 
-    public store = async(product: Product) => {
+    public store = async(produto: Produto) => {
         let data = await this.db.store(
-            `INSERT INTO products 
+            `INSERT INTO produto 
                 (title, value, description, category_id, created, modified) 
              VALUES 
                 (
@@ -30,41 +30,41 @@ class ProductRepository extends IRepository{
                     NOW(), 
                     NOW()
                 );
-            `, [product.title, product.value, product.description, product.category.id]);
-        return new Product(
-            product.title,
-            product.value,
-            product.category,
-            product.description,
+            `, [produto.title, produto.value, produto.description, produto.categoria.id]);
+        return new Produto(
+            produto.title,
+            produto.value,
+            produto.categoria,
+            produto.description,
             parseInt(data.insertId)
         );
     }
 
-    public update = async (product: Product, id: BigInteger) => {
+    public update = async (produto: Produto, id: BigInteger) => {
         await this.db.store(
-            `UPDATE products SET
+            `UPDATE produto SET
                 title = ?,
                 value = ?,
                 description = ?,
                 category_id = ?,
                 modified = NOW()
              WHERE id = ?;
-            `, [product.title, product.value, product.description, product.category.id, id]); 
-        return new Product(
-            product.title,
-            product.value,
-            product.category,
-            product.description,
+            `, [produto.title, produto.value, produto.description, produto.categoria.id, id]); 
+        return new Produto(
+            produto.title,
+            produto.value,
+            produto.categoria,
+            produto.description,
             id
         );
     }
 
     public delete = async (id: BigInteger) => {
-        return await this.db.delete(`DELETE FROM products where id = ${id};`);
+        return await this.db.delete(`DELETE FROM produto where id = ${id};`);
     }
 
     public findById = async (id: BigInteger) => {
-        let data = await this.db.find(`SELECT * FROM products where id = ${id};`);
+        let data = await this.db.find(`SELECT * FROM produto where id = ${id};`);
         if (data.length>0) {
             return data[0];
         } else {
@@ -73,4 +73,4 @@ class ProductRepository extends IRepository{
     }
 }
 
-export default ProductRepository;
+export default ProdutoRepository;

@@ -1,7 +1,7 @@
-import Customer from "../../domain/entity/customer";
+import Cliente from "../../domain/entity/cliente";
 import IRepository from "./IReporitory";
 
-class CustomerRepository extends IRepository
+class ClienteRepository extends IRepository
 {
 
     public getAll = async (params) => {
@@ -18,26 +18,26 @@ class CustomerRepository extends IRepository
             CONDITIONS = ' WHERE ' + CONDITIONS;
         }
 
-        return await this.db.find(`SELECT * FROM customers ${CONDITIONS};`);
+        return await this.db.find(`SELECT * FROM cliente ${CONDITIONS};`);
     }
 
-    public update = async (customer: Customer, id: BigInteger) => {
+    public update = async (cliente: Cliente, id: BigInteger) => {
         await this.db.store(
-            `UPDATE customers SET
+            `UPDATE cliente SET
                 name = ?,
                 email = ?,
                 cpf_cnpj = ?,
                 modified = NOW()
              WHERE id = ?;
-            `, [customer.name, customer.email, 
-                customer.cpf_cnpj, id]); 
-        customer.id = id;
-        return customer;
+            `, [cliente.name, cliente.email, 
+                cliente.cpf_cnpj, id]); 
+        cliente.id = id;
+        return cliente;
     }
 
-    public store = async (customer: Customer) => {
+    public store = async (cliente: Cliente) => {
         return await this.db.store(
-            `INSERT INTO customers 
+            `INSERT INTO cliente 
                 (name,email, cpf_cnpj, created, modified) 
              VALUES 
                 (
@@ -47,15 +47,15 @@ class CustomerRepository extends IRepository
                     NOW(), 
                     NOW()
                 );
-            `, [customer.name, customer.email, customer.cpf_cnpj]); 
+            `, [cliente.name, cliente.email, cliente.cpf_cnpj]); 
     }
 
     public delete = async (id: BigInteger) => {
-        return await this.db.delete(`DELETE FROM customers where id = ${id};`);
+        return await this.db.delete(`DELETE FROM cliente where id = ${id};`);
     }
     
     public findById = async (id: BigInteger) => {
-        let data = await this.db.find(`SELECT * FROM customers where id = ${id};`);
+        let data = await this.db.find(`SELECT * FROM cliente where id = ${id};`);
         if (data.length>0) {
             return data[0];
         } else {
@@ -64,7 +64,7 @@ class CustomerRepository extends IRepository
     }
 
     public findByCPF = async (cpf_cnpj: String) => {
-        let data = await this.db.find(`SELECT * FROM customers where cpf_cnpj = ${cpf_cnpj};`);
+        let data = await this.db.find(`SELECT * FROM cliente where cpf_cnpj = ${cpf_cnpj};`);
         if (data.length>0) {
             return data[0];
         } else {
@@ -73,4 +73,4 @@ class CustomerRepository extends IRepository
     }
 }
 
-export default CustomerRepository;
+export default ClienteRepository;
