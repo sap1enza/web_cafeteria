@@ -1,5 +1,6 @@
 import IRepository from "./IReporitory";
 import Produto from '../../domain/entity/produto';
+import { Console } from "console";
 
 class ProdutoRepository extends IRepository{
 
@@ -67,6 +68,17 @@ class ProdutoRepository extends IRepository{
         let data = await this.db.find(`SELECT * FROM produto where id = ${id};`);
         if (data.length>0) {
             return data[0];
+        } else {
+            return null;
+        }
+    }
+
+    public findByCategory = async (category_id: BigInteger) => {
+        console.log(category_id);
+        let data = await this.db.find(`SELECT * FROM produto where category_id = ${category_id};`);
+        console.log(data);
+        if (data.length>0) {
+            return data;
         } else {
             return null;
         }

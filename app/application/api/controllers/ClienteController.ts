@@ -92,7 +92,7 @@ class CustomersController{
     public show = async (request, response) => {
         try {
             if (typeof request.params.id == 'undefined') {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requido."));
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
             }
             let data = await this.repository.findById(request.params.id);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
@@ -112,7 +112,7 @@ class CustomersController{
     public identifyByCPF = async (request, response) => {
         try {
             if (typeof request.params.cpfcnpj == 'undefined' || request.params.cpfcnpj == "") {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "CPF do registro é requido."));
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "CPF do registro é requerido."));
             }
             let data = await this.repository.findByCPF(request.params.cpfcnpj);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
@@ -132,7 +132,7 @@ class CustomersController{
     public delete = async (request, response) => {
         try {
             if (typeof request.params.id == 'undefined' || request.params.id == "") {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requido."));
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
             }
             let data = await this.repository.delete(request.params.id);
             response.status(HttpStatus.NO_CONTENT).json({});
