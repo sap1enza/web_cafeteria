@@ -1,4 +1,4 @@
-<h1>Tech Chalange</h1>
+<h1>Tech Challenge</h1>
 
 ## Architecture
 
