@@ -1,4 +1,4 @@
-class Category{
+class Categoria{
     
     public name: string = null;
 
@@ -12,4 +12,4 @@ class Category{
 
 }
 
-export default Category;
+export default Categoria;

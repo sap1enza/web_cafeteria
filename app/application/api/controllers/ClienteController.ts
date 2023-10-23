@@ -1,21 +1,21 @@
 import * as HttpStatus from 'http-status';
-import CustomerRepository from "../../repositories/CustomerRepository";
+import ClienteRepository from "../../repositories/ClienteRepository";
 import ResponseAPI from '../../core/ResponseAPI';
 import MysqlDataBase from '../../database/MysqlDataBase';
-import Customer from '../../../domain/entity/customer';
+import Cliente from '../../../domain/entity/cliente';
 
 class CustomersController{
 
     /**
      * 
      */
-    public repository: CustomerRepository;
+    public repository: ClienteRepository;
 
     /**
      * 
      */
     constructor() {
-        this.repository = new CustomerRepository(new MysqlDataBase());
+        this.repository = new ClienteRepository(new MysqlDataBase());
     }
 
     /**
@@ -40,15 +40,20 @@ class CustomersController{
     public store = async (request, response) => {
         try {
             
-            let customer = new Customer(
+            let cliente = new Cliente(
                 request.body.name,
                 request.body.email,
                 request.body.cpf_cnpj
             );
             
             try {
-                let data = await this.repository.store(customer);
-                response.status(HttpStatus.OK).json(ResponseAPI.list(data));
+                let data = await this.repository.store(cliente);
+                console.log(data);
+                console.log(ResponseAPI.data(data));
+                console.log(cliente);
+
+                response.status(HttpStatus.OK).json({message:'Cliente criado com sucesso!'});
+                
             } catch(err) {
                     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
             }
@@ -64,12 +69,12 @@ class CustomersController{
      */
     public update = async (request, response) => {
         try {
-            let customer = new Customer(
+            let cliente = new Cliente(
                 request.body.name,
                 request.body.email,
                 request.body.cpf_cnpj,
             );
-            let data = await this.repository.update(customer, request.params.id);
+            let data = await this.repository.update(cliente, request.params.id);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -1,25 +1,25 @@
 import * as HttpStatus from 'http-status';
-import ProductRepository from "../../repositories/ProductRepository";
+import ProdutoRepository from "../../repositories/ProdutoRepository";
 import ResponseAPI from '../../core/ResponseAPI';
 import MysqlDataBase from '../../database/MysqlDataBase';
-import Product from '../../../domain/entity/product';
-import Category from '../../../domain/entity/category';
-import CategoriesRepository from '../../repositories/CategoriesRepository';
+import Produto from '../../../domain/entity/produto';
+import Categoria from '../../../domain/entity/categoria';
+import CategoriaRepository from '../../repositories/CategoriaRepository';
 
 
-class ProductsController{
+class ProdutoController{
      /**
      * 
      */
-     public repository: ProductRepository;
-     public categoryRepository: CategoriesRepository;
+     public repository: ProdutoRepository;
+     public categoryRepository: CategoriaRepository;
 
      /**
       * 
       */
      constructor() {
-         this.repository = new ProductRepository(new MysqlDataBase());
-         this.categoryRepository = new CategoriesRepository(new MysqlDataBase());
+         this.repository = new ProdutoRepository(new MysqlDataBase());
+         this.categoryRepository = new CategoriaRepository(new MysqlDataBase());
      }
  
      /**
@@ -43,16 +43,16 @@ class ProductsController{
       */
      public store = async (request, response) => {
          try {
-             let category = await this.categoryRepository.findById(request.body.category_id);
-             let product = new Product(
+             let categoria = await this.categoryRepository.findById(request.body.category_id);
+             let produto = new Produto(
                  request.body.title,
                  request.body.value,
-                 category,
+                 categoria,
                  request.body.description
              );
              
              try {
-                 let data = await this.repository.store(product);
+                 let data = await this.repository.store(produto);
                  response.status(HttpStatus.OK).json(ResponseAPI.data(data));
              } catch(err) {
                      response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
@@ -69,16 +69,16 @@ class ProductsController{
       */
      public update = async (request, response) => {
          try {
-            let category = await this.categoryRepository.findById(request.body.category_id);
+            let categoria = await this.categoryRepository.findById(request.body.category_id);
             
-            let product = new Product(
+            let produto = new Produto(
                 request.body.title,
                 request.body.value,
-                category,
+                categoria,
                 request.body.description
             );
 
-             let data = await this.repository.update(product, request.params.id);
+             let data = await this.repository.update(produto, request.params.id);
              response.status(HttpStatus.OK).json(ResponseAPI.data(data));
          } catch (err) {
              response.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -129,4 +129,4 @@ class ProductsController{
      }
 }
 
-export default new ProductsController();
+export default new ProdutoController();

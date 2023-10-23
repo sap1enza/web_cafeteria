@@ -22,13 +22,13 @@ paths:
                 type: array
                 items: 
                   $ref: '#/components/schemas/Auth'
-  #customer
-  /customers:
+  #cliente
+  /cliente:
     get:
       summary: Recupera uma lista de usuários.
       description: Recupera uma lista de usuarios no sistema.
       tags:
-        - "Custormer"
+        - "Cliente"
       parameters:
         - in: query
           name: email
@@ -48,11 +48,11 @@ paths:
               schema: 
                 type: array
                 items: 
-                  $ref: '#/components/schemas/Customer'
+                  $ref: '#/components/schemas/cliente'
     post:
       summary: Cria um novo usuário.
       tags:
-        - "Custormer"
+        - "Cliente"
       requestBody:
         required: true
         content:
@@ -79,12 +79,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customer'
-  /customers/{id}:
+                $ref: '#/components/schemas/cliente'
+  /cliente/{id}:
     get:
-      summary: Recupera um usuário pelo ID
+      summary: Recupera um cliente pelo ID
       tags:
-        - "Custormer"
+        - "Cliente"
       parameters:
         - in: path
           name: id
@@ -98,11 +98,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customer'
+                $ref: '#/components/schemas/cliente'
     put:
-      summary: Atualiza os dados de um usuário.
+      summary: Atualiza os dados de um Cliente.
       tags:
-        - "Custormer"
+        - "Cliente"
       parameters:
         - in: path
           name: id
@@ -136,11 +136,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customer'         
+                $ref: '#/components/schemas/cliente'         
     delete:
       summary: Deleta um usuário.
       tags:
-        - "Custormer"
+        - "Cliente"
       parameters:
         - in: path
           name: id
@@ -151,11 +151,11 @@ paths:
       responses:
         '204':
           description: OK
-  /customers/{cpfcnpj}/identify:
+  /cliente/{cpfcnpj}/identify:
     get:
-      summary: Recupera um usuário pelo número do documento
+      summary: Recupera um cliente pelo número do documento
       tags:
-        - "Custormer"
+        - "Cliente"
       parameters:
         - in: path
           name: cpfcnpj
@@ -169,14 +169,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customer'
-  #category
-  /categories:
+                $ref: '#/components/schemas/cliente'
+  #categoria
+  /categoria:
     get:
       summary: Recupera uma lista de categorias.
       description: Recupera uma lista de categorias cadastrada no sistema.
       tags:
-        - "Category"
+        - "Categoria"
       parameters:
         - in: query
           name: name
@@ -191,11 +191,11 @@ paths:
               schema: 
                 type: array
                 items: 
-                  $ref: '#/components/schemas/Category'
+                  $ref: '#/components/schemas/Categoria'
     post:
       summary: Cria um nova categoria.
       tags:
-        - "Category"
+        - "Categoria"
       requestBody:
         required: true
         content:
@@ -213,12 +213,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Category'
-  /categories/{id}:
+                $ref: '#/components/schemas/Categoria'
+  /categoria/{id}:
     get:
       summary: Recupera uma categoria pelo ID
       tags:
-        - "Category"
+        - "Categoria"
       parameters:
         - in: path
           name: id
@@ -232,11 +232,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Category'
+                $ref: '#/components/schemas/Categoria'
     put:
       summary: Atualiza os dados de uma categoria.
       tags:
-        - "Category"
+        - "Categoria"
       parameters:
         - in: path
           name: id
@@ -261,11 +261,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Category'
+                $ref: '#/components/schemas/Categoria'
     delete:
       summary: Deleta uma Categoria.
       tags:
-        - "Category"
+        - "Categoria"
       parameters:
         - in: path
           name: id
@@ -276,13 +276,13 @@ paths:
       responses:
         '204':
           description: OK
-  #category
-  /products:
+  #produto
+  /produto:
     get:
       summary: Recupera uma lista de produtos.
       description: Recupera uma lista de produtos cadastrada no sistema.
       tags:
-        - "Product"
+        - "Produto"
       parameters:
         - in: query
           name: title
@@ -297,11 +297,11 @@ paths:
               schema: 
                 type: array
                 items: 
-                  $ref: '#/components/schemas/Product'
+                  $ref: '#/components/schemas/Produto'
     post:
       summary: Cria um novo produto.
       tags:
-        - "Product"
+        - "Produto"
       requestBody:
         required: true
         content:
@@ -329,12 +329,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
-  /products/{id}:
+                $ref: '#/components/schemas/Produto'
+  /produto/{id}:
     get:
       summary: Recupera um produto pelo ID
       tags:
-        - "Product"
+        - "Produto"
       parameters:
         - in: path
           name: id
@@ -348,11 +348,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: '#/components/schemas/Produto'
     put:
       summary: Atualiza os dados de um produto.
       tags:
-        - "Product"
+        - "Produto"
       parameters:
         - in: path
           name: id
@@ -387,11 +387,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: '#/components/schemas/Produto'
     delete:
       summary: Deleta um produto.
       tags:
-        - "Product"
+        - "Produto"
       parameters:
         - in: path
           name: id
@@ -425,7 +425,7 @@ components:
         token_type:
           type: string
           example: Bearer
-    Customer:
+    cliente:
       properties:
         id:
           type: integer
@@ -450,7 +450,7 @@ components:
         - "name"
         - "email"
         - "cpf_cnpj"
-    Category:
+    Categoria:
       properties:
         id:
           type: integer
@@ -465,7 +465,7 @@ components:
           format: datetime
       required:
         - "name"
-    Product:
+    Produto:
       properties:
         id:
           type: integer

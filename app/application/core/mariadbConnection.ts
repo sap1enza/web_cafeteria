@@ -20,7 +20,7 @@ class MysqlConnection
             });
         }
         
-        await this.connection.query(`CREATE TABLE IF NOT EXISTS customers (
+        await this.connection.query(`CREATE TABLE IF NOT EXISTS cliente (
                 id INT PRIMARY KEY AUTO_INCREMENT,
                 name VARCHAR(200) not null,
                 email VARCHAR(245) not null unique,
@@ -29,7 +29,7 @@ class MysqlConnection
                 modified datetime null
             )  ENGINE=INNODB;`);
 
-        await this.connection.query(`CREATE TABLE IF NOT EXISTS categories (
+        await this.connection.query(`CREATE TABLE IF NOT EXISTS categoria (
             id INT PRIMARY KEY AUTO_INCREMENT,
             name VARCHAR(200) not null unique,
             created datetime null,
@@ -37,7 +37,7 @@ class MysqlConnection
         )  ENGINE=INNODB;`);
 
         await this.connection.query(`
-            CREATE TABLE IF NOT EXISTS products (
+            CREATE TABLE IF NOT EXISTS produto (
                 id INT PRIMARY KEY AUTO_INCREMENT,
                 category_id INT not null,
                 title VARCHAR(200) not null unique,

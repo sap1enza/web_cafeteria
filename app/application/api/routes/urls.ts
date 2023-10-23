@@ -1,7 +1,7 @@
 import * as express from "express";
-import customeRoutes from './customersRoutes';
-import categoriesRoutes from './categoriesRoutes';
-import productsRoutes from './productsRoutes';
+import customeRoutes from './clienteRoutes';
+import categoriesRoutes from './categoriaRoutes';
+import productsRoutes from './produtoRoutes';
 
 let router = express.Router();
 
