@@ -48,7 +48,12 @@ class CustomersController{
             
             try {
                 let data = await this.repository.store(cliente);
-                response.status(HttpStatus.OK).json(ResponseAPI.list(data));
+                console.log(data);
+                console.log(ResponseAPI.data(data));
+                console.log(cliente);
+
+                response.status(HttpStatus.OK).json({message:'Cliente criado com sucesso!'});
+                
             } catch(err) {
                     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
             }

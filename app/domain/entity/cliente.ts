@@ -21,7 +21,8 @@ class Cliente{
         if (cpf_cnpj==null || cpf_cnpj=="") {
             throw new Error("CPF é obrigatório.");
         }
-        this.cpf_cnpj = String(cpf_cnpj).replace(".", "").replace("-", "");
+        this.cpf_cnpj = String(cpf_cnpj).replace(".", "").replace("-", "").replace(".", "");
+
         if (!this.isValidCpf()) {
             throw new Error("CPF inválido.");
         }
@@ -32,9 +33,11 @@ class Cliente{
     }
 
     public isValidEmail() : boolean {
+        console.log(this.email);
+    
         return !String(this.email)
         .toLocaleLowerCase()
-        .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+        .match('^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     }
 
     public cpfFormat() : string {

@@ -101,7 +101,7 @@ class CategoriaController{
      */
     public delete = async (request: Request, response: Response) => {
         try {
-            if (typeof request.params.cpfcnpj == 'undefined') {
+            if (typeof request.params.id == 'undefined') {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requido."));
             }
             await this.repository.delete(request.params.id);
