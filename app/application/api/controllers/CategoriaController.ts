@@ -84,7 +84,7 @@ class CategoriaController{
     public show = async (request: Request, response: Response) => {
         try {
             if (typeof request.params.id == 'undefined') {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requido."));
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
             }
             let data = await this.repository.findById(request.params.id);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
@@ -102,7 +102,7 @@ class CategoriaController{
     public delete = async (request: Request, response: Response) => {
         try {
             if (typeof request.params.id == 'undefined') {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requido."));
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
             }
             await this.repository.delete(request.params.id);
             response.status(HttpStatus.NO_CONTENT).json({});

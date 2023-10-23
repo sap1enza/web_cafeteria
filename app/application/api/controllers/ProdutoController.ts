@@ -35,7 +35,7 @@ class ProdutoController{
                  response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message)); 
          }
      }
- 
+
      /**
       * 
       * @param request 
@@ -96,7 +96,7 @@ class ProdutoController{
      public show = async (request, response) => {
          try {
              if (typeof request.params.id == 'undefined') {
-                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requido."));
+                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
              }
              let data = await this.repository.findById(request.params.id);
              response.status(HttpStatus.OK).json(ResponseAPI.data(data));
@@ -116,7 +116,7 @@ class ProdutoController{
      public delete = async (request, response) => {
          try {
              if (typeof request.params.id == 'undefined') {
-                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requido."));
+                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
              }
              let data = await this.repository.delete(request.params.id);
              response.status(HttpStatus.NO_CONTENT).json({});
@@ -127,6 +127,27 @@ class ProdutoController{
              );
          }
      }
+
+     /**
+      * 
+      * @param request 
+      * @param response 
+      */
+     public getByidCategory = async (request, response) => {
+        try {
+            if (typeof request.params.category_id  == 'undefined' || request.params.category_id == "") {
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID da Categoria é requerido."));
+            }
+            console.log(request.params.category_id);
+            let data = await this.repository.findByCategory(request.params.category_id);
+            response.status(HttpStatus.OK).json(ResponseAPI.data(data));
+        } catch (err) {
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .json(
+                ResponseAPI.error(err.message)
+            );
+        }
+}
 }
 
 export default new ProdutoController();

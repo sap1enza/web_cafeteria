@@ -402,7 +402,25 @@ paths:
       responses:
         '204':
           description: OK
-
+  /produto/categoria/{category_id}:
+    get:
+      summary: Recupera os produto de uma categoria especifica
+      tags:
+        - "Produto"
+      parameters:
+        - in: path
+          name: category_id
+          schema:
+            type: integer
+          required: true
+          description: ID da categoria do produto
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Produto'
 components:
   securitySchemes:
      BearerAuth:
