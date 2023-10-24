@@ -19,7 +19,7 @@ class MysqlConnection
                 port : parseInt(process.env.MARIADB_PORT),
             });
         }
-        
+
         await this.connection.query(`CREATE TABLE IF NOT EXISTS cliente (
                 id INT PRIMARY KEY AUTO_INCREMENT,
                 name VARCHAR(200) not null,
@@ -43,6 +43,26 @@ class MysqlConnection
                 title VARCHAR(200) not null unique,
                 description text null,
                 value decimal(19,2) not null default 0,
+                created datetime null,
+                modified datetime null
+            )  ENGINE=INNODB;
+        `);
+
+        await this.connection.query(`
+            CREATE TABLE IF NOT EXISTS pedidos (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                customer_id INT not null,
+                status VARCHAR(200) not null default 'created',
+                created datetime null,
+                modified datetime null
+            )  ENGINE=INNODB;
+        `);
+
+        await this.connection.query(`
+            CREATE TABLE IF NOT EXISTS pedido_produtos (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                order_id INT not null,
+                product_id INT not null,
                 created datetime null,
                 modified datetime null
             )  ENGINE=INNODB;
