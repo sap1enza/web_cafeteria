@@ -1,7 +1,7 @@
-openapi: '3.0.2'
+openapi: "3.0.2"
 info:
   title: Projeto Pedidos
-  version: '1.0'
+  version: "1.0"
 servers:
   - url: http://localhost:3000/api/v1
 paths:
@@ -9,19 +9,19 @@ paths:
   /user/auth:
     post:
       summary: Retorna o token para autenticação.
-      description: Infoma o token para autenticação o tempo de expiração e qual o tipo de utilização 
-      security: [] 
+      description: Infoma o token para autenticação o tempo de expiração e qual o tipo de utilização
+      security: []
       tags:
         - "User"
       responses:
-        '200':
+        "200":
           description: retorna um token para autenticação
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
-                  $ref: '#/components/schemas/Auth'
+                items:
+                  $ref: "#/components/schemas/Auth"
   #cliente
   /cliente:
     get:
@@ -41,14 +41,14 @@ paths:
             type: string
           description: recupera os dados de um usuário pelo documento em especifico ou parcial
       responses:
-        '200':
+        "200":
           description: retorna uma lista de itens
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
-                  $ref: '#/components/schemas/cliente'
+                items:
+                  $ref: "#/components/schemas/cliente"
     post:
       summary: Cria um novo usuário.
       tags:
@@ -74,12 +74,12 @@ paths:
                 - "email"
                 - "cpf_cnpj"
       responses:
-        '201':
+        "201":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cliente'
+                $ref: "#/components/schemas/cliente"
   /cliente/{id}:
     get:
       summary: Recupera um cliente pelo ID
@@ -93,12 +93,12 @@ paths:
           required: true
           description: ID do cliente
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cliente'
+                $ref: "#/components/schemas/cliente"
     put:
       summary: Atualiza os dados de um Cliente.
       tags:
@@ -131,12 +131,12 @@ paths:
                 - "email"
                 - "cpf_cnpj"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cliente'         
+                $ref: "#/components/schemas/cliente"
     delete:
       summary: Deleta um usuário.
       tags:
@@ -149,7 +149,7 @@ paths:
           required: true
           description: ID do cliente
       responses:
-        '204':
+        "204":
           description: OK
   /cliente/{cpfcnpj}/identify:
     get:
@@ -164,12 +164,12 @@ paths:
           required: true
           description: CPF/CNPJ do cliente
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cliente'
+                $ref: "#/components/schemas/cliente"
   #categoria
   /categoria:
     get:
@@ -184,14 +184,14 @@ paths:
             type: string
           description: recupera uma categoria pelo npme em especifico ou parcial
       responses:
-        '200':
+        "200":
           description: retorna uma lista de itens
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
-                  $ref: '#/components/schemas/Categoria'
+                items:
+                  $ref: "#/components/schemas/Categoria"
     post:
       summary: Cria um nova categoria.
       tags:
@@ -208,12 +208,12 @@ paths:
               required:
                 - "name"
       responses:
-        '201':
+        "201":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Categoria'
+                $ref: "#/components/schemas/Categoria"
   /categoria/{id}:
     get:
       summary: Recupera uma categoria pelo ID
@@ -227,12 +227,12 @@ paths:
           required: true
           description: ID do categoria
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Categoria'
+                $ref: "#/components/schemas/Categoria"
     put:
       summary: Atualiza os dados de uma categoria.
       tags:
@@ -256,12 +256,12 @@ paths:
               required:
                 - "name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Categoria'
+                $ref: "#/components/schemas/Categoria"
     delete:
       summary: Deleta uma Categoria.
       tags:
@@ -274,7 +274,7 @@ paths:
           required: true
           description: ID do Categoria
       responses:
-        '204':
+        "204":
           description: OK
   #produto
   /produto:
@@ -290,14 +290,14 @@ paths:
             type: string
           description: recupera um produto pelo titulo em especifico ou parcial
       responses:
-        '200':
+        "200":
           description: retorna uma lista de itens
           content:
             application/json:
-              schema: 
+              schema:
                 type: array
-                items: 
-                  $ref: '#/components/schemas/Produto'
+                items:
+                  $ref: "#/components/schemas/Produto"
     post:
       summary: Cria um novo produto.
       tags:
@@ -324,12 +324,12 @@ paths:
                 - "value"
                 - "category_id"
       responses:
-        '201':
+        "201":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Produto'
+                $ref: "#/components/schemas/Produto"
   /produto/{id}:
     get:
       summary: Recupera um produto pelo ID
@@ -343,12 +343,12 @@ paths:
           required: true
           description: ID do produto
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Produto'
+                $ref: "#/components/schemas/Produto"
     put:
       summary: Atualiza os dados de um produto.
       tags:
@@ -382,12 +382,12 @@ paths:
                 - "value"
                 - "category_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Produto'
+                $ref: "#/components/schemas/Produto"
     delete:
       summary: Deleta um produto.
       tags:
@@ -400,7 +400,7 @@ paths:
           required: true
           description: ID do produto
       responses:
-        '204':
+        "204":
           description: OK
   /produto/categoria/{category_id}:
     get:
@@ -415,19 +415,133 @@ paths:
           required: true
           description: ID da categoria do produto
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Produto'
+                $ref: "#/components/schemas/Produto"
+  #pedido
+  /pedido:
+    get:
+      summary: Recupera uma lista de pedidos.
+      description: Recupera uma lista de pedidos no sistema.
+      tags:
+        - "Pedido"
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+          description: recupera os dados de um pedido pelo status especifico ou parcial
+      responses:
+        "200":
+          description: retorna uma lista de pedidos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/pedido"
+    post:
+      summary: Cria um novo pedido.
+      tags:
+        - "Pedido"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                client_id:
+                  type: number
+                  format: integer
+              required:
+                - "status"
+                - "client_id"
+      responses:
+        "201":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/pedido"
+  /pedido/{id}:
+    get:
+      summary: Recupera um pedido pelo ID
+      tags:
+        - "Pedido"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do pedido
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pedido"
+    put:
+      summary: Atualiza os dados de um pedido.
+      tags:
+        - "Pedido"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do pedido
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                client_id:
+                  type: number
+                  format: integer
+              required:
+                - "status"
+                - "client_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pedido"
+    delete:
+      summary: Deleta um pedido.
+      tags:
+        - "Pedido"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do pedido
+      responses:
+        "204":
+          description: OK
 components:
   securitySchemes:
-     BearerAuth:
+    BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-  
+
   schemas:
     Auth:
       properties:
@@ -496,7 +610,7 @@ components:
         description:
           type: string
           example: Teste de produto
-        value: 
+        value:
           type: number
           format: decimal
           example: 0.00
