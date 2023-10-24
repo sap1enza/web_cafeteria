@@ -5,7 +5,11 @@ class Pedido {
         readonly cliente: Cliente,
         readonly status,
         readonly id?
-    ) {}
+    ) {
+      if (!cliente) {
+        throw new Error("Cliente é obrigatório.");
+      }
+    }
 }
 
 export default Pedido;
