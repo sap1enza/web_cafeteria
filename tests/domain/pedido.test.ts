@@ -4,13 +4,14 @@ import { test } from '@jest/globals';
 
 import Cliente from '../../app/domain/entity/cliente';
 import Pedido from '../../app/domain/entity/pedido';
+import { statusPedido } from '../../app/domain/entity/enum/statusPedido';
 
 describe("Validando Pedido", () => {
     test("Cria Pedido sem Cliente", () => {
       const dataPedido = () => {
         new Pedido(
           null,
-          "created"
+          statusPedido.CRIADO
         );
       };
       expect(dataPedido).toThrow(Error);
@@ -25,9 +26,9 @@ describe("Validando Pedido", () => {
 
         let dataPedido = new Pedido(
           dataClient,
-          "created"
+          statusPedido.CRIADO
         );
         expect("Heitor Bernardo Victor Nogueira").toEqual(dataPedido.cliente.name);
-        expect("created").toEqual(dataPedido.status);
+        expect(0).toEqual(dataPedido.status);
     })
 });
