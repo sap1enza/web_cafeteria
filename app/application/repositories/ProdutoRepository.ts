@@ -74,9 +74,7 @@ class ProdutoRepository extends IRepository{
     }
 
     public findByCategory = async (category_id: BigInteger) => {
-        console.log(category_id);
         let data = await this.db.find(`SELECT * FROM produto where category_id = ${category_id};`);
-        console.log(data);
         if (data.length>0) {
             return data;
         } else {

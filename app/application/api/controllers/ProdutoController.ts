@@ -138,7 +138,6 @@ class ProdutoController{
             if (typeof request.params.category_id  == 'undefined' || request.params.category_id == "") {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID da Categoria é requerido."));
             }
-            console.log(request.params.category_id);
             let data = await this.repository.findByCategory(request.params.category_id);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {

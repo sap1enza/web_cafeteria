@@ -39,7 +39,7 @@ class PedidoRepository extends IRepository{
     public update = async (pedido: Pedido, id: BigInteger) => {
         await this.db.store(
             `UPDATE pedidos SET
-                customer_id = ?
+                customer_id = ?,
                 status = ?,
                 modified = NOW()
             WHERE id = ?;

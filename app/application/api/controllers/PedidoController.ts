@@ -41,14 +41,16 @@ class PedidoController {
      */
     public store = async (request, response) => {
         try {
-            let customer = await this.clienteRepository.findById(request.body.customer_id);
+            let customer = await this.clienteRepository.findById(request.body.client_id);
             let order = new Pedido(
                 customer,
                 request.body.status
             );
 
             try {
+
                 let data = await this.repository.store(order);
+                
                 response.status(HttpStatus.OK).json(ResponseAPI.data(data));
             } catch(err) {
                 response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message));
@@ -65,13 +67,12 @@ class PedidoController {
      */
     public update = async (request, response) => {
         try {
-            let customer = await this.clienteRepository.findById(request.body.customer_id);
+            let customer = await this.clienteRepository.findById(request.body.client_id);
 
             let order = new Pedido(
                 customer,
                 request.body.status
-            );
-
+            );  
             let data = await this.repository.update(order, request.params.id);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {

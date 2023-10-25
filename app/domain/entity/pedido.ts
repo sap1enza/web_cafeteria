@@ -1,9 +1,10 @@
 import Cliente from "./cliente";
+import { statusPedido } from './enum/statusPedido';
 
 class Pedido {
     constructor (
         readonly cliente: Cliente,
-        readonly status,
+        readonly status: statusPedido,
         readonly id?
     ) {
       if (!cliente) {

@@ -6,6 +6,7 @@ import Cliente from '../../app/domain/entity/cliente';
 import Produto from '../../app/domain/entity/produto';
 import Pedido from '../../app/domain/entity/pedido';
 import PedidoProduto from '../../app/domain/entity/pedido_produto';
+import { statusPedido } from '../../app/domain/entity/enum/statusPedido';
 
 describe("Validando PedidoProduto", () => {
     test("Cria PedidoProduto sem Pedido", () => {
@@ -33,7 +34,7 @@ describe("Validando PedidoProduto", () => {
 
       let dataPedido = new Pedido(
         dataClient,
-        "created"
+        statusPedido.CRIADO
       );
 
       const dataPedidoProduto = () => {
@@ -54,7 +55,7 @@ describe("Validando PedidoProduto", () => {
 
       let dataPedido = new Pedido(
         dataClient,
-        "created"
+        statusPedido.CRIADO
       );
 
       let dataProduto = new Produto(
