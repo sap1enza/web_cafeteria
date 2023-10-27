@@ -68,10 +68,6 @@ class PedidoProdutosRepository extends IRepository{
             return null;
         }
     }
-
-    public deleteByIdPedido = async (id: BigInteger) => {
-        return await this.db.delete(`DELETE FROM pedido_produtos where id = ${id};`);
-    }
 }
 
 export default PedidoProdutosRepository;
