@@ -535,6 +535,90 @@ paths:
       responses:
         "204":
           description: OK
+#pedido-produtos
+  /pedidos-produtos:
+    get:
+      summary: Recupera uma lista de pedidos.
+      description: Recupera uma lista de pedidos no sistema.
+      tags:
+        - "Pedido-Produto"
+      # parameters:
+      #   - in: query
+      #     name: created
+      #     schema:
+      #       type: datetime
+      #       format: datetime
+      #     description: recupera os dados de todos os pedido com seus produtos
+      responses:
+        "200":
+          description: recupera os dados de todos os pedido com seus produtos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/pedidos-produtos"
+    post:
+      summary: Add um novo produto ao pedido existente.
+      tags:
+        - "Pedido-Produto"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pedido_id:
+                  type: number
+                  format: integer
+                produto_id:
+                  type: number
+                  format: integer
+              required:
+                - "pedido_id"
+                - "produto_id"
+      responses:
+        "201":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/pedidos-produtos"
+  /pedidos-produtos/{pedido_id}:
+    get:
+      summary: Recupera um pedido e seus produtos pelo ID do Pedido
+      tags:
+        - "Pedido-Produto"
+      parameters:
+        - in: path
+          name: pedido_id
+          schema:
+            type: integer
+          required: true
+          description: ID do pedido
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/pedidos-produtos"
+  /pedidos-produtos/{id}:
+    delete:
+      summary: Deleta um produto do pedido.
+      tags:
+        - "Pedido-Produto"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do pedido_produto
+      responses:
+        "204":
+          description: OK
 components:
   securitySchemes:
     BearerAuth:
@@ -625,31 +709,5 @@ components:
         - "title"
         - "value"
         - "category_id"
-    Pedidos:
-        properties:
-          id:
-            type: integer
-          customer_id:
-            type: integer
-            example: ID Cliente
-          status:
-            type: string
-            properties:
-            enum:
-            - 0- CRIADO
-            - 1- RECEBIDO
-            - 2- EM_PREPARACAO
-            - 3- PRONTO
-            - 4- FINALIZADO
-          created:
-            type: string
-            format: datetime
-          modified:
-            type: string
-            format: datetime
-        required:
-          - "id"
-          - "customer_id"
-          - "status"
 security:
   - BearerAuth: [JWT]

@@ -44,8 +44,8 @@ class PedidoProdutosController {
      */
     public store = async (request, response) => {
         try {
-            let order = await this.pedidoRepository.findById(request.body.order_id);
-            let product = await this.produtoRepository.findById(request.body.product_id);
+            let order = await this.pedidoRepository.findById(request.body.pedido_id);
+            let product = await this.produtoRepository.findById(request.body.produto_id);
 
             let order_product = new PedidoProduto(
                 order,
@@ -95,10 +95,12 @@ class PedidoProdutosController {
      */
     public show = async (request, response) => {
         try {
-            if (typeof request.params.id == 'undefined') {
+            console.log(request.params.pedido_id);
+            if (typeof request.params.pedido_id == 'undefined') {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
             }
-            let data = await this.repository.findById(request.params.id);
+            console.log(request.params.pedido_id);
+            let data = await this.repository.findByIdpedido(request.params.pedido_id);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR)
