@@ -59,6 +59,19 @@ class PedidoProdutosRepository extends IRepository{
             return null;
         }
     }
+
+    public findByIdpedido = async (id: BigInteger) => {
+        let data = await this.db.find(`SELECT * FROM pedido_produtos where order_id = ${id};`);
+        if (data.length>0) {
+            return data;
+        } else {
+            return null;
+        }
+    }
+
+    public deleteByIdPedido = async (id: BigInteger) => {
+        return await this.db.delete(`DELETE FROM pedido_produtos where id = ${id};`);
+    }
 }
 
 export default PedidoProdutosRepository;
