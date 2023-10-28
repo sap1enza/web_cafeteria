@@ -442,7 +442,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/pedidos"
+                  $ref: "#/components/schemas/Pedido"
     post:
       summary: Cria um novo pedido.
       tags:
@@ -468,7 +468,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/pedidos"
+                $ref: "#/components/schemas/Pedido"
   /pedidos/{id}:
     get:
       summary: Recupera um pedido pelo ID
@@ -487,7 +487,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/pedidos"
+                $ref: "#/components/schemas/Pedido"
     put:
       summary: Atualiza os dados de um pedido.
       tags:
@@ -520,7 +520,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/pedidos"
+                $ref: "#/components/schemas/Pedido"
     delete:
       summary: Deleta um pedido.
       tags:
@@ -557,7 +557,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/pedidos-produtos"
+                  $ref: "#/components/schemas/PedidoProdutos"
     post:
       summary: Add um novo produto ao pedido existente.
       tags:
@@ -584,7 +584,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/pedidos-produtos"
+                $ref: "#/components/schemas/PedidoProdutos"
   /pedidos-produtos/{pedido_id}:
     get:
       summary: Recupera um pedido e seus produtos pelo ID do Pedido
@@ -603,7 +603,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/pedidos-produtos"
+                $ref: "#/components/schemas/PedidoProdutos"
   /pedidos-produtos/{id}:
     delete:
       summary: Deleta um produto do pedido.
@@ -709,5 +709,13 @@ components:
         - "title"
         - "value"
         - "category_id"
+    Pedido:
+      properties:
+        id:
+          type: integer
+    PedidoProdutos:
+      properties:
+        id:
+          type: integer
 security:
   - BearerAuth: [JWT]

@@ -32,10 +32,9 @@ class Cliente{
         return cpf.isValid(this.cpf_cnpj);
     }
 
-    public isValidEmail() : boolean {    
-        return !String(this.email)
-        .toLocaleLowerCase()
-        .match('^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+    public isValidEmail() : boolean {  
+        const expression = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
+        return expression.test(this.email); 
     }
 
     public cpfFormat() : string {
