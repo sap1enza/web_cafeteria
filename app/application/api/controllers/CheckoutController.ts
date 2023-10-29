@@ -22,7 +22,7 @@ class CheckoutController {
     public store = async (request: Request, response: Response) => {
         try {
             let pedidoRepository = new PedidoRepository(new MysqlDataBase());
-            let pedido = pedidoRepository.findById(request.body.pedido_id);
+            let pedido = await pedidoRepository.findById(request.body.pedido_id);
 
             let instance = new Checkout(
                pedido,
@@ -39,18 +39,23 @@ class CheckoutController {
             );
 
             response.status(HttpStatus.OK).json(ResponseAPI.data(instance));
-            this.repository = new CheckoutPagamento(instance);
+            // this.repository = new CheckoutPagamento(instance);
             
-            try {
-                let data = await this.repository.create();
-                response.status(HttpStatus.OK).json(ResponseAPI.data(data));
-            } catch(err) {
-                    response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            }
+            // try {
+            //     let data = await this.repository.create();
+            //     response.status(HttpStatus.OK).json(ResponseAPI.data(data));
+            // } catch(err) {
+            //         response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
+            // }
 
         } catch (err) {
             response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message)); 
         } 
+    }
+
+
+    public hook = async (request: Request, response: Response) => {
+        response.status(HttpStatus.OK).json(ResponseAPI.data(request.params.uuid));
     }
 
 }

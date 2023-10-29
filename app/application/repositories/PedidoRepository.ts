@@ -1,4 +1,5 @@
 import Pedido from "../../domain/entity/pedido";
+import ClienteRepository from "./ClienteRepository";
 import IRepository from "./IReporitory";
 
 class PedidoRepository extends IRepository{
@@ -56,7 +57,13 @@ class PedidoRepository extends IRepository{
     public findById = async (id: BigInteger) : Promise<Pedido> => {
         let data = await this.db.find(`SELECT * FROM pedidos where id = ${id};`);
         if (data.length>0) {
-            return data[0];
+            let cliente = await new ClienteRepository(this.db).findById(data[0].customer_id)
+            let pedido = new Pedido(
+                cliente,
+                data[0].id
+            );
+            pedido.setStatus(data[0].getStatus())
+            return pedido;
         } else {
             return null;
         }
