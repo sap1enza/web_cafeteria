@@ -535,90 +535,63 @@ paths:
       responses:
         "204":
           description: OK
-#pedido-produtos
-  /pedidos-produtos:
-    get:
-      summary: Recupera uma lista de pedidos.
-      description: Recupera uma lista de pedidos no sistema.
-      tags:
-        - "Pedido-Produto"
-      # parameters:
-      #   - in: query
-      #     name: created
-      #     schema:
-      #       type: datetime
-      #       format: datetime
-      #     description: recupera os dados de todos os pedido com seus produtos
-      responses:
-        "200":
-          description: recupera os dados de todos os pedido com seus produtos
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/PedidoProdutos"
+  #checkout
+  /checkout:
     post:
-      summary: Add um novo produto ao pedido existente.
+      summary: "Cria um pagamento de para um Pedido"
       tags:
-        - "Pedido-Produto"
+        - "Checkout"
       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                pedido_id:
-                  type: number
-                  format: integer
-                produto_id:
-                  type: number
-                  format: integer
-              required:
-                - "pedido_id"
-                - "produto_id"
+        $ref: '#/components/requestBodies/CheckoutBody'
       responses:
         "201":
-          description: OK
+          description: "Requisição para pagamento realizada com sucesso."
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PedidoProdutos"
-  /pedidos-produtos/{pedido_id}:
-    get:
-      summary: Recupera um pedido e seus produtos pelo ID do Pedido
+                type: object
+                properties:
+                  pedido_id:
+                    type: number
+                    format: integer
+                    example: 1
+                  status:
+                      type: number
+                      format: integer
+                      example: 1
+                  uuid:
+                      type: string
+                      example: '0115b81d-067e-4b62-a4c3-253e1b218712'
+                  cartao:
+                    $ref: '#/components/schemas/Cartao'
+  /checkout/{uuid}/hook:
+    post:
+      summary: "Recebe um retorno de pagamento do gateway de pagamento escolhido"
+      security: []
       tags:
-        - "Pedido-Produto"
-      parameters:
-        - in: path
-          name: pedido_id
-          schema:
-            type: integer
-          required: true
-          description: ID do pedido
+        - "Checkout"
       responses:
-        "200":
-          description: OK
+        "201":
+          description: "Requisição para pagamento realizada com sucesso."
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PedidoProdutos"
-  /pedidos-produtos/{id}:
-    delete:
-      summary: Deleta um produto do pedido.
-      tags:
-        - "Pedido-Produto"
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID do pedido_produto
-      responses:
-        "204":
-          description: OK
+                type: object
+                properties:
+                  pedido_id:
+                    type: number
+                    format: integer
+                    example: 1
+                  status:
+                      type: number
+                      format: integer
+                      example: 2
+                  uuid:
+                      type: string
+                      example: '0115b81d-067e-4b62-a4c3-253e1b218712'
+                  cartao:
+                    $ref: '#/components/schemas/Cartao'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -626,6 +599,21 @@ components:
       scheme: bearer
       bearerFormat: JWT
 
+  requestBodies:
+    CheckoutBody:
+      description: "Payload para cadastro ou atualização do checkout"
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              pedido_id:
+                type: number
+                format: integer
+                example: 1
+              cartao:
+                $ref: '#/components/schemas/Cartao'
   schemas:
     Auth:
       properties:
@@ -713,9 +701,30 @@ components:
       properties:
         id:
           type: integer
-    PedidoProdutos:
+    Payer: 
       properties:
-        id:
+        name:
+          type: string
+          example: 'Jhon Doe'
+        email:
+          type: string
+          example : jhondoe@test.com
+        document:
+          type: string
+          example: '317.594.877-40'
+    Cartao:
+      properties:
+        number:
           type: integer
+          example: '4171-9043-4466-6522'
+        cvv:
+          type: integer
+          example: 171
+        expiration_date:
+          type: string
+          format: date
+        payer:
+          $ref: '#/components/schemas/Payer'
+
 security:
   - BearerAuth: [JWT]

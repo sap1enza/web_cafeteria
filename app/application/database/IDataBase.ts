@@ -5,6 +5,7 @@ abstract class IDataBase {
     abstract update(query: string, data);
     abstract delete(query: string);
     abstract find(query: string);
+    abstract query(query: string);
 
 }
 

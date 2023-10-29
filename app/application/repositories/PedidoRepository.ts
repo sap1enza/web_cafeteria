@@ -1,4 +1,5 @@
 import Pedido from "../../domain/entity/pedido";
+import ClienteRepository from "./ClienteRepository";
 import IRepository from "./IReporitory";
 
 class PedidoRepository extends IRepository{
@@ -28,10 +29,9 @@ class PedidoRepository extends IRepository{
                     NOW(),
                     NOW()
                 );
-            `, [pedido.cliente.id, pedido.status]);
+            `, [pedido.cliente.id, pedido.getStatus()]);
         return new Pedido(
             pedido.cliente,
-            pedido.status,
             parseInt(data.insertId)
         );
     }
@@ -43,10 +43,9 @@ class PedidoRepository extends IRepository{
                 status = ?,
                 modified = NOW()
             WHERE id = ?;
-            `, [pedido.cliente.id, pedido.status, id]);
+            `, [pedido.cliente.id, pedido.getStatus(), id]);
         return new Pedido(
             pedido.cliente,
-            pedido.status,
             id
         );
     }
@@ -55,10 +54,16 @@ class PedidoRepository extends IRepository{
         return await this.db.delete(`DELETE FROM pedidos where id = ${id};`);
     }
 
-    public findById = async (id: BigInteger) => {
+    public findById = async (id: BigInteger) : Promise<Pedido> => {
         let data = await this.db.find(`SELECT * FROM pedidos where id = ${id};`);
         if (data.length>0) {
-            return data[0];
+            let cliente = await new ClienteRepository(this.db).findById(data[0].customer_id)
+            let pedido = new Pedido(
+                cliente,
+                data[0].id
+            );
+            pedido.setStatus(parseInt(data[0].status))
+            return pedido;
         } else {
             return null;
         }

@@ -54,7 +54,7 @@ class ClienteRepository extends IRepository
         return await this.db.delete(`DELETE FROM cliente where id = ${id};`);
     }
     
-    public findById = async (id: BigInteger) => {
+    public findById = async (id: BigInteger) : Promise<Cliente> => {
         let data = await this.db.find(`SELECT * FROM cliente where id = ${id};`);
         if (data.length>0) {
             return data[0];

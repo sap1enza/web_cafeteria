@@ -29,6 +29,6 @@ describe("Validando Pedido", () => {
           statusPedido.CRIADO
         );
         expect("Heitor Bernardo Victor Nogueira").toEqual(dataPedido.cliente.name);
-        expect(0).toEqual(dataPedido.status);
+        expect(0).toEqual(dataPedido.getStatus());
     })
 });

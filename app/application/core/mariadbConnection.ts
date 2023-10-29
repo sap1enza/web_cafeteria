@@ -10,24 +10,22 @@ class MysqlConnection
     }
 
     async connect(){
-        if (this.connection==null) {
-            this.connection = await mariadb.createConnection({
-                host: process.env.MARIADB_HOST,
-                user: process.env.MARIADB_USER,
-                password: process.env.MARIADB_PASS,
-                database: process.env.MARIADB_DATABASE,
-                port : parseInt(process.env.MARIADB_PORT),
-            });
-        }
+        this.connection = await mariadb.createConnection({
+            host: process.env.MARIADB_HOST,
+            user: process.env.MARIADB_USER,
+            password: process.env.MARIADB_PASS,
+            database: process.env.MARIADB_DATABASE,
+            port : parseInt(process.env.MARIADB_PORT),
+        });
 
         await this.connection.query(`CREATE TABLE IF NOT EXISTS cliente (
-                id INT PRIMARY KEY AUTO_INCREMENT,
-                name VARCHAR(200) not null,
-                email VARCHAR(245) not null unique,
-                cpf_cnpj VARCHAR(20) not null unique,
-                created datetime null,
-                modified datetime null
-            )  ENGINE=INNODB;`);
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            name VARCHAR(200) not null,
+            email VARCHAR(245) not null unique,
+            cpf_cnpj VARCHAR(20) not null unique,
+            created datetime null,
+            modified datetime null
+        )  ENGINE=INNODB;`);
 
         await this.connection.query(`CREATE TABLE IF NOT EXISTS categoria (
             id INT PRIMARY KEY AUTO_INCREMENT,
@@ -67,9 +65,26 @@ class MysqlConnection
                 modified datetime null
             )  ENGINE=INNODB;
         `);
+
+        await this.connection.query(`
+            CREATE TABLE IF NOT EXISTS checkout (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                uuid VARCHAR(254) not null unique,
+                status int(11) not null default 1,
+                pedido_id int(11) not null,
+                card_number varchar(50) not null,
+                card_cvv varchar(10) not null,
+                card_expiration_date varchar(10) not null,
+                payer_name varchar(245) not null,
+                payer_email varchar(245) not null,
+                payer_document varchar(16) not null,
+                created datetime null,
+                modified datetime null
+            )  ENGINE=INNODB;
+        `);   
     }
 
-    public conn() {
+    public conn () {
         return this.connection;
     }
 }

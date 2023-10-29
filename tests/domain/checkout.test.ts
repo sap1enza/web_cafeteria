@@ -47,7 +47,7 @@ describe("Validando Entity Checkout", () => {
         expect("155").toEqual(instance.cartao.cvv);
         expect("9/2026").toEqual(instance.cartao.expirationDate);
 
-        expect(statusPedido.CRIADO).toEqual(instance.pedido.status);
+        expect(statusPedido.CRIADO).toEqual(instance.pedido.getStatus());
         expect(StatusCheckout.AGUARDANDO_PAGAMENTO).toEqual(instance.getStatus());
         expect(instance.uuid).not.toBeNull();
     });

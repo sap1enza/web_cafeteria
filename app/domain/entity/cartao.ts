@@ -8,10 +8,10 @@ class Cartao {
         if (String(number).replace(/-/g, '').length != 16) {
             throw new Error("Número do Cartão DEVE conter 16 digitos.");
         }
-        if (!cvv.trim()) {
+        if (!String(cvv).trim()) {
             throw new Error("CVV do Cartão é obrigatório.");
         }
-        if (!expirationDate.trim()) {
+        if (!String(expirationDate).trim()) {
             throw new Error("Data de Expiração do Cartão é obrigatória.");
         }
     }
