@@ -9,5 +9,9 @@
     "include": ["**/*.ts","*.ts"],
     "exclude": ["node_modules"],
     "buildOnSave": true,
-    "compileOnSave": true
+    "compileOnSave": true,
+    "lib": [
+        // ... other libs
+        "ES2021.String"
+    ]
 }
