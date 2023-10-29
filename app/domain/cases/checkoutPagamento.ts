@@ -28,10 +28,10 @@ class CheckoutPagamento {
     }
 
     
-    paymentPIX = () => {}
+    public paymentPIX = () => {}
 
 
-    confirmPayment = async () : Promise<Checkout> => {
+    public confirmPayment = async () : Promise<Checkout> => {
         this.checkout.setStatus(StatusCheckout.PAGAMENTO_EFETUADO);
         /**
          * TODO altera o status do pagamento no banco de dados

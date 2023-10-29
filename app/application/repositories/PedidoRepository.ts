@@ -28,10 +28,9 @@ class PedidoRepository extends IRepository{
                     NOW(),
                     NOW()
                 );
-            `, [pedido.cliente.id, pedido.status]);
+            `, [pedido.cliente.id, pedido.getStatus()]);
         return new Pedido(
             pedido.cliente,
-            pedido.status,
             parseInt(data.insertId)
         );
     }
@@ -43,10 +42,9 @@ class PedidoRepository extends IRepository{
                 status = ?,
                 modified = NOW()
             WHERE id = ?;
-            `, [pedido.cliente.id, pedido.status, id]);
+            `, [pedido.cliente.id, pedido.getStatus(), id]);
         return new Pedido(
             pedido.cliente,
-            pedido.status,
             id
         );
     }
@@ -55,7 +53,7 @@ class PedidoRepository extends IRepository{
         return await this.db.delete(`DELETE FROM pedidos where id = ${id};`);
     }
 
-    public findById = async (id: BigInteger) => {
+    public findById = async (id: BigInteger) : Promise<Pedido> => {
         let data = await this.db.find(`SELECT * FROM pedidos where id = ${id};`);
         if (data.length>0) {
             return data[0];
