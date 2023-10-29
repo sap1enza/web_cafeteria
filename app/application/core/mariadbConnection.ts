@@ -67,6 +67,16 @@ class MysqlConnection
                 modified datetime null
             )  ENGINE=INNODB;
         `);
+        
+        await this.connection.query(`TRUNCATE TABLE categoria;`);
+
+        await this.connection.query(`
+            INSERT INTO categoria (id, name, created, modified) 
+            VALUES 
+            (1, 'Lanche',NOW(), NOW()), 
+            (2, 'Acompanhamento',NOW(), NOW()), 
+            (3, 'Bebidas',NOW(), NOW());
+        `);
     }
 
     public conn() {
