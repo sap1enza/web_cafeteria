@@ -67,6 +67,23 @@ class MysqlConnection
                 modified datetime null
             )  ENGINE=INNODB;
         `);
+
+        await this.connection.query(`
+            CREATE TABLE IF NOT EXISTS checkout (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                uuid VARCHAR(254) not null unique,
+                status int(11) not null default 1,
+                pedido_id int(11) not null,
+                card_number varchar(50) not null,
+                card_cvv varchar(10) not null,
+                card_expiration_date varchar(10) not null,
+                payer_name varchar(245) not null,
+                payer_email varchar(245) not null,
+                payer_document varchar(16) not null,
+                created datetime null,
+                modified datetime null
+            )  ENGINE=INNODB;
+        `);        
         
         await this.connection.query(`TRUNCATE TABLE categoria;`);
 
