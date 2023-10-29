@@ -1,14 +1,15 @@
-import MysqlDataBase from "../../application/database/MysqlDataBase";
 import CheckoutPagamentoRepository from "../../application/repositories/CheckoutPagamentoRepository";
 import Checkout from "../entity/checkout";
 import { StatusCheckout } from "../entity/enum/statusCheckout";
+import MysqlDataBase from "../../application/database/MysqlDataBase";
+import IDataBase from "../../application/database/IDataBase";
 
 class CheckoutPagamento {
     
     private repo: CheckoutPagamentoRepository;
 
-    constructor(readonly checkout: Checkout) {
-        this.repo = new CheckoutPagamentoRepository(new MysqlDataBase());
+    constructor(readonly checkout: Checkout, database: IDataBase) {
+        this.repo = new CheckoutPagamentoRepository(database);
     }
 
     public create = async () : Promise<Checkout> => {

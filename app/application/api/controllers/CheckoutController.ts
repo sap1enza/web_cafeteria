@@ -2,7 +2,6 @@ import * as HttpStatus from 'http-status';
 import ResponseAPI from "../../core/ResponseAPI"
 import {Request, Response} from 'express';
 import Checkout from '../../../domain/entity/checkout';
-import Pedido from '../../../domain/entity/pedido';
 import Cartao from '../../../domain/entity/cartao';
 import Payer from '../../../domain/entity/payer';
 import CheckoutPagamento from '../../../domain/cases/checkoutPagamento';
@@ -13,6 +12,12 @@ import MysqlDataBase from '../../database/MysqlDataBase';
 class CheckoutController {
 
     private repository : CheckoutPagamento;
+    private pedidoRepository: PedidoRepository;
+    private mysqlidatabase: MysqlDataBase;
+    constructor() {
+        this.mysqlidatabase = new MysqlDataBase();
+        this.pedidoRepository = new PedidoRepository(this.mysqlidatabase);
+    }
 
     /**
      * 
@@ -21,8 +26,8 @@ class CheckoutController {
      */
     public store = async (request: Request, response: Response) => {
         try {
-            let pedidoRepository = new PedidoRepository(new MysqlDataBase());
-            let pedido = await pedidoRepository.findById(request.body.pedido_id);
+            
+            let pedido = await this.pedidoRepository.findById(request.body.pedido_id);
 
             let instance = new Checkout(
                pedido,
@@ -34,19 +39,18 @@ class CheckoutController {
                     ),
                     request.body.cartao.number,
                     request.body.cartao.cvv,
-                    request.body.cartao.document
+                    request.body.cartao.expiration_date,
                 )
             );
 
-            response.status(HttpStatus.OK).json(ResponseAPI.data(instance));
-            // this.repository = new CheckoutPagamento(instance);
+            let checkoutPagamento = new CheckoutPagamento(instance,  this.mysqlidatabase);
             
-            // try {
-            //     let data = await this.repository.create();
-            //     response.status(HttpStatus.OK).json(ResponseAPI.data(data));
-            // } catch(err) {
-            //         response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            // }
+            try {
+                let data = await checkoutPagamento.create();
+                response.status(HttpStatus.OK).json(ResponseAPI.data(data));
+            } catch(err) {
+                    response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
+            }
 
         } catch (err) {
             response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message)); 

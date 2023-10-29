@@ -7,9 +7,7 @@ class MysqlDataBase extends IDataBase {
 
     constructor(){
         super();
-        if (this.db==null) {
-            this.db = new MysqlConnection();
-        }
+        this.db = new MysqlConnection();
     }
 
     async store(query: string, data: any) {
@@ -22,7 +20,12 @@ class MysqlDataBase extends IDataBase {
         return await this.db.conn().query(query);
     }
     async find(query: string) {
+        console.log(query)
         return await this.db.conn().query(query);
+    }
+    async query(query: string) {
+        console.log(query)
+        return await this.db.conn().query(query)
     }
 }
 

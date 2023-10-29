@@ -62,7 +62,7 @@ class PedidoRepository extends IRepository{
                 cliente,
                 data[0].id
             );
-            pedido.setStatus(data[0].getStatus())
+            pedido.setStatus(parseInt(data[0].status))
             return pedido;
         } else {
             return null;

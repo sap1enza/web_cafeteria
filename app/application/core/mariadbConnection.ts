@@ -10,24 +10,22 @@ class MysqlConnection
     }
 
     async connect(){
-        if (this.connection==null) {
-            this.connection = await mariadb.createConnection({
-                host: process.env.MARIADB_HOST,
-                user: process.env.MARIADB_USER,
-                password: process.env.MARIADB_PASS,
-                database: process.env.MARIADB_DATABASE,
-                port : parseInt(process.env.MARIADB_PORT),
-            });
-        }
+        this.connection = await mariadb.createConnection({
+            host: process.env.MARIADB_HOST,
+            user: process.env.MARIADB_USER,
+            password: process.env.MARIADB_PASS,
+            database: process.env.MARIADB_DATABASE,
+            port : parseInt(process.env.MARIADB_PORT),
+        });
 
         await this.connection.query(`CREATE TABLE IF NOT EXISTS cliente (
-                id INT PRIMARY KEY AUTO_INCREMENT,
-                name VARCHAR(200) not null,
-                email VARCHAR(245) not null unique,
-                cpf_cnpj VARCHAR(20) not null unique,
-                created datetime null,
-                modified datetime null
-            )  ENGINE=INNODB;`);
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            name VARCHAR(200) not null,
+            email VARCHAR(245) not null unique,
+            cpf_cnpj VARCHAR(20) not null unique,
+            created datetime null,
+            modified datetime null
+        )  ENGINE=INNODB;`);
 
         await this.connection.query(`CREATE TABLE IF NOT EXISTS categoria (
             id INT PRIMARY KEY AUTO_INCREMENT,
@@ -83,20 +81,10 @@ class MysqlConnection
                 created datetime null,
                 modified datetime null
             )  ENGINE=INNODB;
-        `);        
-        
-        await this.connection.query(`TRUNCATE TABLE categoria;`);
-
-        await this.connection.query(`
-            INSERT INTO categoria (id, name, created, modified) 
-            VALUES 
-            (1, 'Lanche',NOW(), NOW()), 
-            (2, 'Acompanhamento',NOW(), NOW()), 
-            (3, 'Bebidas',NOW(), NOW());
-        `);
+        `);   
     }
 
-    public conn() {
+    public conn () {
         return this.connection;
     }
 }
