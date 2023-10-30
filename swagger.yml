@@ -459,6 +459,9 @@ paths:
                 client_id:
                   type: number
                   format: integer
+                produtosIds:
+                  type: array
+                  format: integer
               required:
                 - "status"
                 - "client_id"
@@ -488,53 +491,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Pedido"
-    put:
-      summary: Atualiza os dados de um pedido.
-      tags:
-        - "Pedido"
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID do pedido
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  type: string
-                client_id:
-                  type: number
-                  format: integer
-              required:
-                - "status"
-                - "client_id"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Pedido"
-    delete:
-      summary: Deleta um pedido.
-      tags:
-        - "Pedido"
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-          description: ID do pedido
-      responses:
-        "204":
-          description: OK
   #checkout
   /checkout:
     post:
@@ -697,10 +653,25 @@ components:
         - "title"
         - "value"
         - "category_id"
-    Pedido:
-      properties:
-        id:
-          type: integer
+    Pedidos:
+       properties:
+         id:
+           type: integer
+         customer_id:
+           type: integer
+           example: ID Cliente
+         status:
+           type: string
+           enum:
+           - 0- CRIADO
+           - 1- RECEBIDO
+           - 2- EM_PREPARACAO
+           - 3- PRONTO
+           - 4- FINALIZADO
+       required:
+         - "id"
+         - "customer_id"
+         - "status"
     Payer: 
       properties:
         name:

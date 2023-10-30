@@ -4,6 +4,8 @@ import PedidoRepository from "../../repositories/PedidoRepository";
 import ResponseAPI from '../../core/ResponseAPI';
 import MysqlDataBase from '../../database/MysqlDataBase';
 import Pedido from '../../../domain/entity/pedido';
+import Produto from '../../../domain/entity/produto';
+import ProdutoRepository from '../../repositories/ProdutoRepository';
 
 class PedidoController {
     /**
@@ -11,13 +13,16 @@ class PedidoController {
      */
     public repository: PedidoRepository;
     public clienteRepository: ClienteRepository;
+    public produtoRepository: ProdutoRepository;
 
     /**
      *
      */
     constructor() {
-        this.repository = new PedidoRepository(new MysqlDataBase());
+        //this.repository = new PedidoRepository(new MysqlDataBase());
         this.clienteRepository = new ClienteRepository(new MysqlDataBase());
+        this.produtoRepository = new ProdutoRepository(new MysqlDataBase());
+        this.repository = new PedidoRepository(new MysqlDataBase());
     }
 
     /**
@@ -42,16 +47,30 @@ class PedidoController {
     public store = async (request, response) => {
         try {
             let customer = await this.clienteRepository.findById(request.body.client_id);
+            //let produto = await this.produtoRepository.findById(request.body.client_id);
+            let produtos: Produto[] = request.body.produtosIds;
             let order = new Pedido(
                 customer,
                 request.body.status
             );
-
+            console.log(produtos);
+            
+            produtos.forEach(produto => {
+                order.adicionarProduto(produto)   
+            });    
+            console.log(order);
             try {
 
-                let data = await this.repository.store(order);
+                let orderResult = await this.repository.store(order);
+                console.log('Result: ',orderResult);
+                console.log('Result2: ',orderResult.id);
+                produtos.forEach(async produto => {
+                    console.log('Result4: ',produto);
+                    orderResult.adicionarProduto(produto);
+                    let data = await this.repository.adicionarProdutoAoPedido(orderResult.id, produto);
+                });
                 
-                response.status(HttpStatus.OK).json(ResponseAPI.data(data));
+                response.status(HttpStatus.OK).json(ResponseAPI.data(orderResult));
             } catch(err) {
                 response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message));
             }

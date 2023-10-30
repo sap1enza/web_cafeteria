@@ -7,6 +7,7 @@ import Payer from '../../../domain/entity/payer';
 import CheckoutPagamento from '../../../domain/cases/checkoutPagamento';
 import PedidoRepository from '../../repositories/PedidoRepository';
 import MysqlDataBase from '../../database/MysqlDataBase';
+import { statusPedido } from '../../../domain/entity/enum/statusPedido';
 
 
 class CheckoutController {
@@ -28,7 +29,7 @@ class CheckoutController {
         try {
             
             let pedido = await this.pedidoRepository.findById(request.body.pedido_id);
-
+            
             let instance = new Checkout(
                pedido,
                 new Cartao(
@@ -47,6 +48,11 @@ class CheckoutController {
             
             try {
                 let data = await checkoutPagamento.create();
+                if (response.status(HttpStatus.OK)){
+                    pedido.setStatus(statusPedido.EM_PREPARACAO);
+                    await this.pedidoRepository.update(pedido, pedido.id);
+                }
+                
                 response.status(HttpStatus.OK).json(ResponseAPI.data(data));
             } catch(err) {
                     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
