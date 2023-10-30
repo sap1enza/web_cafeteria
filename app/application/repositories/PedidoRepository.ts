@@ -1,12 +1,13 @@
 import Pedido from "../../domain/entity/pedido";
 import ClienteRepository from "./ClienteRepository";
 import IRepository from "./IReporitory";
+import Produto from '../../domain/entity/produto';
 
 class PedidoRepository extends IRepository{
 
     public getAll = async (params: any) => {
         let CONDITIONS = "";
-
+        console.log(params);
         if (typeof params.status != 'undefined' && params.status != "") {
             CONDITIONS += ` status LIKE '%${params.status}%' `;
         }
@@ -14,8 +15,10 @@ class PedidoRepository extends IRepository{
         if (CONDITIONS != "") {
             CONDITIONS = ' WHERE ' + CONDITIONS;
         }
+        return await this.db.find(`SELECT * FROM pedidos  ${CONDITIONS};`);
 
-        return await this.db.find(`SELECT * FROM pedidos ${CONDITIONS};`);
+        // return await this.db.find(`SELECT p.id AS pedido_id, p.customer_id, p.status AS pedido_status,
+        // pp.product_id, pp.created, pp.modified FROM pedidos p inner join pedido_produtos pp on p.id=pp.order_id  ${CONDITIONS};`);
     }
 
     public store = async(pedido: Pedido) => {
@@ -32,8 +35,18 @@ class PedidoRepository extends IRepository{
             `, [pedido.cliente.id, pedido.getStatus()]);
         return new Pedido(
             pedido.cliente,
+            pedido.getStatus(),
             parseInt(data.insertId)
         );
+    }
+
+    public adicionarProdutoAoPedido = async (pedidoId: Pedido, produtoId: Produto) => {
+        let data = await this.db.store( `
+            INSERT INTO pedido_produtos (order_id, product_id, created, modified)
+            VALUES (?, ?, NOW(), NOW());
+        `,[pedidoId, produtoId]);
+
+        return data.insertId;
     }
 
     public update = async (pedido: Pedido, id: BigInteger) => {
@@ -46,6 +59,7 @@ class PedidoRepository extends IRepository{
             `, [pedido.cliente.id, pedido.getStatus(), id]);
         return new Pedido(
             pedido.cliente,
+            pedido.getStatus(),
             id
         );
     }
@@ -56,13 +70,18 @@ class PedidoRepository extends IRepository{
 
     public findById = async (id: BigInteger) : Promise<Pedido> => {
         let data = await this.db.find(`SELECT * FROM pedidos where id = ${id};`);
+        let dataPedidos: Produto[] = await this.db.find(`SELECT * FROM pedido_produtos where order_id = ${id};`);
         if (data.length>0) {
             let cliente = await new ClienteRepository(this.db).findById(data[0].customer_id)
             let pedido = new Pedido(
                 cliente,
+                data[0].status,
                 data[0].id
             );
-            pedido.setStatus(parseInt(data[0].status))
+            dataPedidos.forEach(produto => {
+                pedido.adicionarProduto(produto)   
+            });  
+            console.log(pedido)
             return pedido;
         } else {
             return null;

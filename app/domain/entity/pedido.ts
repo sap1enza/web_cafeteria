@@ -4,35 +4,40 @@ import Produto from "./produto";
 
 class Pedido {
 
-    private status;
-
-    private produtos = [];
+  private _produtos: Produto[] = []; 
+  private _status: statusPedido;
+  private _valorTotal: number;
 
     constructor (
         readonly cliente: Cliente,
-        readonly id?
+        status: statusPedido = statusPedido.CRIADO,
+        readonly id? 
     ) {
       if (!cliente) {
         throw new Error("Cliente é obrigatório.");
       }
-      this.status = statusPedido.CRIADO;
+      this._status = status;
     }
 
-    setProdutos = (produto: Produto) => {
-        this.produtos.push(produto);
-    }
+    somaTotal(valorASomar: number): void {
+      this._valorTotal += valorASomar;
+  }
+    adicionarProduto(produto: Produto): void {
+      this._produtos.push(produto);
+  }
 
     getProdutos = () => {
-        return this.produtos;
+        return this._produtos;
     }
 
     setStatus = (status: statusPedido) => {
-      this.status = status;
+      this._status = status;
     }
 
     getStatus = () => {
-      return this.status;
+      return this._status;
     }
+    
 }
 
 export default Pedido;
