@@ -51,6 +51,7 @@ class MysqlConnection
                 id INT PRIMARY KEY AUTO_INCREMENT,
                 customer_id INT not null,
                 status VARCHAR(200) not null default 'created',
+                total_value decimal(19,2) not null default 0,
                 created datetime null,
                 modified datetime null
             )  ENGINE=INNODB;
@@ -78,6 +79,7 @@ class MysqlConnection
                 payer_name varchar(245) not null,
                 payer_email varchar(245) not null,
                 payer_document varchar(16) not null,
+                total_value decimal(19,2) not null default 0,
                 created datetime null,
                 modified datetime null
             )  ENGINE=INNODB;

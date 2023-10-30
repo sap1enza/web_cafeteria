@@ -5,8 +5,10 @@ import Produto from "./produto";
 class Pedido {
 
   private _produtos: Produto[] = []; 
+
   private _status: statusPedido;
-  private _valorTotal: number;
+
+  private _valorTotal: number = 0;
 
     constructor (
         readonly cliente: Cliente,
@@ -19,12 +21,18 @@ class Pedido {
       this._status = status;
     }
 
-    somaTotal(valorASomar: number): void {
-      this._valorTotal += valorASomar;
-  }
+    somaTotal(valor: number): void {
+      this._valorTotal += valor;
+    }
+
+    getValorTotal() : number {
+      return this._valorTotal;
+    }
+
     adicionarProduto(produto: Produto): void {
-      this._produtos.push(produto);
-  }
+        this._produtos.push(produto);
+        this.somaTotal(produto.value);
+    }
 
     getProdutos = () => {
         return this._produtos;

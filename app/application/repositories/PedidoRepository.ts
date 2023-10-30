@@ -24,15 +24,16 @@ class PedidoRepository extends IRepository{
     public store = async(pedido: Pedido) => {
         let data = await this.db.store(
             `INSERT INTO pedidos
-                (customer_id, status, created, modified)
+                (customer_id, status, total_value, created, modified)
              VALUES
                 (
+                    ?,
                     ?,
                     ?,
                     NOW(),
                     NOW()
                 );
-            `, [pedido.cliente.id, pedido.getStatus()]);
+            `, [pedido.cliente.id, pedido.getStatus(), pedido.getValorTotal()]);
         return new Pedido(
             pedido.cliente,
             pedido.getStatus(),
@@ -54,9 +55,10 @@ class PedidoRepository extends IRepository{
             `UPDATE pedidos SET
                 customer_id = ?,
                 status = ?,
+                total_value = ?,
                 modified = NOW()
             WHERE id = ?;
-            `, [pedido.cliente.id, pedido.getStatus(), id]);
+            `, [pedido.cliente.id, pedido.getStatus(), pedido.getValorTotal(), id]);
         return new Pedido(
             pedido.cliente,
             pedido.getStatus(),
