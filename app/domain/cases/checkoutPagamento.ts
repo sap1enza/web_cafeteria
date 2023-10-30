@@ -1,7 +1,6 @@
 import CheckoutPagamentoRepository from "../../application/repositories/CheckoutPagamentoRepository";
 import Checkout from "../entity/checkout";
 import { StatusCheckout } from "../entity/enum/statusCheckout";
-import MysqlDataBase from "../../application/database/MysqlDataBase";
 import IDataBase from "../../application/database/IDataBase";
 
 class CheckoutPagamento {

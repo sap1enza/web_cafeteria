@@ -20,11 +20,9 @@ class MysqlDataBase extends IDataBase {
         return await this.db.conn().query(query);
     }
     async find(query: string) {
-        console.log(query)
         return await this.db.conn().query(query);
     }
     async query(query: string) {
-        console.log(query)
         return await this.db.conn().query(query)
     }
 }
