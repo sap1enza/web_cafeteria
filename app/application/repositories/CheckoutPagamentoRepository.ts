@@ -19,6 +19,7 @@ class CheckoutPagamentoRepository extends IRepository
                 payer_name = ?,
                 payer_email = ?,
                 payer_document = ?, 
+                total_value = ?, 
                 modified = NOW()
             WHERE id = ?
             `, [
@@ -31,6 +32,7 @@ class CheckoutPagamentoRepository extends IRepository
                 chekout.cartao.payer.name,
                 chekout.cartao.payer.email,
                 chekout.cartao.payer.document,
+                chekout.pedido.getValorTotal(),
                 id
             ]); 
 
@@ -44,9 +46,10 @@ class CheckoutPagamentoRepository extends IRepository
     public store = async (chekout: Checkout) => {
         let data = await this.db.store(
             `INSERT INTO checkout 
-                (uuid, status, pedido_id, card_number, card_cvv, card_expiration_date, payer_name, payer_email, payer_document, created, modified) 
+                (uuid, status, pedido_id, card_number, card_cvv, card_expiration_date, payer_name, payer_email, payer_document, total_value, created, modified) 
              VALUES 
                 (
+                    ?,
                     ?,
                     ?,
                     ?,
@@ -68,7 +71,8 @@ class CheckoutPagamentoRepository extends IRepository
                 chekout.cartao.expirationDate, 
                 chekout.cartao.payer.name,
                 chekout.cartao.payer.email,
-                chekout.cartao.payer.document  
+                chekout.cartao.payer.document ,
+                chekout.pedido.getValorTotal() 
             ]); 
 
         return new Checkout(
