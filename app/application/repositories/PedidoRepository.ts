@@ -74,18 +74,21 @@ class PedidoRepository extends IRepository{
 
     public findById = async (id: BigInteger) : Promise<Pedido> => {
         let data = await this.db.find(`SELECT * FROM pedidos where id = ${id};`);
-        let dataPedidos: Produto[] = await this.db.find(`SELECT * FROM pedido_produtos where order_id = ${id};`);
+        let dataPedidos: Produto[] = await this.db.find(`SELECT p.* FROM pedido_produtos pp
+                                                          inner join  produto p 
+                                                          on pp.product_id= p.id
+                                                          where pp.order_id = ${id};`);
         if (data.length>0) {
             let cliente = await new ClienteRepository(this.db).findById(data[0].customer_id)
             let pedido = new Pedido(
                 cliente,
                 data[0].status,
-                data[0].id
+                data[0].id,
+                data[0].valorTotal
             );
-            dataPedidos.forEach(produto => {
-                pedido.adicionarProduto(produto)   
-            });  
-            console.log(pedido)
+             dataPedidos.forEach(produto => {
+                 pedido.adicionarProduto(produto)   
+             });  
             return pedido;
         } else {
             return null;

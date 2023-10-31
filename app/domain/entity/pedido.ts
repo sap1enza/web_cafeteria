@@ -8,17 +8,19 @@ class Pedido {
 
   private _status: statusPedido;
 
-  private _valorTotal: number = 0;
+  private _valorTotal: number;
 
     constructor (
         readonly cliente: Cliente,
         status: statusPedido = statusPedido.CRIADO,
-        readonly id? 
+        readonly id?,
+        valorTotal: number = 0 
     ) {
       if (!cliente) {
         throw new Error("Cliente é obrigatório.");
       }
       this._status = status;
+      this._valorTotal = valorTotal;
     }
 
     somaTotal(valor: number): void {
