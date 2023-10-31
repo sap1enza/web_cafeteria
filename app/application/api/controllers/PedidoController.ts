@@ -53,22 +53,23 @@ class PedidoController {
                 request.body.status
             );
             try {
-                order = await this.repository.store(order);
-                produtos.forEach(async produto => {
+
+                produtos.forEach(produto => {
                     order.adicionarProduto(produto);
-                   
+                       
                 });
 
-               
+                const orderResult = await this.repository.store(order);
                 
-                order.getProdutos().forEach(async produto => {
-                    //order.adicionarProduto(produto);
-                    let data = await this.repository.adicionarProdutoAoPedido(order.id, produto.id);
+                const promises = order.getProdutos().map(async (produto) => {
+                    const data = await this.repository.adicionarProdutoAoPedido(orderResult.id, produto.id);
+                    return data;
                 });
-                console.log('Order: ',order);
-                console.log('Order: ',order.getValorTotal());
-                
+
+                await Promise.all(promises);
+
                 response.status(HttpStatus.OK).json(ResponseAPI.data(order));
+
             } catch(err) {
                 response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message));
             }
