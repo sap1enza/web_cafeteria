@@ -47,7 +47,9 @@ Cada nova tabela desenvolvida DEVE ser adicionado o create no arquivo para que s
 ```
 
 ## DATA BASE EXECUTABLE
+
 Deve ser executado esse script no banco de dados, antes de iniciar a criação do pedido na API
+
 ```bash
     -- insert data values categoria
     TRUNCATE TABLE categoria;
@@ -77,8 +79,8 @@ Deve ser executado esse script no banco de dados, antes de iniciar a criação d
     values (1, 'Heitor Bernardo Victor Nogueira', 'heitoBVN@gmail.com', '31759487740', now(), now());
 
     -- inserindo pedido
-    insert into `projeto-pedidos`.pedidos(id, customer_id, status, created, modified)
-    values (1, 1, 1, now(), now());
+    insert into `projeto-pedidos`.pedidos(id, customer_id, status, total_value, created, modified)
+    values (1, 1, 1, '42.00', now(), now());
 
     -- insert itens do pedido
     insert into `projeto-pedidos`.pedido_produtos(id, order_id, product_id, created, modified)
@@ -88,6 +90,13 @@ Deve ser executado esse script no banco de dados, antes de iniciar a criação d
     (3, 1, 5, now(), now()),
     (4, 1, 5, now(), now())
     ;
+
+    -- insert checkout test
+    INSERT INTO checkout
+	(uuid, status, pedido_id, card_number, card_cvv, card_expiration_date, payer_name, payer_email, payer_document, total_value, created, modified)
+	 VALUES
+	(UUID(), 0, 1, '5482874095004465', 181, '05/2024', 'Heitor Bernardo Victor Nogueira', 'heitoBVN@gmail.com', '31759487740', 42.00, NOW(),  NOW());
+
 ```
 
 ## Install Application

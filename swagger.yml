@@ -442,7 +442,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Pedido"
+                  $ref: "#/components/schemas/Pedidos"
     post:
       summary: Cria um novo pedido.
       tags:
@@ -471,7 +471,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Pedido"
+                $ref: "#/components/schemas/Pedidos"
   /pedidos/{id}:
     get:
       summary: Recupera um pedido pelo ID
@@ -490,7 +490,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Pedido"
+                $ref: "#/components/schemas/Pedidos"
   #checkout
   /checkout:
     post:
