@@ -47,30 +47,28 @@ class PedidoController {
     public store = async (request, response) => {
         try {
             let customer = await this.clienteRepository.findById(request.body.client_id);
-            //let produto = await this.produtoRepository.findById(request.body.client_id);
-            let produtos: Produto[] = request.body.produtosIds;
+            let produtos: Produto[] = await this.produtoRepository.findByMultipleIds(request.body.produtosIds);
             let order = new Pedido(
                 customer,
                 request.body.status
             );
-            console.log(produtos);
-            
-            produtos.forEach(produto => {
-                order.adicionarProduto(produto)   
-            });    
-            console.log(order);
             try {
-
-                let orderResult = await this.repository.store(order);
-                console.log('Result: ',orderResult);
-                console.log('Result2: ',orderResult.id);
+                order = await this.repository.store(order);
                 produtos.forEach(async produto => {
-                    console.log('Result4: ',produto);
-                    orderResult.adicionarProduto(produto);
-                    let data = await this.repository.adicionarProdutoAoPedido(orderResult.id, produto);
+                    order.adicionarProduto(produto);
+                   
                 });
+
+               
                 
-                response.status(HttpStatus.OK).json(ResponseAPI.data(orderResult));
+                order.getProdutos().forEach(async produto => {
+                    //order.adicionarProduto(produto);
+                    let data = await this.repository.adicionarProdutoAoPedido(order.id, produto.id);
+                });
+                console.log('Order: ',order);
+                console.log('Order: ',order.getValorTotal());
+                
+                response.status(HttpStatus.OK).json(ResponseAPI.data(order));
             } catch(err) {
                 response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message));
             }

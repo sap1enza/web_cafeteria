@@ -22,6 +22,8 @@ class PedidoRepository extends IRepository{
     }
 
     public store = async(pedido: Pedido) => {
+        console.log(pedido.cliente.id, pedido.getStatus(), pedido.getValorTotal());
+        
         let data = await this.db.store(
             `INSERT INTO pedidos
                 (customer_id, status, total_value, created, modified)
