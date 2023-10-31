@@ -31,7 +31,7 @@ class Pedido {
 
     adicionarProduto(produto: Produto): void {
         this._produtos.push(produto);
-        this.somaTotal(produto.value);
+        this.somaTotal(parseFloat(produto.value.toString()));
     }
 
     getProdutos = () => {

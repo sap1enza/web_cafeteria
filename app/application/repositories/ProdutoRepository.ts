@@ -73,6 +73,24 @@ class ProdutoRepository extends IRepository{
         }
     }
 
+    public findByMultipleIds = async (ids: number[]) => {
+        if (ids.length === 0) {
+            return null; 
+        }
+    
+        const formattedIds = ids.join(', ');
+    
+        const query = `SELECT * FROM produto WHERE id IN (${formattedIds})`;
+        const data = await this.db.find(query);
+    
+        if (data.length > 0) {
+            return data;
+        } else {
+            return null;
+        }
+    }
+    
+
     public findByCategory = async (category_id: BigInteger) => {
         let data = await this.db.find(`SELECT * FROM produto where category_id = ${category_id};`);
         if (data.length>0) {
