@@ -47,7 +47,7 @@ Cada nova tabela desenvolvida DEVE ser adicionado o create no arquivo para que s
 ```
 
 ## DATA BASE EXECUTABLE
-
+Deve ser executado esse script no banco de dados, antes de iniciar a criação do pedido na API
 ```bash
     -- insert data values categoria
     TRUNCATE TABLE categoria;
