@@ -17,3 +17,19 @@ spec:
       value:  "123456"
     ports:
     - containerPort: 3306
+    readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - exec mysql -h 127.0.0.1 -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'SELECT 1'
+          initialDelaySeconds: 10
+          periodSeconds: 5
+    livenessProbe:
+      exec:
+        command:
+        - sh
+        - -c
+        - exec mysql -h 127.0.0.1 -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'SELECT 1'
+      initialDelaySeconds: 60
+      periodSeconds: 10
