@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep-api
+  labels:
+    app: dep-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dep-api
+  template:
+    metadata:
+      labels:
+        app: dep-api
+    spec:
+      containers:
+      - name: dep-api-container
+        image: bruno01/fiap01:latest
+        resources:
+          requests:
+            cpu: 10m
+        ports:
+        - containerPort: 3000
+        env:
+          - name: MARIADB_HOST
+            value: svc-db
+          - name: MARIADB_USER
+            value: root
+          - name: MARIADB_PASS
+            value : "123456"
+          - name: MARIADB_DATABASE
+            value: projeto-pedidos
+          - name: MARIADB_PORT
+            value: "3306"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          failureThreshold: 3
+          periodSeconds: 10
+          terminationGracePeriodSeconds: 10
+
