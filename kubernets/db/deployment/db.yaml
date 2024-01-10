@@ -17,12 +17,16 @@ spec:
       value:  "123456"
     ports:
     - containerPort: 3306
+    volumeMounts:
+    - name: mysql-persistent-storage
+      mountPath: /var/lib/mysql
+      subPath: mysql
     readinessProbe:
           exec:
             command:
             - sh
             - -c
-            - exec mysql -h 127.0.0.1 -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'SELECT 1'
+            - exec mysql -h 127.0.0.1 -uroot -p$MYSQL_PASSWORD -e 'SELECT 1'
           initialDelaySeconds: 10
           periodSeconds: 5
     livenessProbe:
@@ -30,6 +34,10 @@ spec:
         command:
         - sh
         - -c
-        - exec mysql -h 127.0.0.1 -u$MYSQL_USER -p$MYSQL_PASSWORD -e 'SELECT 1'
+        - exec mysql -h 127.0.0.1 -uroot -p$MYSQL_PASSWORD -e 'SELECT 1'
       initialDelaySeconds: 60
       periodSeconds: 10
+  volumes:
+  - name: mysql-persistent-storage
+    hostPath:
+      path: "C:/nodejs/mysql-data"
