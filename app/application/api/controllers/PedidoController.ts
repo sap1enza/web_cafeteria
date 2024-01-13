@@ -67,8 +67,7 @@ class PedidoController {
                 });
 
                 await Promise.all(promises);
-
-                response.status(HttpStatus.OK).json(ResponseAPI.data(order));
+                response.status(HttpStatus.OK).json(ResponseAPI.data(orderResult.id));
 
             } catch(err) {
                 response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message));
