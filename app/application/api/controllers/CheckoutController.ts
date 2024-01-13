@@ -71,8 +71,8 @@ class CheckoutController {
     }
     public findByIdPedido = async (request, response) => {
         try {
-            console.log(request);
-            console.log(request.params.pedido_id);
+            // console.log(request);
+            // console.log(request.params.pedido_id);
 
             if (typeof request.params.pedido_id == 'undefined') {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
