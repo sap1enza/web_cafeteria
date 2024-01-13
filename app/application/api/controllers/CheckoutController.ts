@@ -8,16 +8,18 @@ import CheckoutPagamento from '../../../domain/cases/checkoutPagamento';
 import PedidoRepository from '../../repositories/PedidoRepository';
 import MysqlDataBase from '../../database/MysqlDataBase';
 import { statusPedido } from '../../../domain/entity/enum/statusPedido';
+import CheckoutPagamentoRepository from '../../repositories/CheckoutPagamentoRepository';
 
 
 class CheckoutController {
 
-    private repository : CheckoutPagamento;
+    private repository : CheckoutPagamentoRepository;
     private pedidoRepository: PedidoRepository;
     private mysqlidatabase: MysqlDataBase;
     constructor() {
         this.mysqlidatabase = new MysqlDataBase();
         this.pedidoRepository = new PedidoRepository(this.mysqlidatabase);
+        this.repository = new CheckoutPagamentoRepository(this.mysqlidatabase);
     }
 
     /**
@@ -66,6 +68,23 @@ class CheckoutController {
 
     public hook = async (request: Request, response: Response) => {
         response.status(HttpStatus.OK).json(ResponseAPI.data(request.params.uuid));
+    }
+    public findByIdPedido = async (request, response) => {
+        try {
+            console.log(request);
+            console.log(request.params.pedido_id);
+
+            if (typeof request.params.pedido_id == 'undefined') {
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
+            }
+            let data = await this.repository.findByIdPedido(request.params.pedido_id);
+            response.status(HttpStatus.OK).json(ResponseAPI.data(data));
+        } catch (err) {
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .json(
+                ResponseAPI.error(err.message)
+            );
+        }
     }
 
 }

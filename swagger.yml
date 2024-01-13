@@ -547,7 +547,25 @@ paths:
                       example: '0115b81d-067e-4b62-a4c3-253e1b218712'
                   cartao:
                     $ref: '#/components/schemas/Cartao'
-
+  /checkout/:pedido_id/status:
+    get:
+        summary: Recupera o status de pagamento do pedido pelo ID do pedido
+        tags:
+          - "Checkout"
+        parameters:
+          - in: path
+            name: id
+            schema:
+              type: integer
+            required: true
+            description: ID do pedido
+        responses:
+          "200":
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Checkout"
 components:
   securitySchemes:
     BearerAuth:
