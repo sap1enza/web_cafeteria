@@ -6,35 +6,36 @@ class MPagamento implements IPaymentMethods {
     
     public auth_token: string;
 
-    public url: string = process.env.MP_URL;
+    public url: string;
 
     public http: AxiosStatic;
-    constructor () {
-        this.init();
-    }
 
-    protected init = async() => {
-        let url = this.url + '/oauth/token'
-        let options = {
-            'client_id' : process.env.MP_CLIENT_ID,
-            'client_secret' : process.env.MP_CLIENT_SECRET,
-            'grant_type' : "authorization_code",
-        } 
-        /**
-         * definindo configurações padrão para chamadas http
-         */
-        axios.defaults.baseURL = this.url;
-        axios.defaults.headers.common['Content-Type'] = 'application/json';
-        await axios.post('/oauth/token', options)
-        .then(response => {
-            console.log(response);
-            this.auth_token = response.data['token']
-            axios.defaults.headers.common['Authorization'] = this.auth_token;
-        });  
-        this.http = axios; 
+    constructor () {
+        this.auth_token = 'TEST-8926445123950097-011307-ee5dc50bf53c38a033fe5da4c9acc9c1__LD_LB__-209191463'
+        this.url = 'https://api.mercadopago.com/v1/'; 
     }
     
-    public store = async (checkout: Checkout) => {
+    public storePix = async (checkout: Checkout) => {
+        const response =  await fetch(`${this.url}payments`,{
+            method: 'POST',
+            body: JSON.stringify({
+                "transaction_amount" : checkout.pedido.getValorTotal(),
+                "description" : `MERCADO PAGO PAGAMENTO PIX - Compra segura cliente ${checkout.pedido.cliente.email}`,
+                "payment_method_id" : "pix",
+                "external_reference" : checkout.uuid,
+                "payer" : {
+                    "email" : checkout.pedido.cliente.email,
+                }
+            }),
+            headers: {
+                "Content-Type" : "application/json",
+                "Authorization" : `Bearer ${this.auth_token}` 
+            }
+        });
+        return await response.json();
+    }
+
+    public storeCard = async (checkout: Checkout) => {
         throw new Error("Method not implemented.");
     }
 
