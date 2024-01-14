@@ -11,16 +11,23 @@ abstract class IPaymentMethods {
     public auth_token : string = null;
 
     /**
-     * metodo de criação de pagamento PIX
+     * metodo de criação de pagamento
      * @param checkout 
      */
-    abstract storePix(checkout: Checkout);
+    abstract store(checkout: Checkout);
+
 
     /**
-     * metodo de criação de pagamento Cartão
+     * metodo de criação de pagamento via PIX
      * @param checkout 
      */
-    abstract storeCard(checkout: Checkout);
+    abstract pix(checkout: Checkout);
+
+    /**
+     * metodo de criação de pagamento via Cartão
+     * @param checkout 
+     */
+    abstract card(checkout: Checkout);
     
     /**
      * metodo de busca do pagamento

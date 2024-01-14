@@ -1,6 +1,7 @@
 import axios, { AxiosStatic } from "axios";
 import Checkout from "../../../../domain/entity/checkout";
 import IPaymentMethods from "../IPaymentsMethods";
+import PaymentoMethods from "../PaymentoMethods";
 
 class MPagamento implements IPaymentMethods {
     
@@ -14,8 +15,18 @@ class MPagamento implements IPaymentMethods {
         this.auth_token = process.env.MP_CLIENT_SECRET
         this.url = process.env.MP_URL; 
     }
+
+    public store = async (checkout: Checkout) => {
+        if (checkout.getPaymentMethod() == PaymentoMethods.PIX) {
+            return await this.pix(checkout);
+        } else if (checkout.getPaymentMethod() == PaymentoMethods.CARD_DEBIT) {
+            return await this.card(checkout);
+        } else {
+            throw new Error("Payment Method not implemented.");
+        }
+    }
     
-    public storePix = async (checkout : Checkout) => {
+    pix = async (checkout : Checkout) => {
         const response =  await fetch(`${this.url}payments`,{
             method: 'POST',
             body: JSON.stringify({
@@ -35,7 +46,7 @@ class MPagamento implements IPaymentMethods {
         return await response.json();
     }
 
-    public storeCard = async (checkout : Checkout) => {
+    card = async (checkout : Checkout) => {
         throw new Error("Method not implemented.");
     }
 

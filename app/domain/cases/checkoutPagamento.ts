@@ -28,7 +28,7 @@ class CheckoutPagamento {
         /**
          * TODO incluir o pagamento no banco de dados
          */
-        let response = await this.metodo_pagamento.storePix(checkout);
+        let response = await this.metodo_pagamento.store(checkout);
 
 
         checkout.payload = JSON.stringify(response);
