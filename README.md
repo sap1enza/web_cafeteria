@@ -134,3 +134,36 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -d ''
 ```
+
+# KUBERNETS
+
+Será utilizado Docker Kubernets, para isso deve ser liberado a opção de kubernets no docker desktop, também para utilizar a persistencia de dados DEVE estar desmarcada a opção WSL 2 na sua docker, se certifique que o HIPER-V do windowns esteja habilitado.
+
+### Arquitetura
+
+![plot](arquitetura.jpg)
+
+1. Libere as metricas na sua Docker Kubernets para o HPA.
+
+```bash
+    kubectl apply -f kubernets/components.yaml
+```
+
+2. Subindo o banco de dados com persistencia em volumes
+
+```bash
+    kubectl apply -f kubernets/db/
+```
+
+3. Subindo a api
+
+```bash
+    kubectl apply -f kubernets/api/
+```
+
+OBS. executando o diretorio inteiro o kube irá em todos os subdiretórios executando.
+
+### Para atualizar a aplicação
+
+DEVE ser criada uma nova imagem no DockerHub e atualizar o arquivo de deployment no diretório kubernets/api/ arquivo dep-api.yaml
+Variáveis de ambiente são adicionadas no arquivo dep-api.yaml.

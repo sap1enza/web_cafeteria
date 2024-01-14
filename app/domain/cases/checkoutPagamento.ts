@@ -22,13 +22,15 @@ class CheckoutPagamento {
         /**
          * TODO incluir o pagamento no banco de dados
          */
-        this.paymentPIX();
+        this.paymentPIX(instance);
 
         return instance;
     }
 
     
-    public paymentPIX = () => {}
+    public paymentPIX = async (instance : Checkout) => {
+        
+    }
 
 
     public confirmPayment = async () : Promise<Checkout> => {
