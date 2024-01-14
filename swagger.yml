@@ -507,6 +507,10 @@ paths:
               schema:
                 type: object
                 properties:
+                  payment_method_id:
+                    type: number
+                    format: integer
+                    example: 1
                   pedido_id:
                     type: number
                     format: integer
@@ -534,6 +538,10 @@ paths:
               schema:
                 type: object
                 properties:
+                  payment_method_id:
+                    type: number
+                    format: integer
+                    example: 1
                   pedido_id:
                     type: number
                     format: integer
@@ -564,6 +572,10 @@ components:
           schema:
             type: object
             properties:
+              payment_method_id:
+                type: number
+                format: integer
+                example: 1
               pedido_id:
                 type: number
                 format: integer

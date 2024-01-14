@@ -72,6 +72,7 @@ class MysqlConnection
                 id INT PRIMARY KEY AUTO_INCREMENT,
                 uuid VARCHAR(254) not null unique,
                 status int(11) not null default 1,
+                payment_method_id int(11) not null default 1,
                 pedido_id int(11) not null,
                 card_number varchar(50) not null,
                 card_cvv varchar(10) not null,

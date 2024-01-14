@@ -11,10 +11,20 @@ class Checkout {
     private status: Number;
 
     public payload : string;
+
+    private payment_method : number;
     
     constructor(readonly pedido: Pedido, readonly cartao?: Cartao, readonly id?) {
         this.uuid = uuidv4();
         this.status = StatusCheckout.AGUARDANDO_PAGAMENTO;
+    }
+
+    public setPaymentMethod = (value: number) => {
+        this.payment_method = value;
+    }
+
+    public getPaymentMethod = () : number => {
+        return this.payment_method;
     }
 
     public setStatus = (status: Number) => {

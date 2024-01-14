@@ -12,6 +12,7 @@ class CheckoutPagamentoRepository extends IRepository
             `UPDATE checkout SET
                 uuid = ?,
                 status = ?,
+                payment_method_id = ?,
                 pedido_id = ?,
                 card_number = ?,
                 card_cvv = ?,
@@ -26,6 +27,7 @@ class CheckoutPagamentoRepository extends IRepository
             `, [
                 chekout.uuid, 
                 chekout.getStatus(), 
+                chekout.getPaymentMethod(), 
                 chekout.pedido.id,
                 chekout.cartao.number, 
                 chekout.cartao.cvv, 
@@ -51,7 +53,8 @@ class CheckoutPagamentoRepository extends IRepository
             `INSERT INTO checkout 
                 (
                     uuid, 
-                    status, 
+                    status,
+                    payment_method_id,
                     pedido_id, 
                     card_number, 
                     card_cvv, 
@@ -75,12 +78,14 @@ class CheckoutPagamentoRepository extends IRepository
                     ?,
                     ?,
                     ?,
+                    ?,
                     NOW(), 
                     NOW()
                 );
             `, [
                 chekout.uuid, 
-                chekout.getStatus(), 
+                chekout.getStatus(),
+                chekout.getPaymentMethod(), 
                 chekout.pedido.id,
                 chekout.cartao.number, 
                 chekout.cartao.cvv, 

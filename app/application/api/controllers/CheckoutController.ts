@@ -8,6 +8,8 @@ import CheckoutPagamento from '../../../domain/cases/checkoutPagamento';
 import PedidoRepository from '../../repositories/PedidoRepository';
 import MysqlDataBase from '../../database/MysqlDataBase';
 import { statusPedido } from '../../../domain/entity/enum/statusPedido';
+import IPaymentMethods from '../../core/paymentsMethods/IPaymentsMethods';
+import MPagamento from '../../core/paymentsMethods/MercadoPago/MPagamento';
 
 
 class CheckoutController {
@@ -15,9 +17,11 @@ class CheckoutController {
     private repository : CheckoutPagamento;
     private pedidoRepository: PedidoRepository;
     private mysqlidatabase: MysqlDataBase;
+    private metodoPagamento: IPaymentMethods;
     constructor() {
         this.mysqlidatabase = new MysqlDataBase();
         this.pedidoRepository = new PedidoRepository(this.mysqlidatabase);
+        this.metodoPagamento = new MPagamento();
     }
 
     /**
@@ -30,7 +34,7 @@ class CheckoutController {
             
             let pedido = await this.pedidoRepository.findById(request.body.pedido_id);
             
-            let instance = new Checkout(
+            let checkout = new Checkout(
                pedido,
                 new Cartao(
                     new Payer(
@@ -44,7 +48,13 @@ class CheckoutController {
                 )
             );
 
-            let checkoutPagamento = new CheckoutPagamento(instance,  this.mysqlidatabase);
+            checkout.setPaymentMethod(request.body.payment_method_id)
+
+            let checkoutPagamento = new CheckoutPagamento(
+                checkout,  
+                this.mysqlidatabase,
+                this.metodoPagamento
+            );
             
             try {
                 let data = await checkoutPagamento.create();

@@ -8,6 +8,7 @@ import Cliente from '../../../../../app/domain/entity/cliente';
 import { statusPedido } from '../../../../../app/domain/entity/enum/statusPedido';
 import Produto from '../../../../../app/domain/entity/produto';
 import Categoria from '../../../../../app/domain/entity/categoria';
+import PaymentMethods from '../../../../../app/application/core/paymentsMethods/PaymentoMethods';
 
 describe("MP metodo de pagamento PIX", () => {
     test("Autenticação de usuário", async () => {
@@ -34,9 +35,11 @@ describe("MP metodo de pagamento PIX", () => {
         let checkout = new Checkout(
             pedido
         );
+        checkout.setPaymentMethod(PaymentMethods.PIX);
         let mercado_pago = new MPagamento();
         const response = await mercado_pago.storePix(checkout);
         expect(response['external_reference']).toEqual(checkout.uuid);
+        expect(PaymentMethods.PIX).toEqual(checkout.getPaymentMethod());
         expect(response['transaction_amount']).toEqual(checkout.pedido.getValorTotal());
         expect(mercado_pago.http).not.toBeNull();
     });

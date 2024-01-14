@@ -91,11 +91,11 @@ Deve ser executado esse script no banco de dados, antes de iniciar a criação d
     (4, 1, 5, now(), now())
     ;
 
-    -- insert checkout test
+    -- insert checkout test - pagamento por pix
     INSERT INTO checkout
-	(uuid, status, pedido_id, card_number, card_cvv, card_expiration_date, payer_name, payer_email, payer_document, total_value, created, modified)
+	(uuid, status, payment_method_id, pedido_id, card_number, card_cvv, card_expiration_date, payer_name, payer_email, payer_document, total_value, created, modified)
 	 VALUES
-	(UUID(), 0, 1, '5482874095004465', 181, '05/2024', 'Heitor Bernardo Victor Nogueira', 'heitoBVN@gmail.com', '31759487740', 42.00, NOW(),  NOW());
+	(UUID(), 0, 1, 1, '5482874095004465', 181, '05/2024', 'Heitor Bernardo Victor Nogueira', 'heitoBVN@gmail.com', '31759487740', 42.00, NOW(),  NOW());
 
 ```
 
