@@ -12,7 +12,7 @@ import Categoria from '../../../../../app/domain/entity/categoria';
 describe("MP metodo de pagamento PIX", () => {
     test("Autenticação de usuário", async () => {
         let mercado_pago = new MPagamento();
-        // expect(mercado_pago.auth_token).toEqual(process.env.MP_CLIENT_SECRET);
+        expect(mercado_pago.auth_token).toEqual(process.env.MP_CLIENT_SECRET);
     });
 
     test("Pagamento via PIX",async () => {

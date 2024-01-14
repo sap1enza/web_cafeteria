@@ -10,6 +10,8 @@ class Checkout {
 
     private status: Number;
 
+    public payload : string;
+    
     constructor(readonly pedido: Pedido, readonly cartao?: Cartao, readonly id?) {
         this.uuid = uuidv4();
         this.status = StatusCheckout.AGUARDANDO_PAGAMENTO;

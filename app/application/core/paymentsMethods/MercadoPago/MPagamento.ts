@@ -10,21 +10,21 @@ class MPagamento implements IPaymentMethods {
 
     public http: AxiosStatic;
 
-    constructor (readonly checkout : Checkout) {
-        this.auth_token = 'TEST-8926445123950097-011307-ee5dc50bf53c38a033fe5da4c9acc9c1__LD_LB__-209191463'
-        this.url = 'https://api.mercadopago.com/v1/'; 
+    constructor () {
+        this.auth_token = process.env.MP_CLIENT_SECRET
+        this.url = process.env.MP_URL; 
     }
     
-    public storePix = async () => {
+    public storePix = async (checkout : Checkout) => {
         const response =  await fetch(`${this.url}payments`,{
             method: 'POST',
             body: JSON.stringify({
-                "transaction_amount" : this.checkout.pedido.getValorTotal(),
-                "description" : `MERCADO PAGO PAGAMENTO PIX - Compra segura cliente ${this.checkout.pedido.cliente.email}`,
+                "transaction_amount" :checkout.pedido.getValorTotal(),
+                "description" : `MERCADO PAGO PAGAMENTO PIX - Compra segura cliente ${checkout.pedido.cliente.email}`,
                 "payment_method_id" : "pix",
-                "external_reference" : this.checkout.uuid,
+                "external_reference" : checkout.uuid,
                 "payer" : {
-                    "email" : this.checkout.pedido.cliente.email,
+                    "email" : checkout.pedido.cliente.email,
                 }
             }),
             headers: {
@@ -35,7 +35,7 @@ class MPagamento implements IPaymentMethods {
         return await response.json();
     }
 
-    public storeCard = async () => {
+    public storeCard = async (checkout : Checkout) => {
         throw new Error("Method not implemented.");
     }
 

@@ -14,13 +14,13 @@ abstract class IPaymentMethods {
      * metodo de criação de pagamento PIX
      * @param checkout 
      */
-    abstract storePix();
+    abstract storePix(checkout: Checkout);
 
     /**
      * metodo de criação de pagamento Cartão
      * @param checkout 
      */
-    abstract storeCard();
+    abstract storeCard(checkout: Checkout);
     
     /**
      * metodo de busca do pagamento

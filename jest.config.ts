@@ -7,4 +7,5 @@ export default {
     '^.+\\.tsx?$': 'ts-jest', // Transforma arquivos TypeScript
   },
   transformIgnorePatterns: ['./node_modules'],
+  setupFiles: ['dotenv/config'],
 };
