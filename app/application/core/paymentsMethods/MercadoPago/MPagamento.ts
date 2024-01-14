@@ -43,7 +43,19 @@ class MPagamento implements IPaymentMethods {
                 "Authorization" : `Bearer ${this.auth_token}` 
             }
         });
-        return await response.json();
+
+        
+        if (response.status >= 300) {
+            throw new Error(response.statusText);
+        }
+
+        let dataPayment = await response.json();
+       
+        if (dataPayment['status']) {
+            
+        }
+
+        return dataPayment;
     }
 
     card = async (checkout : Checkout) => {

@@ -10,6 +10,7 @@ import MysqlDataBase from '../../database/MysqlDataBase';
 import { statusPedido } from '../../../domain/entity/enum/statusPedido';
 import IPaymentMethods from '../../core/paymentsMethods/IPaymentsMethods';
 import MPagamento from '../../core/paymentsMethods/MercadoPago/MPagamento';
+import CheckoutPagamentoRepository from '../../repositories/CheckoutPagamentoRepository';
 
 
 class CheckoutController {
@@ -52,7 +53,7 @@ class CheckoutController {
 
             let checkoutPagamento = new CheckoutPagamento(
                 checkout,  
-                this.mysqlidatabase,
+                new CheckoutPagamentoRepository(this.mysqlidatabase),
                 this.metodoPagamento
             );
             
@@ -75,6 +76,8 @@ class CheckoutController {
 
 
     public hook = async (request: Request, response: Response) => {
+
+        
         response.status(HttpStatus.OK).json(ResponseAPI.data(request.params.uuid));
     }
 
