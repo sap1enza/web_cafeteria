@@ -2,6 +2,7 @@ import CheckoutPagamentoRepository from "../../application/repositories/Checkout
 import Checkout from "../entity/checkout";
 import { StatusCheckout } from "../entity/enum/statusCheckout";
 import IDataBase from "../../application/database/IDataBase";
+import MPagamento from "../../application/core/paymentsMethods/MercadoPago/MPagamento";
 
 class CheckoutPagamento {
     
@@ -28,7 +29,8 @@ class CheckoutPagamento {
     }
 
     
-    public paymentPIX = async (instance : Checkout) => {
+    public paymentPIX = async (checkout : Checkout) => {
+        let mercado_pago = new MPagamento(checkout);
         
     }
 
