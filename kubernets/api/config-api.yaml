@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-api
+  labels:
+    name: config-api
+data:
+  MARIADB_HOST: svc-db
+  MARIADB_USER: root
+  MARIADB_PASS: "123456"
+  MARIADB_DATABASE: projeto-pedidos
+  MARIADB_PORT: "3306"
