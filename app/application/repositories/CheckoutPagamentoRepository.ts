@@ -3,6 +3,9 @@ import IRepository from "./IReporitory";
 
 class CheckoutPagamentoRepository extends IRepository
 {
+    findById(id: any) {
+        throw new Error("Method not implemented.");
+    }
     getAll(params: any) {
         throw new Error("Method not implemented.");
     }
@@ -88,8 +91,15 @@ class CheckoutPagamentoRepository extends IRepository
     }
 
 
-    findById(id: any) {
-        throw new Error("Method not implemented.");
+    public findByIdPedido = async (pedido_id: BigInteger) : Promise<Checkout> => {
+        let data = await this.db.find(`SELECT * FROM checkout where pedido_id = ${pedido_id};`);
+        if (data.length>0) {
+            
+            return  data[0].status;
+        }
+        else{
+            return null;
+        }
     }
     
 }

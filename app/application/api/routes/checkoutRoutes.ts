@@ -5,6 +5,7 @@ let router = express.Router();
 
 router.post('/checkout', CheckoutController.store);
 router.post('/checkout/:uuid/hook', CheckoutController.hook);
+router.get('/checkout/:pedido_id/status', CheckoutController.findByIdPedido);
 
 
 export default router;
