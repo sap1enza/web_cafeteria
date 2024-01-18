@@ -67,8 +67,7 @@ class PedidoController {
                 });
 
                 await Promise.all(promises);
-
-                response.status(HttpStatus.OK).json(ResponseAPI.data(order));
+                response.status(HttpStatus.OK).json(ResponseAPI.data(orderResult.id));
 
             } catch(err) {
                 response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message));
@@ -85,12 +84,12 @@ class PedidoController {
      */
     public update = async (request, response) => {
         try {
-            let customer = await this.clienteRepository.findById(request.body.client_id);
+            console.log(request.params.id)
+            console.log(request.body.status)
+            let order: Pedido = await this.repository.findById(request.params.id);
 
-            let order = new Pedido(
-                customer,
-                request.body.status
-            );  
+            order.setStatus(request.body.status);
+            
             let data = await this.repository.update(order, request.params.id);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {

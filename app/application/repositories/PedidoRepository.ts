@@ -14,7 +14,12 @@ class PedidoRepository extends IRepository{
 
         if (CONDITIONS != "") {
             CONDITIONS = ' WHERE ' + CONDITIONS;
+            CONDITIONS +=" AND status != 4 order by status desc, created desc";
         }
+        else{
+            CONDITIONS =" WHERE status != 4 order by status desc, created desc";
+        }
+       
         return await this.db.find(`SELECT * FROM pedidos  ${CONDITIONS};`);
 
         // return await this.db.find(`SELECT p.id AS pedido_id, p.customer_id, p.status AS pedido_status,

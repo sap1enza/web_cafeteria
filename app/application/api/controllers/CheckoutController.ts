@@ -16,6 +16,8 @@ import Pix from '../../../domain/entity/pix';
 
 
 class CheckoutController {
+
+    private repository : CheckoutPagamentoRepository;
     private pedidoRepository: PedidoRepository;
     private mysqlidatabase: MysqlDataBase;
     private metodoPagamento: IPaymentMethods;
@@ -23,8 +25,8 @@ class CheckoutController {
         this.mysqlidatabase = new MysqlDataBase();
         this.pedidoRepository = new PedidoRepository(this.mysqlidatabase);
         this.metodoPagamento = new MPagamento();
+        this.repository = new CheckoutPagamentoRepository(this.mysqlidatabase);
     }
-
     /**
      * 
      * @param request 
@@ -85,6 +87,21 @@ class CheckoutController {
 
         
         response.status(HttpStatus.OK).json(ResponseAPI.data(request.params.uuid));
+    }
+    public findByIdPedido = async (request, response) => {
+        try {
+            if (typeof request.params.pedido_id == 'undefined') {
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
+            }
+
+            let data = await this.repository.findByIdPedido(request.params.pedido_id);
+            response.status(HttpStatus.OK).json(ResponseAPI.data(data));
+        } catch (err) {
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .json(
+                ResponseAPI.error(err.message)
+            );
+        }
     }
 
 }
