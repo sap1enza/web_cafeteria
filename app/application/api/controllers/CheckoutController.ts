@@ -4,14 +4,14 @@ import {Request, Response} from 'express';
 import Checkout from '../../../domain/entity/checkout';
 import Cartao from '../../../domain/entity/cartao';
 import Payer from '../../../domain/entity/payer';
-import CheckoutPagamento from '../../../domain/cases/checkoutPagamento';
-import PedidoRepository from '../../repositories/PedidoRepository';
+import CheckoutPagamento from '../../../cases/checkoutPagamento';
+import PedidoRepository from '../../../gateways/PedidoRepository';
 import MysqlDataBase from '../../database/MysqlDataBase';
 import { statusPedido } from '../../../domain/entity/enum/statusPedido';
-import IPaymentMethods from '../../core/paymentsMethods/IPaymentsMethods';
-import MPagamento from '../../core/paymentsMethods/MercadoPago/MPagamento';
-import CheckoutPagamentoRepository from '../../repositories/CheckoutPagamentoRepository';
-import PaymentoMethods from '../../core/paymentsMethods/PaymentoMethods';
+import IPaymentMethods from '../../../gateways/paymentsMethods/IPaymentsMethods';
+import MPagamento from '../../../gateways/paymentsMethods/MercadoPago/MPagamento';
+import CheckoutPagamentoRepository from '../../../gateways/CheckoutPagamentoRepository';
+import PaymentoMethods from '../../../gateways/paymentsMethods/PaymentoMethods';
 import Pix from '../../../domain/entity/pix';
 
 
@@ -84,12 +84,13 @@ class CheckoutController {
 
 
     public hook = async (request: Request, response: Response) => {
-
-        
         response.status(HttpStatus.OK).json(ResponseAPI.data(request.params.uuid));
     }
+
+
     public findByIdPedido = async (request, response) => {
         try {
+
             if (typeof request.params.pedido_id == 'undefined') {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
             }

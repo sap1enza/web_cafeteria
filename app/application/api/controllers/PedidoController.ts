@@ -1,11 +1,11 @@
 import * as HttpStatus from 'http-status';
-import ClienteRepository from "../../repositories/ClienteRepository";
-import PedidoRepository from "../../repositories/PedidoRepository";
+import ClienteRepository from "../../../gateways/ClienteRepository";
+import PedidoRepository from "../../../gateways/PedidoRepository";
 import ResponseAPI from '../../core/ResponseAPI';
 import MysqlDataBase from '../../database/MysqlDataBase';
 import Pedido from '../../../domain/entity/pedido';
 import Produto from '../../../domain/entity/produto';
-import ProdutoRepository from '../../repositories/ProdutoRepository';
+import ProdutoRepository from '../../../gateways/ProdutoRepository';
 
 class PedidoController {
     /**

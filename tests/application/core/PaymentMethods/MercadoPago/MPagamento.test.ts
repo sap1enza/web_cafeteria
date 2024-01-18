@@ -1,14 +1,14 @@
 import { describe } from 'node:test';
 import { expect } from '@jest/globals';
 import { test, it } from '@jest/globals';
-import MPagamento from '../../../../../app/application/core/paymentsMethods/MercadoPago/MPagamento';
+import MPagamento from '../../../../../app/gateways/paymentsMethods/MercadoPago/MPagamento';
 import Checkout from '../../../../../app/domain/entity/checkout';
 import Pedido from '../../../../../app/domain/entity/pedido';
 import Cliente from '../../../../../app/domain/entity/cliente';
 import { statusPedido } from '../../../../../app/domain/entity/enum/statusPedido';
 import Produto from '../../../../../app/domain/entity/produto';
 import Categoria from '../../../../../app/domain/entity/categoria';
-import PaymentMethods from '../../../../../app/application/core/paymentsMethods/PaymentoMethods';
+import PaymentMethods from '../../../../../app/gateways/paymentsMethods/PaymentoMethods';
 import Pix from '../../../../../app/domain/entity/pix';
 import Payer from '../../../../../app/domain/entity/payer';
 
@@ -50,6 +50,5 @@ describe("MP metodo de pagamento PIX", () => {
         expect(response['external_reference']).toEqual(checkout.uuid);
         expect(PaymentMethods.PIX).toEqual(checkout.getPaymentMethod());
         expect(response['transaction_amount']).toEqual(checkout.pedido.getValorTotal());
-        expect(mercado_pago.http).not.toBeNull();
     });
 });

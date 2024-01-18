@@ -575,14 +575,14 @@ paths:
                       example: '0115b81d-067e-4b62-a4c3-253e1b218712'
                   cartao:
                     $ref: '#/components/schemas/Cartao'
-  /checkout/:pedido_id/status:
+  /checkout/{pedidoId}/status:
     get:
         summary: Recupera o status de pagamento do pedido pelo ID do pedido
         tags:
           - "Checkout"
         parameters:
           - in: path
-            name: id
+            name: pedidoId
             schema:
               type: integer
             required: true
@@ -746,6 +746,27 @@ components:
           format: date
         payer:
           $ref: '#/components/schemas/Payer'
+    Checkout:
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        pedido:
+          $ref: "#/components/schemas/Pedidos"
+        cliente:
+          $ref: "#/components/schemas/cliente"
+        status_id:
+          type: integer
+          example: 1
+        created:
+          type: string
+          format: datetime
+        modified:
+          type: string
+          format: datetime
+      required:
+        - "status_id"
+        - "uuid"
 
 security:
   - BearerAuth: [JWT]

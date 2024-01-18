@@ -1,7 +1,7 @@
-import Checkout from "../entity/checkout";
-import { StatusCheckout } from "../entity/enum/statusCheckout";
-import IPaymentMethods from "../../application/core/paymentsMethods/IPaymentsMethods";
-import IRepository from "../../application/repositories/IReporitory";
+import Checkout from "../domain/entity/checkout";
+import { StatusCheckout } from "../domain/entity/enum/statusCheckout";
+import IPaymentMethods from "../gateways/paymentsMethods/IPaymentsMethods";
+import IRepository from "../gateways/IReporitory";
 
 class CheckoutPagamento {
     
@@ -30,12 +30,13 @@ class CheckoutPagamento {
             /**
              * atualizo o checkout de pagamento com o retorno de sucesso ou erro do gateway
              */
-            if (response['status_detail'] == 'pending_waiting_transfer') {
+            if (this.metodo_pagamento.aguardandoPagamento()) {
                 this.checkout.setStatus(StatusCheckout.AGUARDANDO_CONFIMACAO_PAGAMENTO);
             }
             
             await this.repositoryCheckout.update(checkout, checkout.id);
         } catch (err) {
+            console.log(err)
             throw new Error("Não foi possível realiza o pagamento na MP.");
         }
         

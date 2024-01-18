@@ -1,7 +1,7 @@
-import Pedido from "../../domain/entity/pedido";
+import Pedido from "../domain/entity/pedido";
 import ClienteRepository from "./ClienteRepository";
 import IRepository from "./IReporitory";
-import Produto from '../../domain/entity/produto';
+import Produto from '../domain/entity/produto';
 
 class PedidoRepository extends IRepository{
 

@@ -1,5 +1,5 @@
 import IRepository from "./IReporitory";
-import Produto from '../../domain/entity/produto';
+import Produto from '../domain/entity/produto';
 import { Console } from "console";
 
 class ProdutoRepository extends IRepository{
