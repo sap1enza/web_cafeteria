@@ -15,6 +15,7 @@ class CheckoutPagamentoRepository extends IRepository
             `UPDATE checkout SET
                 uuid = ?,
                 status = ?,
+                payment_method_id = ?,
                 pedido_id = ?,
                 card_number = ?,
                 card_cvv = ?,
@@ -22,26 +23,30 @@ class CheckoutPagamentoRepository extends IRepository
                 payer_name = ?,
                 payer_email = ?,
                 payer_document = ?, 
-                total_value = ?, 
+                total_value = ?,
+                payload = ?, 
                 modified = NOW()
             WHERE id = ?
             `, [
                 chekout.uuid, 
                 chekout.getStatus(), 
+                chekout.getPaymentMethod(), 
                 chekout.pedido.id,
-                chekout.cartao.number, 
-                chekout.cartao.cvv, 
-                chekout.cartao.expirationDate, 
-                chekout.cartao.payer.name,
-                chekout.cartao.payer.email,
-                chekout.cartao.payer.document,
+                chekout.metodoPagamento.number, 
+                chekout.metodoPagamento.cvv, 
+                chekout.metodoPagamento.expirationDate, 
+                chekout.metodoPagamento.payer.name,
+                chekout.metodoPagamento.payer.email,
+                chekout.metodoPagamento.payer.document,
+                chekout.metodoPagamento.payer.document,
                 chekout.pedido.getValorTotal(),
+                chekout.payload,
                 id
             ]); 
 
         return new Checkout(
             chekout.pedido,
-            chekout.cartao,
+            chekout.metodoPagamento,
             parseInt(data.insertId)
         )
     }
@@ -49,9 +54,24 @@ class CheckoutPagamentoRepository extends IRepository
     public store = async (chekout: Checkout) => {
         let data = await this.db.store(
             `INSERT INTO checkout 
-                (uuid, status, pedido_id, card_number, card_cvv, card_expiration_date, payer_name, payer_email, payer_document, total_value, created, modified) 
-             VALUES 
                 (
+                    uuid, 
+                    status,
+                    payment_method_id,
+                    pedido_id, 
+                    card_number, 
+                    card_cvv, 
+                    card_expiration_date, 
+                    payer_name, 
+                    payer_email, 
+                    payer_document, 
+                    total_value, 
+                    created, 
+                    modified
+                ) 
+                    VALUES 
+                (
+                    ?,
                     ?,
                     ?,
                     ?,
@@ -67,20 +87,21 @@ class CheckoutPagamentoRepository extends IRepository
                 );
             `, [
                 chekout.uuid, 
-                chekout.getStatus(), 
+                chekout.getStatus(),
+                chekout.getPaymentMethod(), 
                 chekout.pedido.id,
-                chekout.cartao.number, 
-                chekout.cartao.cvv, 
-                chekout.cartao.expirationDate, 
-                chekout.cartao.payer.name,
-                chekout.cartao.payer.email,
-                chekout.cartao.payer.document ,
+                chekout.metodoPagamento.number, 
+                chekout.metodoPagamento.cvv, 
+                chekout.metodoPagamento.expirationDate, 
+                chekout.metodoPagamento.payer.name,
+                chekout.metodoPagamento.payer.email,
+                chekout.metodoPagamento.payer.document ,
                 chekout.pedido.getValorTotal() 
             ]); 
 
         return new Checkout(
             chekout.pedido,
-            chekout.cartao,
+            chekout.metodoPagamento,
             parseInt(data.insertId)
         )
     }

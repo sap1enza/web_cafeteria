@@ -23,6 +23,20 @@
         ...
 ```
 
+## ENV Variables
+
+```bash
+    MARIADB_HOST=localhost
+    MARIADB_USER=root
+    MARIADB_PASS=12345678
+    MARIADB_DATABASE=projeto-pedidos
+    MARIADB_PORT=3321
+
+    MP_URL=https://api.mercadopago.com/v1/
+    MP_CLIENT_ID=TEST-427f8e8c-d6ca-4000-ab9b-95b3a2e554f7
+    MP_CLIENT_SECRET=TEST-8926445123950097-011307-ee5dc50bf53c38a033fe5da4c9acc9c1__LD_LB__-209191463
+```
+
 ## Data Base
 
 Banco de dados do projeto é feito com MariaDB, dentro do arquivo de conexão com o banco de dados exite um processo no qual já é criado toda a base de dados assim que for executado o build do projeto.
@@ -91,11 +105,11 @@ Deve ser executado esse script no banco de dados, antes de iniciar a criação d
     (4, 1, 5, now(), now())
     ;
 
-    -- insert checkout test
+    -- insert checkout test - pagamento por pix
     INSERT INTO checkout
-	(uuid, status, pedido_id, card_number, card_cvv, card_expiration_date, payer_name, payer_email, payer_document, total_value, created, modified)
+	(uuid, status, payment_method_id, pedido_id, card_number, card_cvv, card_expiration_date, payer_name, payer_email, payer_document, total_value, created, modified)
 	 VALUES
-	(UUID(), 0, 1, '5482874095004465', 181, '05/2024', 'Heitor Bernardo Victor Nogueira', 'heitoBVN@gmail.com', '31759487740', 42.00, NOW(),  NOW());
+	(UUID(), 0, 1, 1, '5482874095004465', 181, '05/2024', 'Heitor Bernardo Victor Nogueira', 'heitoBVN@gmail.com', '31759487740', 42.00, NOW(),  NOW());
 
 ```
 
@@ -167,3 +181,13 @@ OBS. executando o diretorio inteiro o kube irá em todos os subdiretórios execu
 
 DEVE ser criada uma nova imagem no DockerHub e atualizar o arquivo de deployment no diretório kubernets/api/ arquivo dep-api.yaml
 Variáveis de ambiente são adicionadas no arquivo dep-api.yaml.
+
+```bash
+    #Build image
+    docker build -t <IMAGE_NAME> .
+    #Create tag image
+    docker tag <IMAGE_NAME>:<TAG> <DOCKER_USER>/<IMAGE_NAME>:<TAG>
+    #Push Image
+    docker push <DOCKER_USER>/<IMAGE_NAME>:<TAG>
+
+```

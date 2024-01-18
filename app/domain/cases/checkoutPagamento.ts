@@ -1,14 +1,16 @@
-import CheckoutPagamentoRepository from "../../application/repositories/CheckoutPagamentoRepository";
 import Checkout from "../entity/checkout";
 import { StatusCheckout } from "../entity/enum/statusCheckout";
-import IDataBase from "../../application/database/IDataBase";
+import IPaymentMethods from "../../application/core/paymentsMethods/IPaymentsMethods";
+import IRepository from "../../application/repositories/IReporitory";
 
 class CheckoutPagamento {
     
-    private repo: CheckoutPagamentoRepository;
+    constructor(
+        readonly checkout: Checkout, 
+        readonly repositoryCheckout: IRepository, 
+        readonly metodo_pagamento: IPaymentMethods
+    ) {
 
-    constructor(readonly checkout: Checkout, database: IDataBase) {
-        this.repo = new CheckoutPagamentoRepository(database);
     }
 
     public create = async () : Promise<Checkout> => {
@@ -17,19 +19,27 @@ class CheckoutPagamento {
         /**
          * TODO incluir o repository de envio para o Mercado Pago
          */
-        let instance = await this.repo.store(this.checkout);
+        let checkout = await this.repositoryCheckout.store(this.checkout);
 
         /**
          * TODO incluir o pagamento no banco de dados
          */
-        this.paymentPIX(instance);
-
-        return instance;
-    }
-
-    
-    public paymentPIX = async (instance : Checkout) => {
+        try {
+            let response = await this.metodo_pagamento.store(checkout);
+            checkout.payload = JSON.stringify(response);
+            /**
+             * atualizo o checkout de pagamento com o retorno de sucesso ou erro do gateway
+             */
+            if (response['status_detail'] == 'pending_waiting_transfer') {
+                this.checkout.setStatus(StatusCheckout.AGUARDANDO_CONFIMACAO_PAGAMENTO);
+            }
+            
+            await this.repositoryCheckout.update(checkout, checkout.id);
+        } catch (err) {
+            throw new Error("Não foi possível realiza o pagamento na MP.");
+        }
         
+        return checkout;
     }
 
 
@@ -38,9 +48,9 @@ class CheckoutPagamento {
         /**
          * TODO altera o status do pagamento no banco de dados
          */
-        let instance = await this.repo.update(this.checkout, this.checkout.id);
+        let checkout = await this.repositoryCheckout.update(this.checkout, this.checkout.id);
 
-        return instance; 
+        return checkout; 
     }
 
 }

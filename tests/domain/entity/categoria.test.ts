@@ -2,7 +2,7 @@ import { describe } from 'node:test';
 import { expect } from '@jest/globals';
 import { test } from '@jest/globals';
 
-import Categoria from '../../app/domain/entity/categoria';
+import Categoria from '../../../app/domain/entity/categoria';
 
 describe("Validando Entity Categoria", () => {
     test("Instanciar Categoria sem ID", () => {

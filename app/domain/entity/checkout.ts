@@ -3,6 +3,7 @@ import Cartao from "./cartao";
 import Pedido from "./pedido";
 import { v4 as uuidv4 } from 'uuid';
 import { StatusCheckout } from "./enum/statusCheckout";
+import IMetodoPagamento from "./IMetodoPagamento";
 
 class Checkout {
 
@@ -10,9 +11,21 @@ class Checkout {
 
     private status: Number;
 
-    constructor(readonly pedido: Pedido, readonly cartao: Cartao, readonly id?) {
+    public payload : string;
+
+    private payment_method : number;
+    
+    constructor(readonly pedido: Pedido, readonly metodoPagamento?: IMetodoPagamento, readonly id?) {
         this.uuid = uuidv4();
         this.status = StatusCheckout.AGUARDANDO_PAGAMENTO;
+    }
+
+    public setPaymentMethod = (value: number) => {
+        this.payment_method = value;
+    }
+
+    public getPaymentMethod = () : number => {
+        return this.payment_method;
     }
 
     public setStatus = (status: Number) => {

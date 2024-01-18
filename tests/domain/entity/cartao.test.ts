@@ -2,8 +2,8 @@ import { describe } from 'node:test';
 import { expect } from '@jest/globals';
 import { test } from '@jest/globals';
 
-import Payer from '../../app/domain/entity/payer';
-import Cartao from '../../app/domain/entity/cartao';
+import Payer from '../../../app/domain/entity/payer';
+import Cartao from '../../../app/domain/entity/cartao';
 
 describe("Validando Entity Payer", () => {
     test("Instanciar Cartao", () => {

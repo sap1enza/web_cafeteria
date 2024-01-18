@@ -4,6 +4,7 @@ info:
   version: "1.0"
 servers:
   - url: http://localhost:30002/api/v1
+  - url: http://localhost:3000/api/v1
 paths:
   #user
   /user/auth:
@@ -526,6 +527,10 @@ paths:
               schema:
                 type: object
                 properties:
+                  payment_method_id:
+                    type: number
+                    format: integer
+                    example: 1
                   pedido_id:
                     type: number
                     format: integer
@@ -553,6 +558,10 @@ paths:
               schema:
                 type: object
                 properties:
+                  payment_method_id:
+                    type: number
+                    format: integer
+                    example: 1
                   pedido_id:
                     type: number
                     format: integer
@@ -601,6 +610,10 @@ components:
           schema:
             type: object
             properties:
+              payment_method_id:
+                type: number
+                format: integer
+                example: 1
               pedido_id:
                 type: number
                 format: integer

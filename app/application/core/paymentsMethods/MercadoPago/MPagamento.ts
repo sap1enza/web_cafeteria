@@ -1,40 +1,64 @@
+import { Response } from 'express';
 import axios, { AxiosStatic } from "axios";
 import Checkout from "../../../../domain/entity/checkout";
 import IPaymentMethods from "../IPaymentsMethods";
+import PaymentoMethods from "../PaymentoMethods";
 
 class MPagamento implements IPaymentMethods {
     
     public auth_token: string;
 
-    public url: string = process.env.MP_URL;
+    public url: string;
 
     public http: AxiosStatic;
+
     constructor () {
-        this.init();
+        this.auth_token = process.env.MP_CLIENT_SECRET
+        this.url = process.env.MP_URL; 
     }
 
-    protected init = async() => {
-        let url = this.url + '/oauth/token'
-        let options = {
-            'client_id' : process.env.MP_CLIENT_ID,
-            'client_secret' : process.env.MP_CLIENT_SECRET,
-            'grant_type' : "authorization_code",
-        } 
-        /**
-         * definindo configurações padrão para chamadas http
-         */
-        axios.defaults.baseURL = this.url;
-        axios.defaults.headers.common['Content-Type'] = 'application/json';
-        await axios.post('/oauth/token', options)
-        .then(response => {
-            console.log(response);
-            this.auth_token = response.data['token']
-            axios.defaults.headers.common['Authorization'] = this.auth_token;
-        });  
-        this.http = axios; 
+    public store = async (checkout: Checkout) => {
+        if (checkout.getPaymentMethod() == PaymentoMethods.PIX) {
+            return await this.pix(checkout);
+        } else if (checkout.getPaymentMethod() == PaymentoMethods.CARD_DEBIT) {
+            return await this.card(checkout);
+        } else {
+            throw new Error("Payment Method not implemented.");
+        }
     }
     
-    public store = async (checkout: Checkout) => {
+    pix = async (checkout : Checkout) => {
+        const response =  await fetch(`${this.url}payments`,{
+            method: 'POST',
+            body: JSON.stringify({
+                "transaction_amount" :checkout.pedido.getValorTotal(),
+                "description" : `MERCADO PAGO PAGAMENTO PIX - Compra segura cliente ${checkout.metodoPagamento.payer.email}`,
+                "payment_method_id" : "pix",
+                "external_reference" : checkout.uuid,
+                "payer" : {
+                    "email" : checkout.metodoPagamento.payer.email,
+                }
+            }),
+            headers: {
+                "Content-Type" : "application/json",
+                "Authorization" : `Bearer ${this.auth_token}` 
+            }
+        });
+        
+        if (response.status >= 300) {
+            throw new Error(response.statusText);
+        }
+
+        let dataPayment = await response.json();
+       
+        if (dataPayment['status']) {
+            
+        }
+
+        return dataPayment;
+    }
+    
+    card = async (checkout : Checkout) => {
         throw new Error("Method not implemented.");
     }
 
