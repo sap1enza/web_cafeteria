@@ -14,8 +14,6 @@ import CheckoutPagamentoRepository from '../../repositories/CheckoutPagamentoRep
 
 
 class CheckoutController {
-
-    private repository : CheckoutPagamento;
     private pedidoRepository: PedidoRepository;
     private mysqlidatabase: MysqlDataBase;
     private metodoPagamento: IPaymentMethods;

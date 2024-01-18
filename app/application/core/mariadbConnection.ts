@@ -85,7 +85,7 @@ class MysqlConnection
                 created datetime null,
                 modified datetime null
             )  ENGINE=INNODB;
-        `);   
+        `);  
     }
 
     public conn () {

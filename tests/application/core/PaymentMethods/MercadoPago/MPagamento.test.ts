@@ -9,6 +9,8 @@ import { statusPedido } from '../../../../../app/domain/entity/enum/statusPedido
 import Produto from '../../../../../app/domain/entity/produto';
 import Categoria from '../../../../../app/domain/entity/categoria';
 import PaymentMethods from '../../../../../app/application/core/paymentsMethods/PaymentoMethods';
+import Pix from '../../../../../app/domain/entity/pix';
+import Payer from '../../../../../app/domain/entity/payer';
 
 describe("MP metodo de pagamento PIX", () => {
     test("Autenticação de usuário", async () => {
@@ -33,7 +35,14 @@ describe("MP metodo de pagamento PIX", () => {
             1
         ))
         let checkout = new Checkout(
-            pedido
+            pedido,
+            new Pix(
+                new Payer(
+                    "Heitor Bernardo Victor Nogueira",
+                    "heitoBVN@gmail.com",
+                    "043.065.619-09"
+                )
+            )
         );
         checkout.setPaymentMethod(PaymentMethods.PIX);
         let mercado_pago = new MPagamento();

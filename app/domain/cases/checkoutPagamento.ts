@@ -1,4 +1,3 @@
-import CheckoutPagamentoRepository from "../../application/repositories/CheckoutPagamentoRepository";
 import Checkout from "../entity/checkout";
 import { StatusCheckout } from "../entity/enum/statusCheckout";
 import IPaymentMethods from "../../application/core/paymentsMethods/IPaymentsMethods";

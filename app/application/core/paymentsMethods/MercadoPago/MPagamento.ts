@@ -1,3 +1,4 @@
+import { Response } from 'express';
 import axios, { AxiosStatic } from "axios";
 import Checkout from "../../../../domain/entity/checkout";
 import IPaymentMethods from "../IPaymentsMethods";
@@ -31,11 +32,11 @@ class MPagamento implements IPaymentMethods {
             method: 'POST',
             body: JSON.stringify({
                 "transaction_amount" :checkout.pedido.getValorTotal(),
-                "description" : `MERCADO PAGO PAGAMENTO PIX - Compra segura cliente ${checkout.pedido.cliente.email}`,
+                "description" : `MERCADO PAGO PAGAMENTO PIX - Compra segura cliente ${checkout.metodoPagamento.payer.email}`,
                 "payment_method_id" : "pix",
                 "external_reference" : checkout.uuid,
                 "payer" : {
-                    "email" : checkout.pedido.cliente.email,
+                    "email" : checkout.metodoPagamento.payer.email,
                 }
             }),
             headers: {
@@ -43,7 +44,6 @@ class MPagamento implements IPaymentMethods {
                 "Authorization" : `Bearer ${this.auth_token}` 
             }
         });
-
         
         if (response.status >= 300) {
             throw new Error(response.statusText);
@@ -57,7 +57,7 @@ class MPagamento implements IPaymentMethods {
 
         return dataPayment;
     }
-
+    
     card = async (checkout : Checkout) => {
         throw new Error("Method not implemented.");
     }

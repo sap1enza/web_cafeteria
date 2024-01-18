@@ -1,6 +1,7 @@
+import IMetodoPagamento from "./IMetodoPagamento";
 import Payer from "./payer";
 
-class Cartao {
+class Cartao implements IMetodoPagamento {
     constructor(readonly payer: Payer,readonly number: string, readonly cvv: string, readonly expirationDate: string) {
         if (!number.trim()) {
             throw new Error("Número do Cartão é obrigatório.");

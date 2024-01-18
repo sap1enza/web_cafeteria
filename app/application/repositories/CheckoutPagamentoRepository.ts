@@ -29,13 +29,13 @@ class CheckoutPagamentoRepository extends IRepository
                 chekout.getStatus(), 
                 chekout.getPaymentMethod(), 
                 chekout.pedido.id,
-                chekout.cartao.number, 
-                chekout.cartao.cvv, 
-                chekout.cartao.expirationDate, 
-                chekout.cartao.payer.name,
-                chekout.cartao.payer.email,
-                chekout.cartao.payer.document,
-                chekout.cartao.payer.document,
+                chekout.metodoPagamento.number, 
+                chekout.metodoPagamento.cvv, 
+                chekout.metodoPagamento.expirationDate, 
+                chekout.metodoPagamento.payer.name,
+                chekout.metodoPagamento.payer.email,
+                chekout.metodoPagamento.payer.document,
+                chekout.metodoPagamento.payer.document,
                 chekout.pedido.getValorTotal(),
                 chekout.payload,
                 id
@@ -43,7 +43,7 @@ class CheckoutPagamentoRepository extends IRepository
 
         return new Checkout(
             chekout.pedido,
-            chekout.cartao,
+            chekout.metodoPagamento,
             parseInt(data.insertId)
         )
     }
@@ -87,18 +87,18 @@ class CheckoutPagamentoRepository extends IRepository
                 chekout.getStatus(),
                 chekout.getPaymentMethod(), 
                 chekout.pedido.id,
-                chekout.cartao.number, 
-                chekout.cartao.cvv, 
-                chekout.cartao.expirationDate, 
-                chekout.cartao.payer.name,
-                chekout.cartao.payer.email,
-                chekout.cartao.payer.document ,
+                chekout.metodoPagamento.number, 
+                chekout.metodoPagamento.cvv, 
+                chekout.metodoPagamento.expirationDate, 
+                chekout.metodoPagamento.payer.name,
+                chekout.metodoPagamento.payer.email,
+                chekout.metodoPagamento.payer.document ,
                 chekout.pedido.getValorTotal() 
             ]); 
 
         return new Checkout(
             chekout.pedido,
-            chekout.cartao,
+            chekout.metodoPagamento,
             parseInt(data.insertId)
         )
     }

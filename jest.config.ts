@@ -6,6 +6,11 @@ export default {
   transform: {
     '^.+\\.tsx?$': 'ts-jest', // Transforma arquivos TypeScript
   },
+  testTimeout: 120000,
+  verbose: true,
+  // detectOpenHandles: true,
+  collectCoverage: true,
+  forceExit: true,
   transformIgnorePatterns: ['./node_modules'],
   setupFiles: ['dotenv/config'],
 };

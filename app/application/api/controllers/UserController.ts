@@ -1,7 +1,6 @@
 import * as HttpStatus from 'http-status';
 import ResponseAPI from "../../core/ResponseAPI"
-import JWT from '../../core/jwt';
-import configs from '../../core/configs';
+import UsuarioCasoDeUso from '../../../domain/cases/usuarioCasoDeUso';
 import User from '../../../domain/entity/user';
 
 class UserController{
@@ -10,12 +9,15 @@ class UserController{
             /**
              * criei um usuario mocado, motivo de nao ter escopo para criação de usuario.
              */
-            const authJwt = new JWT(configs.secret, new User(
+            let user = new User(
                 "Bruno Blauzius schuindt",
                 "brunoblauzius@gmail.com"
-            ));
+            );
+            
+            let token = new UsuarioCasoDeUso(user).autenticar()
+
             response.status(HttpStatus.OK).send(ResponseAPI.data({
-                "access_token" : authJwt.sign(),
+                "access_token" : token,
                 "expires_in": 3600,
                 "scope": "customScope",
                 "token_type": "Bearer"

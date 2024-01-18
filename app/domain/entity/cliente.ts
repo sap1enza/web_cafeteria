@@ -10,21 +10,21 @@ class Cliente{
         readonly cpf_cnpj? : string
     ) {
         if (name==null || name=="") {
-            throw new Error("Nome é obrigatório.");
+            throw new Error("Nome do cliente é obrigatório.");
         }
         if (email==null || email=="") {
-            throw new Error("E-mail é obrigatório.");
+            throw new Error("E-mail do cliente éobrigatório.");
         }
         if (!this.isValidEmail()) {
-            throw new Error("E-mail inválido.");
+            throw new Error("E-mail do cliente é inválido.");
         }
         if (cpf_cnpj==null || cpf_cnpj=="") {
-            throw new Error("CPF é obrigatório.");
+            throw new Error("CPF do cliente é obrigatório.");
         }
         this.cpf_cnpj = String(cpf_cnpj).replace(".", "").replace("-", "").replace(".", "");
 
         if (!this.isValidCpf()) {
-            throw new Error("CPF inválido.");
+            throw new Error("CPF do cliente é inválido.");
         }
     }
 
