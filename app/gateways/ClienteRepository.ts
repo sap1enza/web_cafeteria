@@ -1,4 +1,4 @@
-import Cliente from "../../domain/entity/cliente";
+import Cliente from "../domain/entity/cliente";
 import IRepository from "./IReporitory";
 
 class ClienteRepository extends IRepository

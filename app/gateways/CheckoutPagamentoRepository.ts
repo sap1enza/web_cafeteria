@@ -1,4 +1,5 @@
-import Checkout from "../../domain/entity/checkout";
+import Checkout from "../domain/entity/checkout";
+import { StatusCheckout } from "../domain/entity/enum/statusCheckout";
 import IRepository from "./IReporitory";
 
 class CheckoutPagamentoRepository extends IRepository
@@ -112,11 +113,13 @@ class CheckoutPagamentoRepository extends IRepository
     }
 
 
-    public findByIdPedido = async (pedido_id: BigInteger) : Promise<Checkout> => {
+    public findByIdPedido = async (pedido_id: BigInteger) => {
         let data = await this.db.find(`SELECT * FROM checkout where pedido_id = ${pedido_id};`);
         if (data.length>0) {
-            
-            return  data[0].status;
+            return  {
+                id : data[0].status,
+                name : ""
+            }
         }
         else{
             return null;

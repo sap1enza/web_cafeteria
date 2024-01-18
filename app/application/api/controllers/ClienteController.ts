@@ -1,5 +1,5 @@
 import * as HttpStatus from 'http-status';
-import ClienteRepository from "../../repositories/ClienteRepository";
+import ClienteRepository from "../../../gateways/ClienteRepository";
 import ResponseAPI from '../../core/ResponseAPI';
 import MysqlDataBase from '../../database/MysqlDataBase';
 import Cliente from '../../../domain/entity/cliente';

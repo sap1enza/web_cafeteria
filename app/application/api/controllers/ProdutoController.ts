@@ -1,10 +1,10 @@
 import * as HttpStatus from 'http-status';
-import ProdutoRepository from "../../repositories/ProdutoRepository";
+import ProdutoRepository from "../../../gateways/ProdutoRepository";
 import ResponseAPI from '../../core/ResponseAPI';
 import MysqlDataBase from '../../database/MysqlDataBase';
 import Produto from '../../../domain/entity/produto';
 import Categoria from '../../../domain/entity/categoria';
-import CategoriaRepository from '../../repositories/CategoriaRepository';
+import CategoriaRepository from '../../../gateways/CategoriaRepository';
 
 
 class ProdutoController{

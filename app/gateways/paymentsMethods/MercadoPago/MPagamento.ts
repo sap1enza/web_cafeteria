@@ -1,6 +1,4 @@
-import { Response } from 'express';
-import axios, { AxiosStatic } from "axios";
-import Checkout from "../../../../domain/entity/checkout";
+import Checkout from "../../../domain/entity/checkout";
 import IPaymentMethods from "../IPaymentsMethods";
 import PaymentoMethods from "../PaymentoMethods";
 
@@ -10,11 +8,16 @@ class MPagamento implements IPaymentMethods {
 
     public url: string;
 
-    public http: AxiosStatic;
+    public response;
+
 
     constructor () {
         this.auth_token = process.env.MP_CLIENT_SECRET
         this.url = process.env.MP_URL; 
+    }
+
+    aguardandoPagamento = () : boolean => {
+        return this.response['status_detail'] == 'pending_waiting_transfer';
     }
 
     public store = async (checkout: Checkout) => {
@@ -49,13 +52,13 @@ class MPagamento implements IPaymentMethods {
             throw new Error(response.statusText);
         }
 
-        let dataPayment = await response.json();
+        this.response = await response.json();
        
-        if (dataPayment['status']) {
+        if (this.response['status']) {
             
         }
 
-        return dataPayment;
+        return this.response;
     }
     
     card = async (checkout : Checkout) => {

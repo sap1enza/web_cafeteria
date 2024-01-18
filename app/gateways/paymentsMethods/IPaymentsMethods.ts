@@ -1,4 +1,4 @@
-import Checkout from "../../../domain/entity/checkout";
+import Checkout from "../../domain/entity/checkout";
 
 abstract class IPaymentMethods {
     /**
@@ -16,6 +16,7 @@ abstract class IPaymentMethods {
      */
     abstract store(checkout: Checkout);
 
+    abstract aguardandoPagamento() : boolean;
 
     /**
      * metodo de criação de pagamento via PIX

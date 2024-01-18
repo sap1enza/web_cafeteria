@@ -1,4 +1,4 @@
-import Categoria from "../../domain/entity/categoria";
+import Categoria from "../domain/entity/categoria";
 import IRepository from "./IReporitory";
 
 class CategoriaRepository extends IRepository{

@@ -1,7 +1,7 @@
 import * as HttpStatus from 'http-status';
 import ResponseAPI from "../../core/ResponseAPI"
 import {Request, Response} from 'express';
-import CategoriaRepository from '../../repositories/CategoriaRepository';
+import CategoriaRepository from '../../../gateways/CategoriaRepository';
 import MysqlDataBase from '../../database/MysqlDataBase';
 import Categoria from '../../../domain/entity/categoria';
 
