@@ -11,6 +11,8 @@ import { statusPedido } from '../../../domain/entity/enum/statusPedido';
 import IPaymentMethods from '../../core/paymentsMethods/IPaymentsMethods';
 import MPagamento from '../../core/paymentsMethods/MercadoPago/MPagamento';
 import CheckoutPagamentoRepository from '../../repositories/CheckoutPagamentoRepository';
+import PaymentoMethods from '../../core/paymentsMethods/PaymentoMethods';
+import Pix from '../../../domain/entity/pix';
 
 
 class CheckoutController {
@@ -32,21 +34,30 @@ class CheckoutController {
         try {
             
             let pedido = await this.pedidoRepository.findById(request.body.pedido_id);
-            
-            let checkout = new Checkout(
-               pedido,
-                new Cartao(
-                    new Payer(
-                        request.body.cartao.payer.name,
-                        request.body.cartao.payer.email,
-                        request.body.cartao.payer.document,
-                    ),
+            let payer = new Payer(
+                request.body.cartao.payer.name,
+                request.body.cartao.payer.email,
+                request.body.cartao.payer.document,
+            )
+            let metodoPagamento = null;
+            if (request.body.cartao.payment_method_id == PaymentoMethods.CARD_CREDIT) {
+                metodoPagamento = new Cartao(
+                    payer,
                     request.body.cartao.number,
                     request.body.cartao.cvv,
                     request.body.cartao.expiration_date,
                 )
-            );
+            } else {
+                metodoPagamento = new Pix(
+                    payer
+                )
+            }
 
+            let checkout = new Checkout(
+                pedido,
+                metodoPagamento
+            );
+            
             checkout.setPaymentMethod(request.body.payment_method_id)
 
             let checkoutPagamento = new CheckoutPagamento(
@@ -57,11 +68,8 @@ class CheckoutController {
             
             try {
                 let data = await checkoutPagamento.create();
-                if (response.status(HttpStatus.OK)){
-                    pedido.setStatus(statusPedido.EM_PREPARACAO);
-                    await this.pedidoRepository.update(pedido, pedido.id);
-                }
-                
+                pedido.setStatus(statusPedido.EM_PREPARACAO);
+                await this.pedidoRepository.update(pedido, pedido.id);
                 response.status(HttpStatus.OK).json(ResponseAPI.data(data));
             } catch(err) {
                     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
