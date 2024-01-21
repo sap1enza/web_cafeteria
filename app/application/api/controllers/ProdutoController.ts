@@ -1,10 +1,11 @@
 import * as HttpStatus from 'http-status';
 import ProdutoRepository from "../../../gateways/ProdutoRepository";
 import ResponseAPI from '../../../adapters/ResponseAPI';
-import MysqlDataBase from '../../../external/MysqlDataBase';
 import Produto from '../../../domain/entity/produto';
 import Categoria from '../../../domain/entity/categoria';
 import CategoriaRepository from '../../../gateways/CategoriaRepository';
+import { IDataBase } from '../../../interfaces/IDataBase';
+import { ProdutoCasoDeUso } from '../../../cases/produtoCasodeUso';
 
 
 class ProdutoController{
@@ -12,14 +13,16 @@ class ProdutoController{
      * 
      */
      public repository: ProdutoRepository;
+     private _dbconnection: IDataBase;
      public categoryRepository: CategoriaRepository;
 
      /**
       * 
       */
-     constructor() {
-         this.repository = new ProdutoRepository(new MysqlDataBase());
-         this.categoryRepository = new CategoriaRepository(new MysqlDataBase());
+     constructor(dbconnection: IDataBase) {
+        this._dbconnection = dbconnection;
+         this.repository = new ProdutoRepository(dbconnection);
+         this.categoryRepository = new CategoriaRepository(dbconnection);
      }
  
      /**
@@ -29,7 +32,7 @@ class ProdutoController{
       */
      public all = async (request, response) => {
          try {
-             let data = await this.repository.getAll(request.query);
+             let data = await ProdutoCasoDeUso.getAllProdutos(request.query,this.repository);
              response.status(HttpStatus.OK).json(ResponseAPI.list(data));
          } catch(err) {
                  response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message)); 
@@ -42,24 +45,15 @@ class ProdutoController{
       * @param response 
       */
      public store = async (request, response) => {
-         try {
-             let categoria = await this.categoryRepository.findById(request.body.category_id);
-             let produto = new Produto(
-                 request.body.title,
-                 request.body.value,
-                 categoria,
-                 request.body.description
-             );
-             
-             try {
-                 let data = await this.repository.store(produto);
-                 response.status(HttpStatus.OK).json(ResponseAPI.data(data));
-             } catch(err) {
-                     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-             }
-         } catch (err) {
-             response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message)); 
-         } 
+    
+            try {
+                const data = await ProdutoCasoDeUso.criarProduto(request,this.categoryRepository,this.repository);
+                response.status(HttpStatus.OK).json(ResponseAPI.data(data));
+
+            } catch(err) {
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
+            }
+
      }
  
      /**
@@ -68,24 +62,14 @@ class ProdutoController{
       * @param response 
       */
      public update = async (request, response) => {
-         try {
-            let categoria = await this.categoryRepository.findById(request.body.category_id);
-            
-            let produto = new Produto(
-                request.body.title,
-                request.body.value,
-                categoria,
-                request.body.description
-            );
+        try {
+            const data = await ProdutoCasoDeUso.atualizarProduto(request,this.categoryRepository,this.repository);
+            response.status(HttpStatus.OK).json(ResponseAPI.data(data));
 
-             let data = await this.repository.update(produto, request.params.id);
-             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
-         } catch (err) {
-             response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-             .json(
-                 ResponseAPI.error(err.message)
-             );
-         }
+        } catch(err) {
+            response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
+        }
+        
      }
  
      /**
@@ -98,7 +82,7 @@ class ProdutoController{
              if (typeof request.params.id == 'undefined') {
                  response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
              }
-             let data = await this.repository.findById(request.params.id);
+             let data = await ProdutoCasoDeUso.encontrarProdutoPorId(request.params.id,this.repository);
              response.status(HttpStatus.OK).json(ResponseAPI.data(data));
          } catch (err) {
              response.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -118,7 +102,7 @@ class ProdutoController{
              if (typeof request.params.id == 'undefined') {
                  response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
              }
-             let data = await this.repository.delete(request.params.id);
+             let data = await ProdutoCasoDeUso.deleteProduto(request.params.id, this.repository);
              response.status(HttpStatus.NO_CONTENT).json({});
          } catch (err) {
              response.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -138,7 +122,7 @@ class ProdutoController{
             if (typeof request.params.category_id  == 'undefined' || request.params.category_id == "") {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID da Categoria é requerido."));
             }
-            let data = await this.repository.findByCategory(request.params.category_id);
+            let data = await ProdutoCasoDeUso.findByCategory(request.params.category_id, this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -149,4 +133,4 @@ class ProdutoController{
 }
 }
 
-export default new ProdutoController();
+export default ProdutoController;

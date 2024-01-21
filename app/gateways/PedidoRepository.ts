@@ -1,9 +1,16 @@
 import Pedido from "../domain/entity/pedido";
 import ClienteRepository from "./ClienteRepository";
-import IRepository from "../interfaces/IReporitory";
+import IPedido from "../interfaces/IPedido";
 import Produto from '../domain/entity/produto';
+import { IDataBase } from "../interfaces/IDataBase";
 
-class PedidoRepository extends IRepository{
+class PedidoRepository implements IPedido{
+
+    public db: IDataBase;
+
+    constructor(database: IDataBase) {
+        this.db = database;
+      }
 
     public getAll = async (params: any) => {
         let CONDITIONS = "";

@@ -1,8 +1,10 @@
 import * as HttpStatus from 'http-status';
 import ClienteRepository from "../../../gateways/ClienteRepository";
-import PedidoRepository from "../../../gateways/PedidoRepository";
+import PedidoRepository from '../../../gateways/PedidoRepository';
 import ResponseAPI from '../../../adapters/ResponseAPI';
-import MysqlDataBase from '../../../external/MysqlDataBase';
+//import MysqlDataBase from '../../../external/MysqlDataBase';
+import { IDataBase } from "../../../interfaces/IDataBase";
+import { PedidoCasoDeUso } from '../../../cases/pedidoCasodeUso';
 import Pedido from '../../../domain/entity/pedido';
 import Produto from '../../../domain/entity/produto';
 import ProdutoRepository from '../../../gateways/ProdutoRepository';
@@ -10,7 +12,12 @@ import ProdutoRepository from '../../../gateways/ProdutoRepository';
 class PedidoController {
     /**
      *
+     * 
+
+    /**
+     * 
      */
+    private _dbconnection: IDataBase;
     public repository: PedidoRepository;
     public clienteRepository: ClienteRepository;
     public produtoRepository: ProdutoRepository;
@@ -18,11 +25,12 @@ class PedidoController {
     /**
      *
      */
-    constructor() {
+    constructor(dbconnection: IDataBase) {
+        this._dbconnection = dbconnection;
         //this.repository = new PedidoRepository(new MysqlDataBase());
-        this.clienteRepository = new ClienteRepository(new MysqlDataBase());
-        this.produtoRepository = new ProdutoRepository(new MysqlDataBase());
-        this.repository = new PedidoRepository(new MysqlDataBase());
+        this.clienteRepository = new ClienteRepository(dbconnection);
+        this.produtoRepository = new ProdutoRepository(dbconnection);
+        this.repository = new PedidoRepository(dbconnection);
     }
 
     /**
@@ -32,7 +40,7 @@ class PedidoController {
      */
     public all = async (request, response) => {
         try {
-            let data = await this.repository.getAll(request.query);
+            let data = await PedidoCasoDeUso.getAllPedidos(request.query,this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.list(data));
         } catch(err) {
             response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
@@ -45,37 +53,15 @@ class PedidoController {
      * @param response
      */
     public store = async (request, response) => {
+        
         try {
-            let customer = await this.clienteRepository.findById(request.body.client_id);
-            let produtos: Produto[] = await this.produtoRepository.findByMultipleIds(request.body.produtosIds);
-            let order = new Pedido(
-                customer,
-                request.body.status
-            );
-            try {
-
-                produtos.forEach(produto => {
-                    order.adicionarProduto(produto);
-                       
-                });
-
-                const orderResult = await this.repository.store(order);
-                
-                const promises = order.getProdutos().map(async (produto) => {
-                    const data = await this.repository.adicionarProdutoAoPedido(orderResult.id, produto.id);
-                    return data;
-                });
-
-                await Promise.all(promises);
-                response.status(HttpStatus.OK).json(ResponseAPI.data(orderResult.id));
+                const orderResultId =PedidoCasoDeUso.adicionarProdutoPedido(request,this.clienteRepository,this.produtoRepository,this.repository)
+                response.status(HttpStatus.OK).json(ResponseAPI.data(orderResultId));
 
             } catch(err) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message));
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
             }
-        } catch (err) {
-            response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
         }
-    }
 
     /**
      *
@@ -86,11 +72,11 @@ class PedidoController {
         try {
             console.log(request.params.id)
             console.log(request.body.status)
-            let order: Pedido = await this.repository.findById(request.params.id);
+            let order: Pedido = await PedidoCasoDeUso.encontrarPedidoPorId(request.params.id, this.repository);
 
             order.setStatus(request.body.status);
             
-            let data = await this.repository.update(order, request.params.id);
+            let data = await PedidoCasoDeUso.atualizarPedido(order, request.params.id,this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -110,7 +96,7 @@ class PedidoController {
             if (typeof request.params.id == 'undefined') {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
             }
-            let data = await this.repository.findById(request.params.id);
+            let data = await PedidoCasoDeUso.encontrarPedidoPorId(request.params.id,this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -130,7 +116,7 @@ class PedidoController {
             if (typeof request.params.id == 'undefined') {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
             }
-            let data = await this.repository.delete(request.params.id);
+            let data = await PedidoCasoDeUso.deletePedido(request.params.id,this.repository);
             response.status(HttpStatus.NO_CONTENT).json({});
         } catch (err) {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -142,4 +128,4 @@ class PedidoController {
 
 }
 
-export default new PedidoController();
+export default PedidoController;
