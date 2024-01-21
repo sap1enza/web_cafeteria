@@ -2,12 +2,12 @@ import Categoria from "../domain/entity/categoria";
 import IRepository from "../interfaces/IReporitory";
 import {IDataBase} from "../interfaces/IDataBase";
 
-class CategoriaRepository extends IRepository{
-    private repositorioDados: IDataBase;
+class CategoriaRepository implements IRepository{
+    public db: IDataBase;
 
     constructor(database: IDataBase) {
-        super(database);
-        this.repositorioDados = database;
+       // super(database);
+        this.db = database;
       }
     async getAll(params) {
         let CONDITIONS = "";

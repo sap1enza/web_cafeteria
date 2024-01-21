@@ -14,7 +14,6 @@ export default function urls(dbconnection: IDataBase) {
     router.use("/api/v1/", productsRoutes);
     router.use("/api/v1/", orderRoutes);
     router.use("/api/v1/", checkoutRoutes);
-    
- return router;
+ return router
 }
 //export default router;
