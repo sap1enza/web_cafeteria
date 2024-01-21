@@ -1,7 +1,7 @@
 import * as HttpStatus from 'http-status';
 import ClienteRepository from "../../../gateways/ClienteRepository";
 import PedidoRepository from "../../../gateways/PedidoRepository";
-import ResponseAPI from '../../core/ResponseAPI';
+import ResponseAPI from '../../../adapters/ResponseAPI';
 import MysqlDataBase from '../../../external/MysqlDataBase';
 import Pedido from '../../../domain/entity/pedido';
 import Produto from '../../../domain/entity/produto';

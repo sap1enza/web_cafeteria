@@ -1,6 +1,6 @@
 import * as HttpStatus from 'http-status';
 import ProdutoRepository from "../../../gateways/ProdutoRepository";
-import ResponseAPI from '../../core/ResponseAPI';
+import ResponseAPI from '../../../adapters/ResponseAPI';
 import MysqlDataBase from '../../../external/MysqlDataBase';
 import Produto from '../../../domain/entity/produto';
 import Categoria from '../../../domain/entity/categoria';

@@ -1,5 +1,5 @@
 import * as HttpStatus from 'http-status';
-import ResponseAPI from "../../core/ResponseAPI"
+import ResponseAPI from "../../../adapters/ResponseAPI"
 import UsuarioCasoDeUso from '../../../cases/usuarioCasoDeUso';
 import User from '../../../domain/entity/user';
 

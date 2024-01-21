@@ -1,5 +1,5 @@
 import * as HttpStatus from 'http-status';
-import ResponseAPI from "../../core/ResponseAPI"
+import ResponseAPI from "../../../adapters/ResponseAPI"
 import {Request, Response} from 'express';
 import Checkout from '../../../domain/entity/checkout';
 import Cartao from '../../../domain/entity/cartao';
