@@ -1,16 +1,16 @@
 import * as HttpStatus from 'http-status';
 import ClienteRepository from "../../../gateways/ClienteRepository";
-import ResponseAPI from '../../../adapters/ResponseAPI';
+import ResponseAPI from '../../core/ResponseAPI';
 import Cliente from '../../../domain/entity/cliente';
 import { IDataBase } from "../../../interfaces/IDataBase";
 import { ClienteCasoDeUso } from '../../../cases/clienteCasodeUso';
-class CustomersController{
+class ClienteController{
 
     /**
      * 
      */
     private _dbconnection: IDataBase;
-    public repository: ClienteRepository;
+    private repository: ClienteRepository;
 
     /**
      * 
@@ -143,4 +143,4 @@ class CustomersController{
     }
 }
 
-export default CustomersController;
+export default ClienteController;

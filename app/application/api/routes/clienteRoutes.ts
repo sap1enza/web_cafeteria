@@ -3,7 +3,7 @@ import ClienteController from "../controllers/ClienteController";
 import { IDataBase } from '../../../interfaces/IDataBase';
 
 export default function ClienteRoutes(dbconnection: IDataBase) {
-let router = express.Router();
+const router = express.Router();
 const clienteController = new ClienteController(dbconnection);
 
 router.get('/cliente', clienteController.all);

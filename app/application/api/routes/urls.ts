@@ -1,5 +1,5 @@
 import * as express from "express";
-import customerRoutes from './clienteRoutes';
+import ClienteRoutes from './clienteRoutes';
 import categoriesRoutes from './categoriaRoutes';
 import productsRoutes from './produtoRoutes';
 import orderRoutes from './pedidoRoutes';
@@ -9,7 +9,7 @@ import { IDataBase } from '../../../interfaces/IDataBase';
 export default function urls(dbconnection: IDataBase) {
     const router = express.Router();
 
-    router.use("/api/v1/", customerRoutes);
+    router.use("/api/v1/", ClienteRoutes(dbconnection));
     router.use("/api/v1/", categoriesRoutes(dbconnection));
     router.use("/api/v1/", productsRoutes);
     router.use("/api/v1/", orderRoutes);
