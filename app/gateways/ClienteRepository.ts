@@ -1,8 +1,15 @@
 import Cliente from "../domain/entity/cliente";
-import IRepository from "../interfaces/IReporitory";
+import ICliente from "../interfaces/ICliente";
+import { IDataBase } from "../interfaces/IDataBase";
 
-class ClienteRepository extends IRepository
+class ClienteRepository implements ICliente
 {
+    public db: IDataBase;
+
+    constructor(database: IDataBase) {
+       // super(database);
+        this.db = database;
+      }
 
     public getAll = async (params) => {
         let CONDITIONS = "";
