@@ -4,13 +4,17 @@ import categoriesRoutes from './categoriaRoutes';
 import productsRoutes from './produtoRoutes';
 import orderRoutes from './pedidoRoutes';
 import checkoutRoutes from './checkoutRoutes';
+import { IDataBase } from '../../../interfaces/IDataBase';
 
-let router = express.Router();
+export default function urls(dbconnection: IDataBase) {
+    const router = express.Router();
 
-router.use("/api/v1/", customerRoutes);
-router.use("/api/v1/", categoriesRoutes);
-router.use("/api/v1/", productsRoutes);
-router.use("/api/v1/", orderRoutes);
-router.use("/api/v1/", checkoutRoutes);
-
-export default router;
+    router.use("/api/v1/", customerRoutes);
+    router.use("/api/v1/", categoriesRoutes(dbconnection));
+    router.use("/api/v1/", productsRoutes);
+    router.use("/api/v1/", orderRoutes);
+    router.use("/api/v1/", checkoutRoutes);
+    
+ return router;
+}
+//export default router;

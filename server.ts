@@ -1,17 +1,21 @@
 import * as express from "express";
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import applicationUrl from './app/application/api/routes/urls';
+import urls from './app/application/api/routes/urls';
 import Auth from "./app/application/api/middler/auth";
-import userRouter from './app/application/api/routes/userRouter'
+import userRouter from './app/application/api/routes/userRouter';
+import { IDataBase } from './app/interfaces/IDataBase';
 
-class Server{
+export default class Server{
     public app: express.Application;
+    private _dbconnection: IDataBase;
 
-    constructor () {
+    constructor (dbconnection: IDataBase) {
+        this._dbconnection = dbconnection;
         this.app = express();
         this.middler();
         this.routes();
+        
     }
 
     enableCors(){
@@ -35,9 +39,12 @@ class Server{
         this.app.use('/api/v1/', userRouter);
 
         this.app.use(Auth.validate);
-        this.app.use("/", applicationUrl);
+        const _urls = urls(this._dbconnection);
+        console.log(_urls);
+        console.log(urls(this._dbconnection));
+        this.app.use("/", _urls);
         
     }
 }
 
-export default new Server();
+//export default new Server();
