@@ -1,21 +1,23 @@
 import * as HttpStatus from 'http-status';
 import ClienteRepository from "../../../gateways/ClienteRepository";
-import ResponseAPI from '../../core/ResponseAPI';
-import MysqlDataBase from '../../../external/MysqlDataBase';
+import ResponseAPI from '../../../adapters/ResponseAPI';
 import Cliente from '../../../domain/entity/cliente';
-
+import { IDataBase } from "../../../interfaces/IDataBase";
+import { ClienteCasoDeUso } from '../../../cases/clienteCasodeUso';
 class CustomersController{
 
     /**
      * 
      */
+    private _dbconnection: IDataBase;
     public repository: ClienteRepository;
 
     /**
      * 
      */
-    constructor() {
-        this.repository = new ClienteRepository(new MysqlDataBase());
+    constructor(dbconnection: IDataBase) {
+        this._dbconnection = dbconnection;
+        this.repository = new ClienteRepository(this._dbconnection);
     }
 
     /**
@@ -25,7 +27,7 @@ class CustomersController{
      */
     public all = async (request, response) => {
         try {
-            let data = await this.repository.getAll(request.query);
+            let data = await ClienteCasoDeUso.getAllClientes(request.query,this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.list(data));
         } catch(err) {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message)); 
@@ -47,7 +49,7 @@ class CustomersController{
             );
             
             try {
-                let data = await this.repository.store(cliente);
+                let data = await ClienteCasoDeUso.criarCliente(cliente,this.repository);
                 response.status(HttpStatus.OK).json({message:'Cliente criado com sucesso!'});
                 
             } catch(err) {
@@ -70,7 +72,7 @@ class CustomersController{
                 request.body.email,
                 request.body.cpf_cnpj,
             );
-            let data = await this.repository.update(cliente, request.params.id);
+            let data = await ClienteCasoDeUso.atualizarCliente(cliente, request.params.id,this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -90,7 +92,7 @@ class CustomersController{
             if (typeof request.params.id == 'undefined') {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
             }
-            let data = await this.repository.findById(request.params.id);
+            let data = await ClienteCasoDeUso.encontrarClientePorId(request.params.id,this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -141,4 +143,4 @@ class CustomersController{
     }
 }
 
-export default new CustomersController();
+export default CustomersController;
