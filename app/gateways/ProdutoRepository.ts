@@ -1,4 +1,4 @@
-import IRepository from "./IReporitory";
+import IRepository from "../interfaces/IReporitory";
 import Produto from '../domain/entity/produto';
 import { Console } from "console";
 

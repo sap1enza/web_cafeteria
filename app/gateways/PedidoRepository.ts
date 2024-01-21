@@ -1,6 +1,6 @@
 import Pedido from "../domain/entity/pedido";
 import ClienteRepository from "./ClienteRepository";
-import IRepository from "./IReporitory";
+import IRepository from "../interfaces/IReporitory";
 import Produto from '../domain/entity/produto';
 
 class PedidoRepository extends IRepository{

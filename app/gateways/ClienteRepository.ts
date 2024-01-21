@@ -1,5 +1,5 @@
 import Cliente from "../domain/entity/cliente";
-import IRepository from "./IReporitory";
+import IRepository from "../interfaces/IReporitory";
 
 class ClienteRepository extends IRepository
 {

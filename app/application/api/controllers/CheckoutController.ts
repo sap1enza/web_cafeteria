@@ -6,7 +6,7 @@ import Cartao from '../../../domain/entity/cartao';
 import Payer from '../../../domain/entity/payer';
 import CheckoutPagamento from '../../../cases/checkoutPagamento';
 import PedidoRepository from '../../../gateways/PedidoRepository';
-import MysqlDataBase from '../../database/MysqlDataBase';
+import MysqlDataBase from '../../../external/MysqlDataBase';
 import { statusPedido } from '../../../domain/entity/enum/statusPedido';
 import IPaymentMethods from '../../../gateways/paymentsMethods/IPaymentsMethods';
 import MPagamento from '../../../gateways/paymentsMethods/MercadoPago/MPagamento';

@@ -1,8 +1,8 @@
 import * as mariadb from 'mariadb';
-
 class MysqlConnection
 {
 
+    
     connection: mariadb.Connection = null;
 
     constructor(){
@@ -10,7 +10,8 @@ class MysqlConnection
     }
 
     async connect(){
-        this.connection = await mariadb.createConnection({
+        console.log( process.env.MARIADB_HOST);
+        this.connection = await mariadb.createConnection({            
             host: process.env.MARIADB_HOST,
             user: process.env.MARIADB_USER,
             password: process.env.MARIADB_PASS,

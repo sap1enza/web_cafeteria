@@ -1,8 +1,14 @@
 import Categoria from "../domain/entity/categoria";
-import IRepository from "./IReporitory";
+import IRepository from "../interfaces/IReporitory";
+import {IDataBase} from "../interfaces/IDataBase";
 
 class CategoriaRepository extends IRepository{
-    
+    private repositorioDados: IDataBase;
+
+    constructor(database: IDataBase) {
+        super(database);
+        this.repositorioDados = database;
+      }
     async getAll(params) {
         let CONDITIONS = "";
         if (typeof params.name != 'undefined' && params.name != "") {
@@ -22,8 +28,8 @@ class CategoriaRepository extends IRepository{
                 name = ?,
                 modified = NOW()
              WHERE id = ?;
-            `, [params.name, id]); 
-        return new Categoria(params.name, id);
+            `, [params.name, id],new Date()); 
+        return new Categoria(params.name, id,);
     }
 
     async store(params: Categoria) {
@@ -36,7 +42,7 @@ class CategoriaRepository extends IRepository{
                     NOW(), 
                     NOW()
                 );
-            `, [params.name]); 
+            `, [params.name],new Date()); 
         return new Categoria(
             params.name,
             parseInt(data.insertId)

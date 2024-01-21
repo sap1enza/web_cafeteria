@@ -1,12 +1,12 @@
-import IDataBase from './IDataBase';
-import MysqlConnection from '../core/mariadbConnection';
+import {IDataBase} from '../interfaces/IDataBase';
+import MysqlConnection from './mariadbConnection';
 
-class MysqlDataBase extends IDataBase {
+export class MysqlDataBase implements IDataBase {
 
-    db: MysqlConnection = null;
+    private db: MysqlConnection;
 
     constructor(){
-        super();
+        //super();
         this.db = new MysqlConnection();
     }
 

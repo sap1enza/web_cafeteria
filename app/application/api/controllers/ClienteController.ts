@@ -1,7 +1,7 @@
 import * as HttpStatus from 'http-status';
 import ClienteRepository from "../../../gateways/ClienteRepository";
 import ResponseAPI from '../../core/ResponseAPI';
-import MysqlDataBase from '../../database/MysqlDataBase';
+import MysqlDataBase from '../../../external/MysqlDataBase';
 import Cliente from '../../../domain/entity/cliente';
 
 class CustomersController{

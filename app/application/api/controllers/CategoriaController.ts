@@ -2,23 +2,27 @@ import * as HttpStatus from 'http-status';
 import ResponseAPI from "../../core/ResponseAPI"
 import {Request, Response} from 'express';
 import CategoriaRepository from '../../../gateways/CategoriaRepository';
-import MysqlDataBase from '../../database/MysqlDataBase';
+//import MysqlDataBase from '../../../external/MysqlDataBase';
 import Categoria from '../../../domain/entity/categoria';
+import { IDataBase } from "../../../interfaces/IDataBase";
+import { CategoriaCasoDeUso } from '../../../cases/categoriaCasodeUso';
 
 
 
-class CategoriaController{
+ class CategoriaController{
 
     /**
      * 
      */
+    private _dbconnection: IDataBase;
     public repository: CategoriaRepository;
 
     /**
      * 
      */
-    constructor() {
-        this.repository = new CategoriaRepository(new MysqlDataBase());
+    constructor(dbconnection: IDataBase) {
+        this._dbconnection = dbconnection;
+        this.repository = new CategoriaRepository(this._dbconnection);
     }
 
     /**
@@ -28,10 +32,13 @@ class CategoriaController{
      */
     public all = async (request: Request, response: Response) => {
         try {
-            let data = await this.repository.getAll(request.query);
+            //let data = await this.repository.getAll(request.query);
+            const categoriaRepo = new CategoriaRepository( this._dbconnection );
+            const data= await CategoriaCasoDeUso.getAllCategorias(request.query, categoriaRepo)
             response.status(HttpStatus.OK).json(ResponseAPI.list(data));
         } catch (err) {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR)
+
             .send(ResponseAPI.error(err.message));
         }
     }
@@ -115,4 +122,4 @@ class CategoriaController{
     }
 }
 
-export default new CategoriaController();
+ export default CategoriaController;

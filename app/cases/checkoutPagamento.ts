@@ -1,7 +1,7 @@
 import Checkout from "../domain/entity/checkout";
 import { StatusCheckout } from "../domain/entity/enum/statusCheckout";
 import IPaymentMethods from "../gateways/paymentsMethods/IPaymentsMethods";
-import IRepository from "../gateways/IReporitory";
+import IRepository from "../interfaces/IReporitory";
 
 class CheckoutPagamento {
     

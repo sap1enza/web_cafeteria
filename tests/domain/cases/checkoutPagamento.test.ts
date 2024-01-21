@@ -3,7 +3,7 @@ import { expect } from '@jest/globals';
 import { test, it, beforeAll, afterAll, jest } from '@jest/globals';
 import CheckoutPagamento from '../../../app/cases/checkoutPagamento';
 import CheckoutPagamentoRepository from '../../../app/gateways/CheckoutPagamentoRepository';
-import MysqlDataBase from '../../../app/application/database/MysqlDataBase';
+import MysqlDataBase from '../../../app/external/MysqlDataBase';
 import MPagamento from '../../../app/gateways/paymentsMethods/MercadoPago/MPagamento';
 import PedidoRepository from '../../../app/gateways/PedidoRepository';
 import Checkout from '../../../app/domain/entity/checkout';

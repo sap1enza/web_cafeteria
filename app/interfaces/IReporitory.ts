@@ -1,4 +1,4 @@
-import IDataBase from "../application/database/IDataBase";
+import {IDataBase} from "./IDataBase";
 abstract class IRepository {
     constructor(readonly db: IDataBase) {}
 
