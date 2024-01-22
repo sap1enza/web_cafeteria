@@ -8,6 +8,7 @@ import CheckoutPagamento from '../../../cases/checkoutPagamento';
 import PedidoRepository from '../../../gateways/PedidoRepository';
 import MysqlDataBase from '../../database/MysqlDataBase';
 import { statusPedido } from '../../../domain/entity/enum/statusPedido';
+import { StatusCheckout } from '../../../domain/entity/enum/statusCheckout';
 import IPaymentMethods from '../../../gateways/paymentsMethods/IPaymentsMethods';
 import MPagamento from '../../../gateways/paymentsMethods/MercadoPago/MPagamento';
 import CheckoutPagamentoRepository from '../../../gateways/CheckoutPagamentoRepository';
@@ -36,12 +37,14 @@ class CheckoutController {
         try {
             
             let pedido = await this.pedidoRepository.findById(request.body.pedido_id);
+
             let payer = new Payer(
                 request.body.cartao.payer.name,
                 request.body.cartao.payer.email,
                 request.body.cartao.payer.document,
             )
             let metodoPagamento = null;
+
             if (request.body.cartao.payment_method_id == PaymentoMethods.CARD_CREDIT) {
                 metodoPagamento = new Cartao(
                     payer,
@@ -84,7 +87,26 @@ class CheckoutController {
 
 
     public hook = async (request: Request, response: Response) => {
-        response.status(HttpStatus.OK).json(ResponseAPI.data(request.params.uuid));
+        try {
+            let checkout = await this.repository.findById(request.body.data.id);
+            console.log('checkout', checkout)
+
+            if (checkout.payment_method_id == PaymentoMethods.PIX) {
+                checkout.status(StatusCheckout.PAGAMENTO_EFETUADO);
+
+                await this.repository.update(checkout, checkout.id);
+            } else if (checkout.payment_method_id == PaymentoMethods.CARD_CREDIT) {
+                checkout.status(StatusCheckout.AGUARDANDO_CONFIMACAO_PAGAMENTO);
+
+                await this.repository.update(checkout, checkout.id);
+
+                // TODO: Checar status com MercadoPago
+            }
+
+            response.status(HttpStatus.OK);
+        } catch (err) {
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message));
+        }
     }
 
 

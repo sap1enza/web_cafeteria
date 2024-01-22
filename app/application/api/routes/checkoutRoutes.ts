@@ -4,7 +4,7 @@ import CheckoutController from "../controllers/CheckoutController";
 let router = express.Router();
 
 router.post('/checkout', CheckoutController.store);
-router.post('/checkout/:uuid/hook', CheckoutController.hook);
+router.post('/checkout/hook', CheckoutController.hook);
 router.get('/checkout/:pedido_id/status', CheckoutController.findByIdPedido);
 
 
