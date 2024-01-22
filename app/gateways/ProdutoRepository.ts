@@ -1,8 +1,16 @@
 import IRepository from "../interfaces/IReporitory";
 import Produto from '../domain/entity/produto';
 import { Console } from "console";
+import IProduto from "../interfaces/IProduto";
+import { IDataBase } from "../interfaces/IDataBase";
 
-class ProdutoRepository extends IRepository{
+class ProdutoRepository implements IProduto{
+    
+    public db: IDataBase;
+
+    constructor(database: IDataBase) {
+        this.db = database;
+      }
 
     public getAll = async (params: any) => {
         let CONDITIONS = "";
