@@ -3,6 +3,7 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import applicationUrl from './app/application/api/routes/urls';
 import Auth from "./app/application/api/middler/auth";
+import Logger from "./app/application/api/middler/logger";
 import userRouter from './app/application/api/routes/userRouter'
 
 class Server{
@@ -35,6 +36,8 @@ class Server{
         this.app.use('/api/v1/', userRouter);
 
         this.app.use(Auth.validate);
+        this.app.use(Logger.log);
+
         this.app.use("/", applicationUrl);
         
     }

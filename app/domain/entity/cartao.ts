@@ -1,11 +1,12 @@
 import IMetodoPagamento from "./IMetodoPagamento";
+import PaymentoMethods from '../../gateways/paymentsMethods/PaymentoMethods';
 import Payer from "./payer";
 
 class Cartao implements IMetodoPagamento {
     constructor(readonly payer: Payer,readonly number: string, readonly cvv: string, readonly expirationDate: string) {
         if (!number.trim()) {
             throw new Error("Número do Cartão é obrigatório.");
-        }        
+        }
         if (String(number).replace(/-/g, '').length != 16) {
             throw new Error("Número do Cartão DEVE conter 16 digitos.");
         }
@@ -16,6 +17,8 @@ class Cartao implements IMetodoPagamento {
             throw new Error("Data de Expiração do Cartão é obrigatória.");
         }
     }
+
+    public payment_method_id = PaymentoMethods.CARD_CREDIT;
 }
 
 export default Cartao;

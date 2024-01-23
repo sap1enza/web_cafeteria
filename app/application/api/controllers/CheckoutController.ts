@@ -8,6 +8,7 @@ import CheckoutPagamento from '../../../cases/checkoutPagamento';
 import PedidoRepository from '../../../gateways/PedidoRepository';
 import MysqlDataBase from '../../database/MysqlDataBase';
 import { statusPedido } from '../../../domain/entity/enum/statusPedido';
+import { StatusCheckout } from '../../../domain/entity/enum/statusCheckout';
 import IPaymentMethods from '../../../gateways/paymentsMethods/IPaymentsMethods';
 import MPagamento from '../../../gateways/paymentsMethods/MercadoPago/MPagamento';
 import CheckoutPagamentoRepository from '../../../gateways/CheckoutPagamentoRepository';
@@ -34,14 +35,15 @@ class CheckoutController {
      */
     public store = async (request: Request, response: Response) => {
         try {
-            
             let pedido = await this.pedidoRepository.findById(request.body.pedido_id);
+
             let payer = new Payer(
                 request.body.cartao.payer.name,
                 request.body.cartao.payer.email,
                 request.body.cartao.payer.document,
             )
             let metodoPagamento = null;
+
             if (request.body.cartao.payment_method_id == PaymentoMethods.CARD_CREDIT) {
                 metodoPagamento = new Cartao(
                     payer,
@@ -59,15 +61,15 @@ class CheckoutController {
                 pedido,
                 metodoPagamento
             );
-            
+
             checkout.setPaymentMethod(request.body.payment_method_id)
 
             let checkoutPagamento = new CheckoutPagamento(
-                checkout,  
+                checkout,
                 new CheckoutPagamentoRepository(this.mysqlidatabase),
                 this.metodoPagamento
             );
-            
+
             try {
                 let data = await checkoutPagamento.create();
                 pedido.setStatus(statusPedido.EM_PREPARACAO);
@@ -84,7 +86,22 @@ class CheckoutController {
 
 
     public hook = async (request: Request, response: Response) => {
-        response.status(HttpStatus.OK).json(ResponseAPI.data(request.params.uuid));
+        try {
+
+            console.log('========================================================================================')
+            console.log('Hook Mercado Pago', request.body)
+            console.log('========================================================================================')
+
+            let checkout = await this.repository.findByExternalReference(request.body.data.id);
+            let synced_status = await this.metodoPagamento.sync(checkout);
+
+            checkout.status = synced_status;
+            await this.repository.update(checkout, checkout.id);
+
+            response.status(HttpStatus.OK);
+        } catch (err) {
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message));
+        }
     }
 
 

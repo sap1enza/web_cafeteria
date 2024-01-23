@@ -82,6 +82,7 @@ class MysqlConnection
                 payer_document varchar(16) null,
                 total_value decimal(19,2) not null default 0,
                 payload text null,
+                external_reference varchar(254) null,
                 created datetime null,
                 modified datetime null
             )  ENGINE=INNODB;
