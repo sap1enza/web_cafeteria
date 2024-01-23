@@ -69,7 +69,9 @@ class CategoriaRepository implements IRepository {
     }
 
     async delete(id) {
-        return await this.db.delete(`DELETE FROM categoria where id = ${id};`);
+        return await this.db.delete(
+            this.nomeTabela,
+            [{ campo: "id", valor: id }]);
     }
 
     async findById(id): Promise<Categoria> {

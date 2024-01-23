@@ -89,7 +89,9 @@ class PedidoRepository implements IPedido{
     }
 
     public delete = async (id: BigInteger) => {
-        return await this.db.delete(`DELETE FROM pedidos where id = ${id};`);
+        return await this.db.delete(
+            this.nomeTabela,
+            [{ campo: "id", valor: id }]);
     }
 
     public findById = async (id: BigInteger) : Promise<Pedido> => {

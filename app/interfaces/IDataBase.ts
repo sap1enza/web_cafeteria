@@ -3,8 +3,10 @@ export interface IDataBase {
     //public connection = null;
 
     store(query, string, data?: any);
+    //update(query: string, data?: any);
     update(query: string, data?: any);
-    delete(query: string);
+    delete(nomeTabela: string,
+            parametros: ParametroBd[]);
     find(nomeTabela: string,
         campos: string[] | null,
         parametros: ParametroBd[]);

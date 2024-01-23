@@ -25,8 +25,14 @@ export class MysqlDataBase implements IDataBase {
     async update(query: string, data: any) {
         return await this.db.conn().query(query, data);
     }
-    async delete(query: string) {
-        return await this.db.conn().query(query);
+    async delete(nomeTabela: string, parametros: ParametroBd[]) {
+        const parametrosBusca = this.prepararParametrosBusca(parametros);
+        const sql = `
+          Delete FROM ${nomeTabela}
+          ${parametrosBusca.restricao}
+        `;
+        const rows = await this.db.conn().query(sql, parametrosBusca.valores);
+        return rows;
     }
     // async find(query: string) {
     //     return await this.db.conn().query(query);
