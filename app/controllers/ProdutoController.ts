@@ -1,24 +1,23 @@
 import * as HttpStatus from 'http-status';
-import ProdutoGateway from "../../../gateways/ProdutoGateway";
-import ResponseAPI from '../../core/ResponseAPI';
-import MysqlDataBase from '../../database/MysqlDataBase';
-import Produto from '../../../domain/entity/produto';
-import Categoria from '../../../domain/entity/categoria';
-import CategoriaRepository from '../../../gateways/CategoriaRepository';
+import ProdutoGateway from '../gateways/ProdutoGateway';
+import CategoriaRepository from '../gateways/CategoriaRepository';
+import MysqlDataBase from '../application/database/MysqlDataBase';
+import ResponseAPI from '../application/core/ResponseAPI';
+import Produto from '../domain/entity/produto';
 
 
 class ProdutoController{
      /**
      * 
      */
-     public repository: ProdutoGateway;
+     public gateway: ProdutoGateway;
      public categoryRepository: CategoriaRepository;
 
      /**
       * 
       */
      constructor() {
-         this.repository = new ProdutoGateway(new MysqlDataBase());
+         this.gateway = new ProdutoGateway(new MysqlDataBase());
          this.categoryRepository = new CategoriaRepository(new MysqlDataBase());
      }
  
@@ -29,7 +28,7 @@ class ProdutoController{
       */
      public all = async (request, response) => {
          try {
-             let data = await this.repository.getAll(request.query);
+             let data = await this.gateway.getAll(request.query);
              response.status(HttpStatus.OK).json(ResponseAPI.list(data));
          } catch(err) {
                  response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message)); 
@@ -52,7 +51,7 @@ class ProdutoController{
              );
              
              try {
-                 let data = await this.repository.store(produto);
+                 let data = await this.gateway.store(produto);
                  response.status(HttpStatus.OK).json(ResponseAPI.data(data));
              } catch(err) {
                      response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
@@ -78,7 +77,7 @@ class ProdutoController{
                 request.body.description
             );
 
-             let data = await this.repository.update(produto, request.params.id);
+             let data = await this.gateway.update(produto, request.params.id);
              response.status(HttpStatus.OK).json(ResponseAPI.data(data));
          } catch (err) {
              response.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -98,7 +97,7 @@ class ProdutoController{
              if (typeof request.params.id == 'undefined') {
                  response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
              }
-             let data = await this.repository.findById(request.params.id);
+             let data = await this.gateway.findById(request.params.id);
              response.status(HttpStatus.OK).json(ResponseAPI.data(data));
          } catch (err) {
              response.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -118,7 +117,7 @@ class ProdutoController{
              if (typeof request.params.id == 'undefined') {
                  response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
              }
-             let data = await this.repository.delete(request.params.id);
+             let data = await this.gateway.delete(request.params.id);
              response.status(HttpStatus.NO_CONTENT).json({});
          } catch (err) {
              response.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -138,7 +137,7 @@ class ProdutoController{
             if (typeof request.params.category_id  == 'undefined' || request.params.category_id == "") {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID da Categoria é requerido."));
             }
-            let data = await this.repository.findByCategory(request.params.category_id);
+            let data = await this.gateway.findByCategory(request.params.category_id);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR)

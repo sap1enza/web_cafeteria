@@ -2,7 +2,7 @@ import IRepository from "./IReporitory";
 import Produto from '../domain/entity/produto';
 import { Console } from "console";
 
-class ProdutoRepository extends IRepository{
+class ProdutoGateway extends IRepository{
 
     public getAll = async (params: any) => {
         let CONDITIONS = "";
@@ -101,4 +101,4 @@ class ProdutoRepository extends IRepository{
     }
 }
 
-export default ProdutoRepository;
+export default ProdutoGateway;
