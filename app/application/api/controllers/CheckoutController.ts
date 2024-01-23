@@ -35,7 +35,6 @@ class CheckoutController {
      */
     public store = async (request: Request, response: Response) => {
         try {
-            
             let pedido = await this.pedidoRepository.findById(request.body.pedido_id);
 
             let payer = new Payer(
@@ -62,15 +61,15 @@ class CheckoutController {
                 pedido,
                 metodoPagamento
             );
-            
+
             checkout.setPaymentMethod(request.body.payment_method_id)
 
             let checkoutPagamento = new CheckoutPagamento(
-                checkout,  
+                checkout,
                 new CheckoutPagamentoRepository(this.mysqlidatabase),
                 this.metodoPagamento
             );
-            
+
             try {
                 let data = await checkoutPagamento.create();
                 pedido.setStatus(statusPedido.EM_PREPARACAO);
