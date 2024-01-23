@@ -7,23 +7,35 @@ import { IDataBase } from "../interfaces/IDataBase";
 class ProdutoRepository implements IProduto{
     
     public db: IDataBase;
+    private nomeTabela = "produto";
 
     constructor(database: IDataBase) {
         this.db = database;
       }
 
     public getAll = async (params: any) => {
-        let CONDITIONS = "";
-
-        if (typeof params.title != 'undefined' && params.title != "") {
-            CONDITIONS += ` title LIKE '%${params.title}%' `;
+        let CONDITIONS = false;
+        let result;
+        if (typeof params.name != 'undefined' && params.name != "") {
+            CONDITIONS = true;
         }
 
-        if (CONDITIONS != "") {
-            CONDITIONS = ' WHERE ' + CONDITIONS;
+        if (!CONDITIONS) {
+            return await this.db.find(
+                this.nomeTabela,
+                null,
+                null
+            );
+        }
+        else{
+            return await this.db.find(
+                this.nomeTabela,
+                null,
+                [{ campo: "title", valor: params.title }]);
+
         }
 
-        return await this.db.find(`SELECT * FROM produto ${CONDITIONS};`);
+        
     }
 
     public store = async(produto: Produto) => {
@@ -73,7 +85,10 @@ class ProdutoRepository implements IProduto{
     }
 
     public findById = async (id: BigInteger) => {
-        let data = await this.db.find(`SELECT * FROM produto where id = ${id};`);
+        let data = await this.db.find(
+            this.nomeTabela,
+            null,
+            [{ campo: "id", valor: id }]);
         if (data.length>0) {
             return data[0];
         } else {
@@ -85,13 +100,13 @@ class ProdutoRepository implements IProduto{
         if (ids.length === 0) {
             return null; 
         }
-    
+        if (!Array.isArray(ids)) {
+        ids = [ids]; 
+        }
         const formattedIds = ids.join(', ');
-    
-        const query = `SELECT * FROM produto WHERE id IN (${formattedIds})`;
-        const data = await this.db.find(query);
-    
-        if (data.length > 0) {
+
+        let data = await this.db.getMultipleIdsProduto(formattedIds);
+        if (data != null) {
             return data;
         } else {
             return null;
@@ -100,9 +115,12 @@ class ProdutoRepository implements IProduto{
     
 
     public findByCategory = async (category_id: BigInteger) => {
-        let data = await this.db.find(`SELECT * FROM produto where category_id = ${category_id};`);
+        let data = await this.db.find(
+            this.nomeTabela,
+            null,
+            [{ campo: "category_id", valor: category_id }]);
         if (data.length>0) {
-            return data;
+            return data[0];
         } else {
             return null;
         }

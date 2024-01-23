@@ -4,6 +4,7 @@ import IRepository from "../interfaces/IReporitory";
 
 class CheckoutPagamentoRepository extends IRepository
 {
+    private nomeTabela = "checkout";
     findById(id: any) {
         throw new Error("Method not implemented.");
     }
@@ -114,7 +115,8 @@ class CheckoutPagamentoRepository extends IRepository
 
 
     public findByIdPedido = async (pedido_id: BigInteger) => {
-        let data = await this.db.find(`SELECT * FROM checkout where pedido_id = ${pedido_id};`);
+        let data  = await this.db.find(this.nomeTabela, null ,[{ campo: "pedido_id", valor: pedido_id,}]);
+        console.log(data);
         if (data.length>0) {
             return  {
                 id : data[0].status,

@@ -1,3 +1,4 @@
+import Cliente from '../domain/entity/cliente';
 import Pedido from '../domain/entity/pedido';
 import Produto from '../domain/entity/produto';
 import IClienteRepository from '../interfaces/ICliente';
@@ -27,10 +28,11 @@ export class PedidoCasoDeUso{
 
     static async adicionarProdutoPedido(request, clienteRepositorio: IClienteRepository,produtoRepositorio: IProduto, pedidoRepositorio: IPedido){
         try {
-            let customer = await clienteRepositorio.findById(request.body.client_id);
+            let customer: Cliente = await clienteRepositorio.findById(request.body.client_id);
             let produtos: Produto[] = await produtoRepositorio.findByMultipleIds(request.body.produtosIds);
+            
             let order = new Pedido(
-                customer,
+                customer[0],
                 request.body.status
             );
             try {
@@ -39,8 +41,9 @@ export class PedidoCasoDeUso{
                     order.adicionarProduto(produto);
                        
                 });
-
-                const orderResult = await pedidoRepositorio.store(order);
+                
+                const orderResult
+                 = await pedidoRepositorio.store(order);
                 
                 const promises = order.getProdutos().map(async (produto) => {
                     const data = await pedidoRepositorio.adicionarProdutoAoPedido(orderResult.id, produto.id);

@@ -40,8 +40,8 @@ export default class Server{
 
         this.app.use(Auth.validate);
         const _urls = urls(this._dbconnection);
-        console.log(_urls);
-        console.log(urls(this._dbconnection));
+        // console.log(_urls);
+        // console.log(urls(this._dbconnection));
         this.app.use("/", _urls);
         
     }

@@ -5,27 +5,51 @@ import { IDataBase } from "../interfaces/IDataBase";
 class ClienteRepository implements ICliente
 {
     public db: IDataBase;
-
+    private nomeTabela = "cliente";
     constructor(database: IDataBase) {
        // super(database);
         this.db = database;
       }
 
     public getAll = async (params) => {
-        let CONDITIONS = "";
+        let CONDITIONS = false;
+        let result;
+        let filtroCampo, filtroValor;
+
         if (typeof params.email != 'undefined' && params.email != "") {
-            CONDITIONS += ` email LIKE '%${params.email}%' `;
+            filtroCampo = 'email'; 
+            filtroValor= params.email;
+            CONDITIONS = true;
         }
 
         if (typeof params.cpf_cnpj != 'undefined' && params.cpf_cnpj != "") {
-            CONDITIONS += ` cpf_cnpj LIKE '%${params.cpf_cnpj}%' `;
+            filtroCampo = 'cpf_cnpj'; 
+            filtroValor= params.cpf_cnpj;
+            CONDITIONS = true;
         }
 
-        if (CONDITIONS != "") {
-            CONDITIONS = ' WHERE ' + CONDITIONS;
+        if (!CONDITIONS) {
+            result = await this.db.find(
+                this.nomeTabela,
+                null,
+                null
+            );
+        }
+        else {
+            result = await this.db.find(
+                this.nomeTabela,
+                null,
+                [{ campo: filtroCampo, valor: filtroValor}]
+            );
         }
 
-        return await this.db.find(`SELECT * FROM cliente ${CONDITIONS};`);
+        if (result === null || result === undefined) return null;
+        if (result.length < 1) return null;
+
+        const row: Cliente[] = result;
+        return row;
+
+        //return await this.db.find(`SELECT * FROM cliente ${CONDITIONS};`);
     }
 
     public update = async (cliente: Cliente, id: BigInteger) => {
@@ -62,16 +86,19 @@ class ClienteRepository implements ICliente
     }
     
     public findById = async (id: BigInteger) : Promise<Cliente> => {
-        let data = await this.db.find(`SELECT * FROM cliente where id = ${id};`);
-        if (data.length>0) {
-            return data[0];
-        } else {
-            return null;
-        }
+        let data = await this.db.find(
+            this.nomeTabela,
+            null,
+            [{ campo: "id", valor: id }]);
+           return data;
+
     }
 
     public findByCPF = async (cpf_cnpj: String) => {
-        let data = await this.db.find(`SELECT * FROM cliente where cpf_cnpj = ${cpf_cnpj};`);
+        let data = await this.db.find(
+            this.nomeTabela,
+            null,
+            [{ campo: "cpf_cnpj", valor: cpf_cnpj }]);
         if (data.length>0) {
             return data[0];
         } else {

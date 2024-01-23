@@ -3,34 +3,41 @@ import ClienteRepository from "./ClienteRepository";
 import IPedido from "../interfaces/IPedido";
 import Produto from '../domain/entity/produto';
 import { IDataBase } from "../interfaces/IDataBase";
+import produtoRoutes from '../application/api/routes/produtoRoutes';
 
 class PedidoRepository implements IPedido{
-
+   
     public db: IDataBase;
-
+    private nomeTabela = "pedidos";
+    
     constructor(database: IDataBase) {
         this.db = database;
       }
 
     public getAll = async (params: any) => {
         let CONDITIONS = "";
-        console.log(params);
+        let data;
         if (typeof params.status != 'undefined' && params.status != "") {
-            CONDITIONS += ` status LIKE '%${params.status}%' `;
-        }
 
-        if (CONDITIONS != "") {
-            CONDITIONS = ' WHERE ' + CONDITIONS;
-            CONDITIONS +=" AND status != 4 order by status desc, created desc";
+           //console.log(params.status);
+            data = await this.db.find(
+                this.nomeTabela,
+                null,
+                [{ campo: "status", valor: 4, condition:"!=", order: "status desc, created desc"},{
+                    campo: "status",valor: parseInt(params.status)}]);
+
+                    return data;
         }
         else{
-            CONDITIONS =" WHERE status != 4 order by status desc, created desc";
+            data = await this.db.find(
+                this.nomeTabela,
+                null,
+                [{ campo: "status", valor: 4, condition:"!=", order: "status desc, created desc"}]);
+                
+                return data;
+     
         }
-       
-        return await this.db.find(`SELECT * FROM pedidos  ${CONDITIONS};`);
 
-        // return await this.db.find(`SELECT p.id AS pedido_id, p.customer_id, p.status AS pedido_status,
-        // pp.product_id, pp.created, pp.modified FROM pedidos p inner join pedido_produtos pp on p.id=pp.order_id  ${CONDITIONS};`);
     }
 
     public store = async(pedido: Pedido) => {
@@ -48,6 +55,7 @@ class PedidoRepository implements IPedido{
                     NOW()
                 );
             `, [pedido.cliente.id, pedido.getStatus(), pedido.getValorTotal()]);
+            console.log(data);
         return new Pedido(
             pedido.cliente,
             pedido.getStatus(),
@@ -85,23 +93,21 @@ class PedidoRepository implements IPedido{
     }
 
     public findById = async (id: BigInteger) : Promise<Pedido> => {
-        let data = await this.db.find(`SELECT * FROM pedidos where id = ${id};`);
-        let dataPedidos: Produto[] = await this.db.find(`SELECT p.* FROM pedido_produtos pp
-                                                          inner join  produto p 
-                                                          on pp.product_id= p.id
-                                                          where pp.order_id = ${id};`);
-        if (data.length>0) {
-            let cliente = await new ClienteRepository(this.db).findById(data[0].customer_id)
+        let dataPedido  = await this.db.find(this.nomeTabela, null ,[{ campo: "id", valor: id,}]);
+        let dataProduto  = await this.db.getProdutosDoPedido(id)
+        if (dataPedido != null){
+            let cliente  = await new ClienteRepository(this.db).findById(dataPedido[0].customer_id) 
+            
             let pedido = new Pedido(
                 cliente,
-                data[0].status,
-                data[0].id,
-                data[0].valorTotal
+                dataPedido[0].status,
+                dataPedido[0].id,
+                dataPedido[0].valorTotal
             );
-             dataPedidos.forEach(produto => {
+            dataProduto.forEach(produto => {
                  pedido.adicionarProduto(produto)   
              });  
-            return pedido;
+             return pedido;
         } else {
             return null;
         }

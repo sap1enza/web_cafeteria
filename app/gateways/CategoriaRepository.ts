@@ -1,25 +1,44 @@
 import Categoria from "../domain/entity/categoria";
 import IRepository from "../interfaces/IReporitory";
-import {IDataBase} from "../interfaces/IDataBase";
+import { IDataBase } from "../interfaces/IDataBase";
 
-class CategoriaRepository implements IRepository{
+class CategoriaRepository implements IRepository {
     public db: IDataBase;
 
     constructor(database: IDataBase) {
-       // super(database);
+        // super(database);
         this.db = database;
-      }
+    }
+    private nomeTabela = "categoria";
+
     async getAll(params) {
-        let CONDITIONS = "";
+
+        let CONDITIONS = false;
+        let result;
         if (typeof params.name != 'undefined' && params.name != "") {
-            CONDITIONS += ` name LIKE '%${params.name}%' `;
+            CONDITIONS = true;
         }
 
-        if (CONDITIONS != "") {
-            CONDITIONS = ' WHERE ' + CONDITIONS;
+        if (!CONDITIONS) {
+            result = await this.db.find(
+                this.nomeTabela,
+                null,
+                null
+            );
+        }
+        else {
+            result = await this.db.find(
+                this.nomeTabela,
+                null,
+                [{ campo: "name", valor: params.name}]
+            );
         }
 
-        return await this.db.find(`SELECT * FROM categoria ${CONDITIONS};`);
+        if (result === null || result === undefined) return null;
+        if (result.length < 1) return null;
+
+        const row: Categoria[] = result;
+        return row;
     }
 
     async update(params: Categoria, id) {
@@ -28,7 +47,7 @@ class CategoriaRepository implements IRepository{
                 name = ?,
                 modified = NOW()
              WHERE id = ?;
-            `, [params.name, id],new Date()); 
+            `, [params.name, id], new Date());
         return new Categoria(params.name, id,);
     }
 
@@ -42,7 +61,7 @@ class CategoriaRepository implements IRepository{
                     NOW(), 
                     NOW()
                 );
-            `, [params.name],new Date()); 
+            `, [params.name], new Date());
         return new Categoria(
             params.name,
             parseInt(data.insertId)
@@ -53,12 +72,16 @@ class CategoriaRepository implements IRepository{
         return await this.db.delete(`DELETE FROM categoria where id = ${id};`);
     }
 
-    async findById(id) : Promise<Categoria> {
-        let data = await this.db.find(`SELECT * FROM categoria where id = ${id};`);
-        if (data.length>0) {
+    async findById(id): Promise<Categoria> {
+        let data = await this.db.find(
+            this.nomeTabela,
+            null,
+            [{ campo: "id", valor: id }]);
+        if (data.length > 0) {
             return new Categoria(data[0].name, data[0].id);
-        } 
-        return new Categoria();
+        }
+        else
+            return null;
     }
 
 }

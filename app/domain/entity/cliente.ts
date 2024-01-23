@@ -13,7 +13,7 @@ class Cliente{
             throw new Error("Nome do cliente é obrigatório.");
         }
         if (email==null || email=="") {
-            throw new Error("E-mail do cliente éobrigatório.");
+            throw new Error("E-mail do cliente é obrigatório.");
         }
         if (!this.isValidEmail()) {
             throw new Error("E-mail do cliente é inválido.");
@@ -40,6 +40,7 @@ class Cliente{
     public cpfFormat() : string {
         return cpf.format(this.cpf_cnpj);
     }
+
 }
 
 export default Cliente;
