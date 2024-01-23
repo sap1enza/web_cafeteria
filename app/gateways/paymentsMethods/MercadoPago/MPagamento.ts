@@ -81,9 +81,11 @@ class MPagamento implements IPaymentMethods {
 
         this.response = await response.json();
 
-        let obj = JSON.parse(this.response);
+        console.log('========================================================================================')
+        console.log(`Payment QR Code:`, this.response['point_of_interaction']['transaction_data']['ticket_url'])
+        console.log('========================================================================================')
 
-        return this.response;
+        return this.response['point_of_interaction']['transaction_data'];
     }
 
     card = async (checkout : Checkout) => {

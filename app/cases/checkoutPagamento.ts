@@ -21,9 +21,6 @@ class CheckoutPagamento {
          */
         let checkout = await this.repositoryCheckout.store(this.checkout);
 
-        /**
-         * TODO incluir o pagamento no banco de dados
-         */
         try {
             let response = await this.metodo_pagamento.store(checkout);
             checkout.payload = JSON.stringify(response);
@@ -33,7 +30,7 @@ class CheckoutPagamento {
             if (this.metodo_pagamento.aguardandoPagamento()) {
                 this.checkout.setStatus(StatusCheckout.AGUARDANDO_CONFIMACAO_PAGAMENTO);
             }
-            
+
             await this.repositoryCheckout.update(checkout, checkout.id);
         } catch (err) {
             console.log(err)
