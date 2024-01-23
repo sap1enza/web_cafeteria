@@ -32,6 +32,7 @@ class CheckoutPagamentoRepository extends IRepository
                 payer_document = ?,
                 total_value = ?,
                 payload = ?,
+                external_reference = ?,
                 modified = NOW()
             WHERE id = ?
             `, [
@@ -47,6 +48,7 @@ class CheckoutPagamentoRepository extends IRepository
                 checkout.metodoPagamento.payer.document,
                 checkout.pedido.getValorTotal(),
                 checkout.payload,
+                checkout.external_reference,
                 id
             ]);
 
@@ -117,6 +119,15 @@ class CheckoutPagamentoRepository extends IRepository
         throw new Error("Method not implemented.");
     }
 
+    public findByExternalReference = async (id: BigInteger) => {
+        let data = await this.db.find(`SELECT * FROM checkout where external_reference = ${id};`);
+
+        if (data.length > 0) {
+            return data[0];
+        } else {
+            return null;
+        }
+    }
 
     public findByIdPedido = async (pedido_id: BigInteger) => {
         let data = await this.db.find(`SELECT * FROM checkout where pedido_id = ${pedido_id};`);

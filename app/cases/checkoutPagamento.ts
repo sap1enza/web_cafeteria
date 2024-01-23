@@ -23,7 +23,10 @@ class CheckoutPagamento {
 
         try {
             let response = await this.metodo_pagamento.store(checkout);
+
             checkout.payload = JSON.stringify(response);
+            checkout.external_reference = response['id'];
+
             /**
              * atualizo o checkout de pagamento com o retorno de sucesso ou erro do gateway
              */

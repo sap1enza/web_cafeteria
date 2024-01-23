@@ -85,7 +85,7 @@ class MPagamento implements IPaymentMethods {
         console.log(`Payment QR Code:`, this.response['point_of_interaction']['transaction_data']['ticket_url'])
         console.log('========================================================================================')
 
-        return this.response['point_of_interaction']['transaction_data'];
+        return this.response;
     }
 
     card = async (checkout : Checkout) => {
@@ -94,6 +94,25 @@ class MPagamento implements IPaymentMethods {
 
     public find = async (id: BigInt) => {
         throw new Error("Method not implemented.");
+    }
+
+    public sync = async (checkout: Checkout) => {
+        const response =  await fetch(`${this.url}payments/${checkout.external_reference}`,{
+            method: 'GET',
+            headers: {
+                "Content-Type" : "application/json",
+                "X-Idempotency-Key" : uuidv4(),
+                "Authorization" : `Bearer ${this.auth_token}`
+            }
+        });
+
+        if (response.status >= 300) {
+            throw new Error(response.statusText);
+        }
+
+        this.response = await response.json();
+
+        return this.statusPagamentoMapping();
     }
 }
 

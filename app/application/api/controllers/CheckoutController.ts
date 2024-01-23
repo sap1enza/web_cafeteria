@@ -87,22 +87,16 @@ class CheckoutController {
 
     public hook = async (request: Request, response: Response) => {
         try {
-            let checkout = await this.repository.findById(request.body.data.id);
 
-            let checkoutPagamento = new CheckoutPagamento(
-                checkout,
-                new CheckoutPagamentoRepository(this.mysqlidatabase),
-                this.metodoPagamento
-            );
+            console.log('========================================================================================')
+            console.log('Hook Mercado Pago', request.body)
+            console.log('========================================================================================')
 
+            let checkout = await this.repository.findByExternalReference(request.body.data.id);
+            let synced_status = await this.metodoPagamento.sync(checkout);
 
-            if (checkout.payment_method_id == PaymentoMethods.PIX) {
-                await checkoutPagamento.confirmPayment();
-            } else if (checkout.payment_method_id == PaymentoMethods.CARD_CREDIT) {
-                // checkout.status(StatusCheckout.AGUARDANDO_CONFIMACAO_PAGAMENTO);
-
-                // TODO: Checar status com MercadoPago
-            }
+            checkout.status = synced_status;
+            await this.repository.update(checkout, checkout.id);
 
             response.status(HttpStatus.OK);
         } catch (err) {

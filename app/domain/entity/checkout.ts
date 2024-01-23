@@ -9,12 +9,14 @@ class Checkout {
 
     public uuid: String;
 
-    private status: Number;
+    public status: Number;
 
     public payload : string;
 
     private payment_method : number;
-    
+
+    public external_reference : string;
+
     constructor(readonly pedido: Pedido, readonly metodoPagamento?: IMetodoPagamento, readonly id?) {
         this.uuid = uuidv4();
         this.status = StatusCheckout.AGUARDANDO_PAGAMENTO;
