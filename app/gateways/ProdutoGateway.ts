@@ -1,16 +1,7 @@
 import IRepository from "../interfaces/IReporitory";
 import Produto from '../domain/entity/produto';
-import { Console } from "console";
-import IProduto from "../interfaces/IProduto";
-import { IDataBase } from "../interfaces/IDataBase";
 
-class ProdutoRepository implements IProduto{
-    
-    public db: IDataBase;
-
-    constructor(database: IDataBase) {
-        this.db = database;
-      }
+class ProdutoGateway extends IRepository{
 
     public getAll = async (params: any) => {
         let CONDITIONS = "";
@@ -97,7 +88,6 @@ class ProdutoRepository implements IProduto{
             return null;
         }
     }
-    
 
     public findByCategory = async (category_id: BigInteger) => {
         let data = await this.db.find(`SELECT * FROM produto where category_id = ${category_id};`);
@@ -109,4 +99,4 @@ class ProdutoRepository implements IProduto{
     }
 }
 
-export default ProdutoRepository;
+export default ProdutoGateway;

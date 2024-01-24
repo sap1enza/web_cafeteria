@@ -155,7 +155,27 @@ Será utilizado Docker Kubernets, para isso deve ser liberado a opção de kuber
 
 ### Arquitetura
 
+Para garantir a alta disponibilidade do sistema foi utilizado o kubernets, usando em sua aplicação escalabilidade horizontal quando atingir a capacidade de 80% do cpu da POD, e sua porta para o ambiente externo está na 30002 referenciada por uma porta interna 80.
+
+O banco de dados a principio não é alto escalavel porém foi configurado para uma unica replica sendo assim podemos mudar com facilidade adicionando a escalabilidade horizontal, também foi criado um volume para persistência de dados assim garantimos a integridade dos dados quando uma pod morrer ou for excluída.
+A porta para para o ambiente externo está na 30336 e referenciada para o ambiente interno na porta padrão no mariadb 3306.
+
 ![plot](arquitetura.jpg)
+
+### Para atualizar a aplicação
+
+DEVE ser criada uma nova imagem no DockerHub e atualizar o arquivo de deployment no diretório kubernets/api/ arquivo dep-api.yaml
+Variáveis de ambiente são adicionadas no arquivo dep-api.yaml.
+
+```bash
+    #Build image
+    docker build -t <IMAGE_NAME> .
+    #Create tag image
+    docker tag <IMAGE_NAME>:<TAG> <DOCKER_USER>/<IMAGE_NAME>:<TAG>
+    #Push Image
+    docker push <DOCKER_USER>/<IMAGE_NAME>:<TAG>
+
+```
 
 1. Libere as metricas na sua Docker Kubernets para o HPA.
 
@@ -176,18 +196,3 @@ Será utilizado Docker Kubernets, para isso deve ser liberado a opção de kuber
 ```
 
 OBS. executando o diretorio inteiro o kube irá em todos os subdiretórios executando.
-
-### Para atualizar a aplicação
-
-DEVE ser criada uma nova imagem no DockerHub e atualizar o arquivo de deployment no diretório kubernets/api/ arquivo dep-api.yaml
-Variáveis de ambiente são adicionadas no arquivo dep-api.yaml.
-
-```bash
-    #Build image
-    docker build -t <IMAGE_NAME> .
-    #Create tag image
-    docker tag <IMAGE_NAME>:<TAG> <DOCKER_USER>/<IMAGE_NAME>:<TAG>
-    #Push Image
-    docker push <DOCKER_USER>/<IMAGE_NAME>:<TAG>
-
-```

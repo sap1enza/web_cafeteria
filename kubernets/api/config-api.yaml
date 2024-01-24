@@ -7,6 +7,6 @@ metadata:
 data:
   MARIADB_HOST: svc-db
   MARIADB_USER: root
-  MARIADB_PASS: "123456"
+  MARIADB_PASS: qwe1234
   MARIADB_DATABASE: projeto-pedidos
   MARIADB_PORT: "3306"
