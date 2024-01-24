@@ -19,8 +19,29 @@ export class MysqlDataBase implements IDataBase {
         this.db = new MysqlConnection();
     }
 
-    async store(query: string, data: any) {
-        return await this.db.conn().query(query, data);
+    async store(nomeTabela: string, parametros: ParametroBd[]) {
+      const nomesCampos: string[] = [];
+      const Valores: string[] = [];
+      const alias: string[] = [];
+      // const valores: Record<string, any> = {};
+
+      parametros.forEach(function (item) {
+        nomesCampos.push(item.campo);
+        Valores.push(item.valor);
+        alias.push("?");
+      });
+
+      const sql = `
+        INSERT INTO ${nomeTabela} 
+        (${nomesCampos.join(",")}) 
+        VALUES 
+        (${alias.join(",")})
+        `;
+        console.log(sql);
+        console.log(Valores);
+      const rows = await this.db.conn().query(sql, Valores);
+      return rows;
+        //return await this.db.conn().query(query, data);
     }
     async update(nomeTabela: string, campos: ParametroBd[] | null, parametros: ParametroBd[]) {
         const parametrosBusca = this.prepararParametrosBusca(parametros);

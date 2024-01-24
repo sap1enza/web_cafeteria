@@ -42,19 +42,14 @@ class PedidoRepository implements IPedido{
 
     public store = async(pedido: Pedido) => {
         console.log(pedido.cliente.id, pedido.getStatus(), pedido.getValorTotal());
-        
         let data = await this.db.store(
-            `INSERT INTO pedidos
-                (customer_id, status, total_value, created, modified)
-             VALUES
-                (
-                    ?,
-                    ?,
-                    ?,
-                    NOW(),
-                    NOW()
-                );
-            `, [pedido.cliente.id, pedido.getStatus(), pedido.getValorTotal()]);
+            this.nomeTabela,
+            [{ campo: "customer_id", valor: pedido.cliente.id }, 
+            { campo: "status", valor: pedido.getStatus() },
+            { campo: "total_value", valor: pedido.getValorTotal() },
+            { campo: "created", valor:  new Date()}, 
+            { campo: "modified", valor: new Date() }]);
+        
             console.log(data);
         return new Pedido(
             pedido.cliente,
@@ -64,10 +59,10 @@ class PedidoRepository implements IPedido{
     }
 
     public adicionarProdutoAoPedido = async (pedidoId: Pedido, produtoId: Produto) => {
-        let data = await this.db.store( `
-            INSERT INTO pedido_produtos (order_id, product_id, created, modified)
-            VALUES (?, ?, NOW(), NOW());
-        `,[pedidoId, produtoId]);
+        let data =await this.db.store(
+            "pedido_produtos",
+            [{ campo: "order_id", valor: pedidoId },{ campo: "product_id", valor: produtoId }, { campo: "created", valor:  new Date()}, { campo: "modified", valor: new Date() }]);
+        
 
         return data.insertId;
     }

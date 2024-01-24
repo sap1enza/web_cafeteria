@@ -40,19 +40,14 @@ class ProdutoRepository implements IProduto{
 
     public store = async(produto: Produto) => {
         let data = await this.db.store(
-            `INSERT INTO produto 
-                (title, value, description, category_id, created, modified) 
-             VALUES 
-                (
-                    ?,
-                    ?,
-                    ?,
-                    ?,
-                    NOW(), 
-                    NOW()
-                );
-            `, [produto.title, produto.value, produto.description, produto.categoria.id]);
-        return new Produto(
+            this.nomeTabela,
+            [{ campo: "title", valor: produto.title }, 
+            { campo: "value", valor: produto.value },
+            { campo: "description", valor: produto.description },
+            { campo: "category_id", valor: produto.categoria.id },
+            { campo: "created", valor:  new Date()}, 
+            { campo: "modified", valor: new Date() }]);
+                return new Produto(
             produto.title,
             produto.value,
             produto.categoria,
