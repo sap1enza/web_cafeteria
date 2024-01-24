@@ -3,6 +3,7 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import urls from './app/application/api/routes/urls';
 import Auth from "./app/application/api/middler/auth";
+import Logger from "./app/application/api/middler/logger";
 import userRouter from './app/application/api/routes/userRouter';
 import { IDataBase } from './app/interfaces/IDataBase';
 
@@ -42,6 +43,8 @@ export default class Server{
         const _urls = urls(this._dbconnection);
         // console.log(_urls);
         // console.log(urls(this._dbconnection));
+        this.app.use(Logger.log);
+
         this.app.use("/", _urls);
         
     }

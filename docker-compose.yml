@@ -16,14 +16,15 @@ services:
       MONGO_COLLECTION: admin
 
       CHOKIDAR_USEPOLLING: "true"
-      MARIADB_HOST: maria-db
-      MARIADB_USER: root
-      MARIADB_PASS: 12345678
-      MARIADB_DATABASE: projeto-pedidos
-      MARIADB_PORT: 3306
-      MP_URL: https://api.mercadopago.com/v1/
-      MP_CLIENT_ID: TEST-427f8e8c-d6ca-4000-ab9b-95b3a2e554f7
-      MP_CLIENT_SECRET: TEST-8926445123950097-011307-ee5dc50bf53c38a033fe5da4c9acc9c1__LD_LB__-209191463
+      MARIADB_HOST: ${MARIADB_HOST}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASS: ${MARIADB_PASS}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_PORT: ${MARIADB_PORT}
+      MP_URL: ${MP_URL}
+      MP_CLIENT_ID: ${MP_CLIENT_ID}
+      MP_CLIENT_SECRET: ${MP_CLIENT_SECRET}
+      MP_NOTIFICATION_URL: ${MP_NOTIFICATION_URL}
     depends_on:
       # - mongo
       - maria-db

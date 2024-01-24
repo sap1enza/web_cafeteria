@@ -29,7 +29,13 @@ abstract class IPaymentMethods {
      * @param checkout 
      */
     abstract card(checkout: Checkout);
-    
+
+    /**
+     * metodo de sync do pagamento
+     * @param checkout
+     */
+    abstract sync(checkout: Checkout);
+
     /**
      * metodo de busca do pagamento
      * @param id 

@@ -5,14 +5,20 @@ import IRepository from "../interfaces/IReporitory";
 class CheckoutPagamentoRepository extends IRepository
 {
     private nomeTabela = "checkout";
-    findById(id: any) {
-        throw new Error("Method not implemented.");
+    findById = async(id: any) => {
+        let data = await this.db.find(`SELECT * FROM checkout where id = ${id};`);
+
+        if (data.length > 0) {
+            return data[0];
+        } else {
+            return null;
+        }
     }
     getAll(params: any) {
         throw new Error("Method not implemented.");
     }
-    
-    update = async (chekout: Checkout, id) => {
+
+    update = async (checkout: Checkout, id) => {
         let data = await this.db.store(
             `UPDATE checkout SET
                 uuid = ?,
@@ -24,54 +30,55 @@ class CheckoutPagamentoRepository extends IRepository
                 card_expiration_date = ?,
                 payer_name = ?,
                 payer_email = ?,
-                payer_document = ?, 
+                payer_document = ?,
                 total_value = ?,
-                payload = ?, 
+                payload = ?,
+                external_reference = ?,
                 modified = NOW()
             WHERE id = ?
             `, [
-                chekout.uuid, 
-                chekout.getStatus(), 
-                chekout.getPaymentMethod(), 
-                chekout.pedido.id,
-                chekout.metodoPagamento.number, 
-                chekout.metodoPagamento.cvv, 
-                chekout.metodoPagamento.expirationDate, 
-                chekout.metodoPagamento.payer.name,
-                chekout.metodoPagamento.payer.email,
-                chekout.metodoPagamento.payer.document,
-                chekout.metodoPagamento.payer.document,
-                chekout.pedido.getValorTotal(),
-                chekout.payload,
+                checkout.uuid,
+                checkout.getStatus(),
+                checkout.metodoPagamento.payment_method_id,
+                checkout.pedido.id,
+                checkout.metodoPagamento.number,
+                checkout.metodoPagamento.cvv,
+                checkout.metodoPagamento.expirationDate,
+                checkout.metodoPagamento.payer.name,
+                checkout.metodoPagamento.payer.email,
+                checkout.metodoPagamento.payer.document,
+                checkout.pedido.getValorTotal(),
+                checkout.payload,
+                checkout.external_reference,
                 id
-            ]); 
+            ]);
 
         return new Checkout(
-            chekout.pedido,
-            chekout.metodoPagamento,
+            checkout.pedido,
+            checkout.metodoPagamento,
             parseInt(data.insertId)
         )
     }
 
-    public store = async (chekout: Checkout) => {
+    public store = async (checkout: Checkout) => {
         let data = await this.db.store(
-            `INSERT INTO checkout 
+            `INSERT INTO checkout
                 (
-                    uuid, 
+                    uuid,
                     status,
                     payment_method_id,
-                    pedido_id, 
-                    card_number, 
-                    card_cvv, 
-                    card_expiration_date, 
-                    payer_name, 
-                    payer_email, 
-                    payer_document, 
-                    total_value, 
-                    created, 
+                    pedido_id,
+                    card_number,
+                    card_cvv,
+                    card_expiration_date,
+                    payer_name,
+                    payer_email,
+                    payer_document,
+                    total_value,
+                    created,
                     modified
-                ) 
-                    VALUES 
+                )
+                    VALUES
                 (
                     ?,
                     ?,
@@ -84,26 +91,26 @@ class CheckoutPagamentoRepository extends IRepository
                     ?,
                     ?,
                     ?,
-                    NOW(), 
+                    NOW(),
                     NOW()
                 );
             `, [
-                chekout.uuid, 
-                chekout.getStatus(),
-                chekout.getPaymentMethod(), 
-                chekout.pedido.id,
-                chekout.metodoPagamento.number, 
-                chekout.metodoPagamento.cvv, 
-                chekout.metodoPagamento.expirationDate, 
-                chekout.metodoPagamento.payer.name,
-                chekout.metodoPagamento.payer.email,
-                chekout.metodoPagamento.payer.document ,
-                chekout.pedido.getValorTotal() 
-            ]); 
+                checkout.uuid,
+                checkout.getStatus(),
+                checkout.getPaymentMethod(),
+                checkout.pedido.id,
+                checkout.metodoPagamento.number,
+                checkout.metodoPagamento.cvv,
+                checkout.metodoPagamento.expirationDate,
+                checkout.metodoPagamento.payer.name,
+                checkout.metodoPagamento.payer.email,
+                checkout.metodoPagamento.payer.document ,
+                checkout.pedido.getValorTotal()
+            ]);
 
         return new Checkout(
-            chekout.pedido,
-            chekout.metodoPagamento,
+            checkout.pedido,
+            checkout.metodoPagamento,
             parseInt(data.insertId)
         )
     }
@@ -113,6 +120,15 @@ class CheckoutPagamentoRepository extends IRepository
         throw new Error("Method not implemented.");
     }
 
+    public findByExternalReference = async (id: BigInteger) => {
+        let data = await this.db.find(`SELECT * FROM checkout where external_reference = ${id};`);
+
+        if (data.length > 0) {
+            return data[0];
+        } else {
+            return null;
+        }
+    }
 
     public findByIdPedido = async (pedido_id: BigInteger) => {
         let data  = await this.db.find(this.nomeTabela, null ,[{ campo: "pedido_id", valor: pedido_id,}]);
@@ -127,7 +143,7 @@ class CheckoutPagamentoRepository extends IRepository
             return null;
         }
     }
-    
+
 }
 
 export default CheckoutPagamentoRepository;
