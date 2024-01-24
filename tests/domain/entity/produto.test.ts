@@ -2,8 +2,8 @@ import { describe } from 'node:test';
 import { expect } from '@jest/globals';
 import { test } from '@jest/globals';
 
-import Categoria from '../../../app/domain/entity/categoria';
-import Produto from '../../../app/domain/entity/produto';
+import Categoria from '../../../app/entity/categoria';
+import Produto from '../../../app/entity/produto';
 
 describe("Validando Entity Produto", () => {
     test("Instanciar Produto com minimo de parametros", () => {

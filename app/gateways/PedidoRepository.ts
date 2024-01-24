@@ -1,7 +1,7 @@
-import Pedido from "../domain/entity/pedido";
+import Pedido from "../entity/pedido";
 import ClienteRepository from "./ClienteRepository";
 import IPedido from "../interfaces/IPedido";
-import Produto from '../domain/entity/produto';
+import Produto from '../entity/produto';
 import { IDataBase } from "../interfaces/IDataBase";
 import produtoRoutes from '../application/api/routes/produtoRoutes';
 

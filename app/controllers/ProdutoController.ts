@@ -1,11 +1,11 @@
 import * as HttpStatus from 'http-status';
-import ProdutoRepository from "../../../gateways/ProdutoRepository";
-import ResponseAPI from '../../../adapters/ResponseAPI';
-import Produto from '../../../domain/entity/produto';
-import Categoria from '../../../domain/entity/categoria';
-import CategoriaRepository from '../../../gateways/CategoriaRepository';
-import { IDataBase } from '../../../interfaces/IDataBase';
-import { ProdutoCasoDeUso } from '../../../cases/produtoCasodeUso';
+import ProdutoRepository from "../gateways/ProdutoRepository";
+import ResponseAPI from '../adapters/ResponseAPI';
+import Produto from '../entity/produto';
+import Categoria from '../entity/categoria';
+import CategoriaRepository from '../gateways/CategoriaRepository';
+import { IDataBase } from '../interfaces/IDataBase';
+import { ProdutoCasoDeUso } from '../cases/produtoCasodeUso';
 
 
 class ProdutoController{

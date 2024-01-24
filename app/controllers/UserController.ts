@@ -1,7 +1,7 @@
 import * as HttpStatus from 'http-status';
-import ResponseAPI from "../../../adapters/ResponseAPI"
-import UsuarioCasoDeUso from '../../../cases/usuarioCasoDeUso';
-import User from '../../../domain/entity/user';
+import ResponseAPI from "../adapters/ResponseAPI"
+import UsuarioCasoDeUso from '../cases/usuarioCasoDeUso';
+import User from '../entity/user';
 
 class UserController{
     auth = (request, response) => {

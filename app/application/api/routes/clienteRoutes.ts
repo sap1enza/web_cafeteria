@@ -1,5 +1,5 @@
 import * as express from "express";
-import ClienteController from "../controllers/ClienteController";
+import ClienteController from "../../../controllers/ClienteController";
 import { IDataBase } from '../../../interfaces/IDataBase';
 
 export default function ClienteRoutes(dbconnection: IDataBase) {

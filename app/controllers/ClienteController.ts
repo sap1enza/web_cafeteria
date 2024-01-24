@@ -1,9 +1,9 @@
 import * as HttpStatus from 'http-status';
-import ClienteRepository from "../../../gateways/ClienteRepository";
-import ResponseAPI from '../../../adapters/ResponseAPI';
-import Cliente from '../../../domain/entity/cliente';
-import { IDataBase } from "../../../interfaces/IDataBase";
-import { ClienteCasoDeUso } from '../../../cases/clienteCasodeUso';
+import ClienteRepository from "../gateways/ClienteRepository";
+import ResponseAPI from '../adapters/ResponseAPI';
+import Cliente from '../entity/cliente';
+import { IDataBase } from "../interfaces/IDataBase";
+import { ClienteCasoDeUso } from '../cases/clienteCasodeUso';
 class ClienteController{
 
     /**

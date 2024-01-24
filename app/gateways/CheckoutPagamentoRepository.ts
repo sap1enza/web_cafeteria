@@ -1,5 +1,5 @@
-import Checkout from "../domain/entity/checkout";
-import { StatusCheckout } from "../domain/entity/enum/statusCheckout";
+import Checkout from "../entity/checkout";
+import { StatusCheckout } from "../entity/enum/statusCheckout";
 import IRepository from "../interfaces/IReporitory";
 
 class CheckoutPagamentoRepository extends IRepository

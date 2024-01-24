@@ -1,5 +1,5 @@
 import * as express from "express";
-import PedidoController from "../controllers/PedidoController";
+import PedidoController from "../../../controllers/PedidoController";
 import { IDataBase } from "../../../interfaces/IDataBase";
 
 export default function PedidoRoutes(dbconnection: IDataBase) {

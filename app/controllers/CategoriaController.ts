@@ -1,10 +1,10 @@
 import * as HttpStatus from 'http-status';
-import ResponseAPI from "../../../adapters/ResponseAPI"
+import ResponseAPI from "../adapters/ResponseAPI"
 import {Request, Response} from 'express';
-import CategoriaRepository from '../../../gateways/CategoriaRepository';
-import Categoria from '../../../domain/entity/categoria';
-import { IDataBase } from "../../../interfaces/IDataBase";
-import { CategoriaCasoDeUso } from '../../../cases/categoriaCasodeUso';
+import CategoriaRepository from '../gateways/CategoriaRepository';
+import Categoria from '../entity/categoria';
+import { IDataBase } from "../interfaces/IDataBase";
+import { CategoriaCasoDeUso } from '../cases/categoriaCasodeUso';
 
 
 

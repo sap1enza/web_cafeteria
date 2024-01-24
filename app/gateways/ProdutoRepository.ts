@@ -1,5 +1,5 @@
 import IRepository from "../interfaces/IReporitory";
-import Produto from '../domain/entity/produto';
+import Produto from '../entity/produto';
 import { Console } from "console";
 import IProduto from "../interfaces/IProduto";
 import { IDataBase } from "../interfaces/IDataBase";

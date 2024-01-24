@@ -1,5 +1,5 @@
 import * as express from "express";
-import CheckoutController from "../controllers/CheckoutController";
+import CheckoutController from "../../../controllers/CheckoutController";
 
 let router = express.Router();
 

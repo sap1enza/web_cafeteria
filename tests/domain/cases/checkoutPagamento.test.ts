@@ -6,9 +6,9 @@ import CheckoutPagamentoRepository from '../../../app/gateways/CheckoutPagamento
 import MysqlDataBase from '../../../app/external/MysqlDataBase';
 import MPagamento from '../../../app/gateways/paymentsMethods/MercadoPago/MPagamento';
 import PedidoRepository from '../../../app/gateways/PedidoRepository';
-import Checkout from '../../../app/domain/entity/checkout';
-import Cartao from '../../../app/domain/entity/cartao';
-import Payer from '../../../app/domain/entity/payer';
+import Checkout from '../../../app/entity/checkout';
+import Cartao from '../../../app/entity/cartao';
+import Payer from '../../../app/entity/payer';
 import PaymentoMethods from '../../../app/gateways/paymentsMethods/PaymentoMethods';
 
 

@@ -1,4 +1,4 @@
-import Checkout from "../../../domain/entity/checkout";
+import Checkout from "../../../entity/checkout";
 import IPaymentMethods from "../IPaymentsMethods";
 import PaymentoMethods from "../PaymentoMethods";
 

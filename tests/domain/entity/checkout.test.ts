@@ -3,14 +3,14 @@ import { describe } from 'node:test';
 import { expect } from '@jest/globals';
 import { test } from '@jest/globals';
 
-import Payer from '../../../app/domain/entity/payer';
-import Cliente from '../../../app/domain/entity/cliente';
-import Cartao from '../../../app/domain/entity/cartao';
-import Pedido from '../../../app/domain/entity/pedido';
-import Checkout from '../../../app/domain/entity/checkout';
-import { statusPedido } from '../../../app/domain/entity/enum/statusPedido';
-import { StatusCheckout } from '../../../app/domain/entity/enum/statusCheckout';
-import Pix from '../../../app/domain/entity/pix';
+import Payer from '../../../app/entity/payer';
+import Cliente from '../../../app/entity/cliente';
+import Cartao from '../../../app/entity/cartao';
+import Pedido from '../../../app/entity/pedido';
+import Checkout from '../../../app/entity/checkout';
+import { statusPedido } from '../../../app/entity/enum/statusPedido';
+import { StatusCheckout } from '../../../app/entity/enum/statusCheckout';
+import Pix from '../../../app/entity/pix';
 
 describe("Validando Entity Checkout", () => {
     test("Instanciar Checkout by CARD", () => {

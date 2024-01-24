@@ -1,4 +1,4 @@
-import Cliente from "../domain/entity/cliente";
+import Cliente from "../entity/cliente";
 import ICliente from "../interfaces/ICliente";
 import { IDataBase } from "../interfaces/IDataBase";
 

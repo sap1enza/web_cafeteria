@@ -1,5 +1,5 @@
 import * as express from "express";
-import ProdutoController from "../controllers/ProdutoController";
+import ProdutoController from "../../../controllers/ProdutoController";
 import { IDataBase } from "../../../interfaces/IDataBase";
 
 

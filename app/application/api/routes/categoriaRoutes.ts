@@ -1,6 +1,6 @@
 // routes/categoriaRoutes.ts
 import * as express from "express";
-import CategoriaController from '../controllers/CategoriaController';
+import CategoriaController from '../../../controllers/CategoriaController';
 import { IDataBase } from '../../../interfaces/IDataBase';
 
 export default function CategoriaRoutes(dbconnection: IDataBase) {

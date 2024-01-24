@@ -1,4 +1,4 @@
-import Categoria from "../domain/entity/categoria";
+import Categoria from "../entity/categoria";
 import IRepository from "../interfaces/IReporitory";
 import { IDataBase } from "../interfaces/IDataBase";
 

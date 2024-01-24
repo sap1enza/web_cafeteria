@@ -1,18 +1,18 @@
 import * as HttpStatus from 'http-status';
-import ResponseAPI from "../../../adapters/ResponseAPI"
+import ResponseAPI from "../adapters/ResponseAPI"
 import {Request, Response} from 'express';
-import Checkout from '../../../domain/entity/checkout';
-import Cartao from '../../../domain/entity/cartao';
-import Payer from '../../../domain/entity/payer';
-import CheckoutPagamento from '../../../cases/checkoutPagamento';
-import PedidoRepository from '../../../gateways/PedidoRepository';
-import MysqlDataBase from '../../../external/MysqlDataBase';
-import { statusPedido } from '../../../domain/entity/enum/statusPedido';
-import IPaymentMethods from '../../../gateways/paymentsMethods/IPaymentsMethods';
-import MPagamento from '../../../gateways/paymentsMethods/MercadoPago/MPagamento';
-import CheckoutPagamentoRepository from '../../../gateways/CheckoutPagamentoRepository';
-import PaymentoMethods from '../../../gateways/paymentsMethods/PaymentoMethods';
-import Pix from '../../../domain/entity/pix';
+import Checkout from '../entity/checkout';
+import Cartao from '../entity/cartao';
+import Payer from '../entity/payer';
+import CheckoutPagamento from '../cases/checkoutPagamento';
+import PedidoRepository from '../gateways/PedidoRepository';
+import MysqlDataBase from '../external/MysqlDataBase';
+import { statusPedido } from '../entity/enum/statusPedido';
+import IPaymentMethods from '../gateways/paymentsMethods/IPaymentsMethods';
+import MPagamento from '../gateways/paymentsMethods/MercadoPago/MPagamento';
+import CheckoutPagamentoRepository from '../gateways/CheckoutPagamentoRepository';
+import PaymentoMethods from '../gateways/paymentsMethods/PaymentoMethods';
+import Pix from '../entity/pix';
 
 
 class CheckoutController {

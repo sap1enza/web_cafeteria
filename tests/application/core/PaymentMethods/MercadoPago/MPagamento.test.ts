@@ -2,15 +2,15 @@ import { describe } from 'node:test';
 import { expect } from '@jest/globals';
 import { test, it } from '@jest/globals';
 import MPagamento from '../../../../../app/gateways/paymentsMethods/MercadoPago/MPagamento';
-import Checkout from '../../../../../app/domain/entity/checkout';
-import Pedido from '../../../../../app/domain/entity/pedido';
-import Cliente from '../../../../../app/domain/entity/cliente';
-import { statusPedido } from '../../../../../app/domain/entity/enum/statusPedido';
-import Produto from '../../../../../app/domain/entity/produto';
-import Categoria from '../../../../../app/domain/entity/categoria';
+import Checkout from '../../../../../app/entity/checkout';
+import Pedido from '../../../../../app/entity/pedido';
+import Cliente from '../../../../../app/entity/cliente';
+import { statusPedido } from '../../../../../app/entity/enum/statusPedido';
+import Produto from '../../../../../app/entity/produto';
+import Categoria from '../../../../../app/entity/categoria';
 import PaymentMethods from '../../../../../app/gateways/paymentsMethods/PaymentoMethods';
-import Pix from '../../../../../app/domain/entity/pix';
-import Payer from '../../../../../app/domain/entity/payer';
+import Pix from '../../../../../app/entity/pix';
+import Payer from '../../../../../app/entity/payer';
 
 describe("MP metodo de pagamento PIX", () => {
     test("Autenticação de usuário", async () => {

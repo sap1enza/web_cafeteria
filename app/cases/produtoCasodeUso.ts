@@ -1,4 +1,4 @@
-import Produto from '../domain/entity/produto';
+import Produto from '../entity/produto';
 import IClienteRepository from '../interfaces/ICliente';
 import IProduto from '../interfaces/IProduto';
 import IRepository from '../interfaces/IReporitory';
