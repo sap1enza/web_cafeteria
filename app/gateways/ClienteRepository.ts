@@ -53,15 +53,13 @@ class ClienteRepository implements ICliente
     }
 
     public update = async (cliente: Cliente, id: BigInteger) => {
-        await this.db.store(
-            `UPDATE cliente SET
-                name = ?,
-                email = ?,
-                cpf_cnpj = ?,
-                modified = NOW()
-             WHERE id = ?;
-            `, [cliente.name, cliente.email, 
-                cliente.cpf_cnpj, id]); 
+        this.db.update(
+            this.nomeTabela,
+            [{ campo: "name", valor: cliente.name }, 
+            { campo: "email", valor: cliente.email }, 
+            { campo: "cpf_cnpj", valor: cliente.cpf_cnpj } ,
+            { campo: "modified", valor: new Date() }],
+            [{ campo: "id", valor: id }]);  
         cliente.id = id;
         return cliente;
     }

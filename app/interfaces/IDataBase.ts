@@ -4,7 +4,7 @@ export interface IDataBase {
 
     store(query, string, data?: any);
     //update(query: string, data?: any);
-    update(query: string, data?: any);
+    update(nomeTabela: string, campos: ParametroBd[], where: ParametroBd[]);
     delete(nomeTabela: string,
             parametros: ParametroBd[]);
     find(nomeTabela: string,

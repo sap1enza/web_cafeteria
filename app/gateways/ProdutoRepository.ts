@@ -62,15 +62,13 @@ class ProdutoRepository implements IProduto{
     }
 
     public update = async (produto: Produto, id: BigInteger) => {
-        await this.db.store(
-            `UPDATE produto SET
-                title = ?,
-                value = ?,
-                description = ?,
-                category_id = ?,
-                modified = NOW()
-             WHERE id = ?;
-            `, [produto.title, produto.value, produto.description, produto.categoria.id, id]); 
+        this.db.update(
+            this.nomeTabela,
+            [{ campo: "title", valor: produto.title }, 
+            { campo: "value", valor: produto.value }, 
+            { campo: "description", valor: produto.description } ,
+            { campo: "category_id", valor: produto.categoria.id }],
+            [{ campo: "id", valor: id }]);  
         return new Produto(
             produto.title,
             produto.value,

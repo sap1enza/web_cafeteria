@@ -22,8 +22,27 @@ export class MysqlDataBase implements IDataBase {
     async store(query: string, data: any) {
         return await this.db.conn().query(query, data);
     }
-    async update(query: string, data: any) {
-        return await this.db.conn().query(query, data);
+    async update(nomeTabela: string, campos: ParametroBd[] | null, parametros: ParametroBd[]) {
+        const parametrosBusca = this.prepararParametrosBusca(parametros);
+
+        const nomesCampos: string[] = [];
+        const nomesValores: any[] = [];
+        
+
+        campos.forEach(function (item) {
+        nomesCampos.push(`${item.campo} = ?`);
+        nomesValores.push(item.valor);
+        
+        });
+        const sql = `
+          Update ${nomeTabela} SET
+          ${nomesCampos.join(" , ")}
+          ${parametrosBusca.restricao}
+        `;
+        nomesValores.push(parametrosBusca.valores);
+        //console.log(sql);
+        const rows = await this.db.conn().query(sql, nomesValores);
+        return rows;
     }
     async delete(nomeTabela: string, parametros: ParametroBd[]) {
         const parametrosBusca = this.prepararParametrosBusca(parametros);
@@ -52,7 +71,7 @@ export class MysqlDataBase implements IDataBase {
         // console.log(sql);
         // console.log(parametrosBusca.valores);
         const rows = await this.db.conn().query(sql, parametrosBusca.valores);
-        console.log(rows);
+        //console.log(rows);
         return rows;
     }
     

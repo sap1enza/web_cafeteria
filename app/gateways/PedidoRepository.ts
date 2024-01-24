@@ -73,14 +73,13 @@ class PedidoRepository implements IPedido{
     }
 
     public update = async (pedido: Pedido, id: BigInteger) => {
-        await this.db.store(
-            `UPDATE pedidos SET
-                customer_id = ?,
-                status = ?,
-                total_value = ?,
-                modified = NOW()
-            WHERE id = ?;
-            `, [pedido.cliente.id, pedido.getStatus(), pedido.getValorTotal(), id]);
+        this.db.update(
+            this.nomeTabela,
+            [{ campo: "customer_id", valor: pedido.cliente[0].id }, 
+            { campo: "status", valor: pedido.getStatus() }, 
+            { campo: "total_value", valor: pedido.getValorTotal() } ,
+            { campo: "modified", valor: new Date() }],
+            [{ campo: "id", valor: id }]);  
         return new Pedido(
             pedido.cliente,
             pedido.getStatus(),
@@ -109,6 +108,7 @@ class PedidoRepository implements IPedido{
             dataProduto.forEach(produto => {
                  pedido.adicionarProduto(produto)   
              });  
+             console.log(` aqui 3 ${dataPedido}`);
              return pedido;
         } else {
             return null;

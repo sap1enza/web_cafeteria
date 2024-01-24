@@ -5,8 +5,6 @@ import ResponseAPI from '../../../adapters/ResponseAPI';
 //import MysqlDataBase from '../../../external/MysqlDataBase';
 import { IDataBase } from "../../../interfaces/IDataBase";
 import { PedidoCasoDeUso } from '../../../cases/pedidoCasodeUso';
-import Pedido from '../../../domain/entity/pedido';
-import Produto from '../../../domain/entity/produto';
 import ProdutoRepository from '../../../gateways/ProdutoRepository';
 
 class PedidoController {
@@ -70,10 +68,11 @@ class PedidoController {
      */
     public update = async (request, response) => {
         try {
-            console.log(request.params.id)
-            console.log(request.body.status)
-            let order: Pedido = await PedidoCasoDeUso.encontrarPedidoPorId(request.params.id, this.repository);
+            // console.log(request.params.id)
+            // console.log(request.body.status)
+            let order = await PedidoCasoDeUso.encontrarPedidoPorId(request.params.id, this.repository);
 
+            //console.log(` aqui ${order}`);
             order.setStatus(request.body.status);
             
             let data = await PedidoCasoDeUso.atualizarPedido(order, request.params.id,this.repository);

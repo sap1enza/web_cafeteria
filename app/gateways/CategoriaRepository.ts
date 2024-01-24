@@ -42,12 +42,10 @@ class CategoriaRepository implements IRepository {
     }
 
     async update(params: Categoria, id) {
-        await this.db.store(
-            `UPDATE categoria SET
-                name = ?,
-                modified = NOW()
-             WHERE id = ?;
-            `, [params.name, id], new Date());
+        this.db.update(
+            this.nomeTabela,
+            [{ campo: "name", valor: params.name }, { campo: "modified", valor: new Date() }],
+            [{ campo: "id", valor: id }]);
         return new Categoria(params.name, id,);
     }
 
