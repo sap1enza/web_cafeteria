@@ -5,10 +5,11 @@ metadata:
   labels:
     app: svc-db
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: db-deployment
   ports:
   - protocol: TCP
     port: 3306
     targetPort: 3306
+    nodePort: 30336
