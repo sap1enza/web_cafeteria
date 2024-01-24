@@ -54,16 +54,6 @@ class CategoriaRepository implements IRepository {
             this.nomeTabela,
             [{ campo: "name", valor: params.name }, { campo: "created", valor:  new Date()}, { campo: "modified", valor: new Date() }]);
         
-        // let data = await this.db.store(
-        //     `INSERT INTO categoria 
-        //         (name,created, modified) 
-        //      VALUES 
-        //         (
-        //             ?,
-        //             NOW(), 
-        //             NOW()
-        //         );
-        //     `, [params.name], new Date());
         return new Categoria(
             params.name,
             parseInt(data.insertId)
