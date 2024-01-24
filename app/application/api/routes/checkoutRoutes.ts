@@ -1,11 +1,13 @@
 import * as express from "express";
 import CheckoutController from "../controllers/CheckoutController";
+import { IDataBase } from "../../../interfaces/IDataBase";
 
-let router = express.Router();
-
-router.post('/checkout', CheckoutController.store);
-router.post('/checkout/:uuid/hook', CheckoutController.hook);
-router.get('/checkout/:pedido_id/status', CheckoutController.findByIdPedido);
-
-
-export default router;
+export default function checkoutRouter(dbconnection : IDataBase) : express.Router
+{
+    const router = express.Router();
+    const controller = new CheckoutController(dbconnection);
+    router.post('/checkout', controller.store);
+    router.post('/checkout/:uuid/hook', controller.hook);
+    router.get('/checkout/:pedido_id/status', controller.findByIdPedido);
+    return  router;
+}

@@ -1,13 +1,13 @@
 import Checkout from "../domain/entity/checkout";
 import { StatusCheckout } from "../domain/entity/enum/statusCheckout";
 import IPaymentMethods from "../gateways/paymentsMethods/IPaymentsMethods";
-import IRepository from "../interfaces/IReporitory";
+import IGateways from "../interfaces/IGateways";
 
 class CheckoutPagamento {
     
     constructor(
         readonly checkout: Checkout, 
-        readonly repositoryCheckout: IRepository, 
+        readonly repositoryCheckout: IGateways, 
         readonly metodo_pagamento: IPaymentMethods
     ) {
 

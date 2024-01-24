@@ -1,5 +1,5 @@
-import IRepository from "./IReporitory";
+import IGateways from "./IGateways";
 
-export default interface IClienteRepository extends IRepository {
+export default interface ICliente extends IGateways {
     findByCPF(cpf: string);
 }

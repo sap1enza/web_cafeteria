@@ -1,5 +1,5 @@
 import {IDataBase} from "./IDataBase";
-abstract class IRepository {
+abstract class IGateways {
     constructor(readonly db: IDataBase) {}
 
     abstract getAll(params);
@@ -10,4 +10,4 @@ abstract class IRepository {
 
 }
 
-export default IRepository;
+export default IGateways;

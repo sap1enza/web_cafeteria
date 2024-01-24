@@ -6,26 +6,28 @@ import Cartao from '../../../domain/entity/cartao';
 import Payer from '../../../domain/entity/payer';
 import CheckoutPagamento from '../../../cases/checkoutPagamento';
 import PedidoRepository from '../../../gateways/PedidoRepository';
-import MysqlDataBase from '../../../external/MysqlDataBase';
 import { statusPedido } from '../../../domain/entity/enum/statusPedido';
 import IPaymentMethods from '../../../gateways/paymentsMethods/IPaymentsMethods';
 import MPagamento from '../../../gateways/paymentsMethods/MercadoPago/MPagamento';
 import CheckoutPagamentoRepository from '../../../gateways/CheckoutPagamentoRepository';
 import PaymentoMethods from '../../../gateways/paymentsMethods/PaymentoMethods';
 import Pix from '../../../domain/entity/pix';
+import { IDataBase } from '../../../interfaces/IDataBase';
 
 
 class CheckoutController {
 
     private repository : CheckoutPagamentoRepository;
     private pedidoRepository: PedidoRepository;
-    private mysqlidatabase: MysqlDataBase;
     private metodoPagamento: IPaymentMethods;
-    constructor() {
-        this.mysqlidatabase = new MysqlDataBase();
-        this.pedidoRepository = new PedidoRepository(this.mysqlidatabase);
+    
+    /**
+     * 
+     */
+    constructor(readonly dbconnection: IDataBase) {
+        this.pedidoRepository = new PedidoRepository(dbconnection);
         this.metodoPagamento = new MPagamento();
-        this.repository = new CheckoutPagamentoRepository(this.mysqlidatabase);
+        this.repository = new CheckoutPagamentoRepository(dbconnection);
     }
     /**
      * 
@@ -64,7 +66,7 @@ class CheckoutController {
 
             let checkoutPagamento = new CheckoutPagamento(
                 checkout,  
-                new CheckoutPagamentoRepository(this.mysqlidatabase),
+                this.repository,
                 this.metodoPagamento
             );
             
@@ -107,4 +109,4 @@ class CheckoutController {
 
 }
 
-export default new CheckoutController();
+export default CheckoutController;

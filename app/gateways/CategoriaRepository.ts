@@ -1,5 +1,5 @@
 import Categoria from "../domain/entity/categoria";
-import IRepository from "../interfaces/IReporitory";
+import IRepository from "../interfaces/IGateways";
 import {IDataBase} from "../interfaces/IDataBase";
 
 class CategoriaRepository implements IRepository{

@@ -2,8 +2,15 @@ import * as HttpStatus from 'http-status';
 import ResponseAPI from "../../../adapters/ResponseAPI"
 import UsuarioCasoDeUso from '../../../cases/usuarioCasoDeUso';
 import User from '../../../domain/entity/user';
+import { IDataBase } from '../../../interfaces/IDataBase';
 
 class UserController{
+
+    /**
+     * 
+     */
+    constructor(readonly dbconnection: IDataBase) {}
+
     auth = (request, response) => {
         try {
             let user = new User(
@@ -20,4 +27,4 @@ class UserController{
     }
 }
 
-export default new UserController();
+export default UserController;

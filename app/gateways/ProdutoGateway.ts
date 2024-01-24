@@ -1,4 +1,4 @@
-import IRepository from "../interfaces/IReporitory";
+import IRepository from "../interfaces/IGateways";
 import Produto from '../domain/entity/produto';
 
 class ProdutoGateway extends IRepository{

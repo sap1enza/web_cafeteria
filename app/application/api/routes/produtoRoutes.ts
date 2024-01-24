@@ -3,8 +3,9 @@ import ProdutoController from "../controllers/ProdutoController";
 import { IDataBase } from "../../../interfaces/IDataBase";
 
 
-export default function produtoRoutes(dbconnection: IDataBase) {
-    let router = express.Router();
+export default function produtoRoutes(dbconnection: IDataBase) : express.Router
+{
+    const router = express.Router();
     const produtoController = new ProdutoController(dbconnection);
 
     router.get('/produto', produtoController.all);
@@ -15,5 +16,3 @@ export default function produtoRoutes(dbconnection: IDataBase) {
     router.get('/produto/categoria/:category_id', produtoController.getByidCategory);
     return router;
 }
-
-//export default router;
