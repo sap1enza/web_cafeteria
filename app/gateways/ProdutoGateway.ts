@@ -1,7 +1,7 @@
-import IRepository from "../interfaces/IGateways";
+import IGateways from "../interfaces/IGateways";
 import Produto from '../domain/entity/produto';
 
-class ProdutoGateway extends IRepository{
+class ProdutoGateway extends IGateways{
 
     public getAll = async (params: any) => {
         let CONDITIONS = "";

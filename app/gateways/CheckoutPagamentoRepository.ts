@@ -1,8 +1,8 @@
 import Checkout from "../domain/entity/checkout";
 import { StatusCheckout } from "../domain/entity/enum/statusCheckout";
-import IRepository from "../interfaces/IGateways";
+import IGateways from "../interfaces/IGateways";
 
-class CheckoutPagamentoRepository extends IRepository
+class CheckoutPagamentoRepository extends IGateways
 {
     findById(id: any) {
         throw new Error("Method not implemented.");

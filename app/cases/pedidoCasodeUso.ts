@@ -3,7 +3,6 @@ import Produto from '../domain/entity/produto';
 import IClienteRepository from '../interfaces/ICliente';
 import IPedido from '../interfaces/IPedido';
 import IProduto from '../interfaces/IProduto';
-import IRepository from '../interfaces/IGateways';
 
 export class PedidoCasoDeUso{
 
@@ -64,5 +63,4 @@ export class PedidoCasoDeUso{
                 const Pedido = await PedidoRepositorio.delete(idPedido);
         return Pedido;
     }
-
 }

@@ -1,6 +1,6 @@
-import IRepository from "../interfaces/IGateways";
+import IGateways from "../interfaces/IGateways";
 
-class DBRepository extends IRepository
+class DBRepository extends IGateways
 {
 
     public init = async () => {     

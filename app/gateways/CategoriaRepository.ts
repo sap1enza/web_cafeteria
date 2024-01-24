@@ -1,8 +1,8 @@
 import Categoria from "../domain/entity/categoria";
-import IRepository from "../interfaces/IGateways";
+import IGateways from "../interfaces/IGateways";
 import {IDataBase} from "../interfaces/IDataBase";
 
-class CategoriaRepository implements IRepository{
+class CategoriaRepository implements IGateways{
     public db: IDataBase;
 
     constructor(database: IDataBase) {

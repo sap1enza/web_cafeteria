@@ -1,7 +1,7 @@
 import Produto from '../domain/entity/produto';
 import IClienteRepository from '../interfaces/ICliente';
 import IProduto from '../interfaces/IProduto';
-import IRepository from '../interfaces/IGateways';
+import IGateways from '../interfaces/IGateways';
 import CategoriaRepository from '../gateways/CategoriaRepository';
 
 export class ProdutoCasoDeUso{
@@ -11,7 +11,7 @@ export class ProdutoCasoDeUso{
         return Produtos;
     }
 
-    static async criarProduto(request,CategoriaRepository: IRepository, ProdutoRepositorio: IProduto){
+    static async criarProduto(request,CategoriaRepository: IGateways, ProdutoRepositorio: IProduto){
         let categoria = await CategoriaRepository.findById(request.body.category_id);
              let produto = new Produto(
                  request.body.title,
@@ -27,7 +27,7 @@ export class ProdutoCasoDeUso{
                 throw new Error(err.message)
              }
     }
-    static async atualizarProduto(request,CategoriaRepository: IRepository, ProdutoRepositorio: IProduto){
+    static async atualizarProduto(request,CategoriaRepository: IGateways, ProdutoRepositorio: IProduto){
         try {
             let categoria = await CategoriaRepository.findById(request.body.category_id);
             
