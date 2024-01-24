@@ -8,14 +8,11 @@ import { IDataBase } from './app/interfaces/IDataBase';
 
 export default class Server{
     public app: express.Application;
-    private _dbconnection: IDataBase;
 
-    constructor (dbconnection: IDataBase) {
-        this._dbconnection = dbconnection;
+    constructor (readonly dbconnection: IDataBase) {
         this.app = express();
         this.middler();
         this.routes();
-        
     }
 
     enableCors(){
@@ -36,15 +33,9 @@ export default class Server{
         this.app.route('/').get((req, res) => {
             res.json({'version' : '1.0.0'});
         });
-        this.app.use('/api/v1/', userRouter);
-
-        this.app.use(Auth.validate);
-        const _urls = urls(this._dbconnection);
-        console.log(_urls);
-        console.log(urls(this._dbconnection));
-        this.app.use("/", _urls);
+        this.app.use('/api/v1/', userRouter(this.dbconnection));
         
+        this.app.use(Auth.validate);
+        this.app.use("/", urls(this.dbconnection));
     }
 }
-
-//export default new Server();
