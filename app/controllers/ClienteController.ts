@@ -49,7 +49,7 @@ class ClienteController{
             );
             
             try {
-                let data = await ClienteCasoDeUso.criarCliente(cliente,this.repository);
+                let data = await ClienteCasoDeUso.criarCliente(cliente, this.repository);
                 response.status(HttpStatus.OK).json({message:'Cliente criado com sucesso!'});
                 
             } catch(err) {

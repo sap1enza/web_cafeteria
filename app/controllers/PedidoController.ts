@@ -53,13 +53,17 @@ class PedidoController {
     public store = async (request, response) => {
         
         try {
-                const orderResultId =PedidoCasoDeUso.adicionarProdutoPedido(request,this.clienteRepository,this.produtoRepository,this.repository)
-                response.status(HttpStatus.OK).json(ResponseAPI.data(orderResultId));
-
-            } catch(err) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            }
+            const orderResultId = PedidoCasoDeUso.adicionarProdutoPedido(
+                request,
+                this.clienteRepository,
+                this.produtoRepository,
+                this.repository
+            )
+            response.status(HttpStatus.OK).json(ResponseAPI.data(orderResultId));
+        } catch(err) {
+            response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
         }
+    }
 
     /**
      *
