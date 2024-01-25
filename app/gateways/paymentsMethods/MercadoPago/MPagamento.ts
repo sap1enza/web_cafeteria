@@ -1,7 +1,7 @@
 import Checkout from "../../../entity/checkout";
-import IPaymentMethods from "../IPaymentsMethods";
-import PaymentoMethods from "../PaymentoMethods";
-import { StatusCheckout } from '../../../domain/entity/enum/statusCheckout';
+import IPaymentMethods from "../../../interfaces/IPaymentsMethods";
+import PaymentoMethods from "../../../entity/enum/PaymentoMethods";
+import { StatusCheckout } from '../../../entity/enum/statusCheckout';
 import { v4 as uuidv4 } from 'uuid';
 
 class MPagamento implements IPaymentMethods {

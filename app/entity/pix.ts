@@ -1,5 +1,5 @@
 import IMetodoPagamento from "./IMetodoPagamento";
-import PaymentoMethods from '../../gateways/paymentsMethods/PaymentoMethods';
+import PaymentoMethods from '../entity/enum/PaymentoMethods';
 import Payer from "./payer";
 
 class Pix implements IMetodoPagamento {

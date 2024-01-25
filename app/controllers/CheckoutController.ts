@@ -4,28 +4,31 @@ import {Request, Response} from 'express';
 import Checkout from '../entity/checkout';
 import Cartao from '../entity/cartao';
 import Payer from '../entity/payer';
-import CheckoutPagamento from '../cases/checkoutPagamento';
 import PedidoRepository from '../gateways/PedidoRepository';
 import MysqlDataBase from '../external/MysqlDataBase';
 import { statusPedido } from '../entity/enum/statusPedido';
-import IPaymentMethods from '../gateways/paymentsMethods/IPaymentsMethods';
+import IPaymentMethods from '../interfaces/IPaymentsMethods';
 import MPagamento from '../gateways/paymentsMethods/MercadoPago/MPagamento';
 import CheckoutPagamentoRepository from '../gateways/CheckoutPagamentoRepository';
-import PaymentoMethods from '../gateways/paymentsMethods/PaymentoMethods';
+import PaymentoMethods from '../entity/enum/PaymentoMethods';
 import Pix from '../entity/pix';
+import { IDataBase } from '../interfaces/IDataBase';
+import { CheckoutPagamento } from '../cases/checkoutPagamento';
 
 
 class CheckoutController {
 
+    private _dbconnection: IDataBase;
     private repository : CheckoutPagamentoRepository;
     private pedidoRepository: PedidoRepository;
-    private mysqlidatabase: MysqlDataBase;
     private metodoPagamento: IPaymentMethods;
-    constructor() {
-        this.mysqlidatabase = new MysqlDataBase();
-        this.pedidoRepository = new PedidoRepository(this.mysqlidatabase);
+
+    constructor(dbconnection: IDataBase) {
+
+        this._dbconnection = dbconnection;
+        this.pedidoRepository = new PedidoRepository(this._dbconnection);
         this.metodoPagamento = new MPagamento();
-        this.repository = new CheckoutPagamentoRepository(this.mysqlidatabase);
+        this.repository = new CheckoutPagamentoRepository(this._dbconnection);
     }
     /**
      * 
@@ -33,53 +36,12 @@ class CheckoutController {
      * @param response 
      */
     public store = async (request: Request, response: Response) => {
-        try {
-            
-            let pedido = await this.pedidoRepository.findById(request.body.pedido_id);
-            let payer = new Payer(
-                request.body.cartao.payer.name,
-                request.body.cartao.payer.email,
-                request.body.cartao.payer.document,
-            )
-            let metodoPagamento = null;
-            if (request.body.cartao.payment_method_id == PaymentoMethods.CARD_CREDIT) {
-                metodoPagamento = new Cartao(
-                    payer,
-                    request.body.cartao.number,
-                    request.body.cartao.cvv,
-                    request.body.cartao.expiration_date,
-                )
-            } else {
-                metodoPagamento = new Pix(
-                    payer
-                )
-            }
-
-            let checkout = new Checkout(
-                pedido,
-                metodoPagamento
-            );
-            
-            checkout.setPaymentMethod(request.body.payment_method_id)
-
-            let checkoutPagamento = new CheckoutPagamento(
-                checkout,  
-                new CheckoutPagamentoRepository(this.mysqlidatabase),
-                this.metodoPagamento
-            );
-            
             try {
-                let data = await checkoutPagamento.create();
-                pedido.setStatus(statusPedido.EM_PREPARACAO);
-                await this.pedidoRepository.update(pedido, pedido.id);
+                let data = await CheckoutPagamento.CreateCheckout(request, this.repository,this.metodoPagamento,this.pedidoRepository);
                 response.status(HttpStatus.OK).json(ResponseAPI.data(data));
             } catch(err) {
                     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            }
-
-        } catch (err) {
-            response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message)); 
-        } 
+            } 
     }
 
 
@@ -95,7 +57,7 @@ class CheckoutController {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
             }
 
-            let data = await this.repository.findByIdPedido(request.params.pedido_id);
+            let data = await CheckoutPagamento.encontrarPagamentoPorIdPedido(request.params.pedido_id, this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -107,4 +69,4 @@ class CheckoutController {
 
 }
 
-export default new CheckoutController();
+export default CheckoutController;

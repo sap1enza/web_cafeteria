@@ -1,11 +1,16 @@
 import * as express from "express";
 import CheckoutController from "../../../controllers/CheckoutController";
+import { IDataBase } from "../../../interfaces/IDataBase";
 
+export default function CategoriaRoutes(dbconnection: IDataBase) {
 let router = express.Router();
 
-router.post('/checkout', CheckoutController.store);
-router.post('/checkout/hook', CheckoutController.hook);
-router.get('/checkout/:pedido_id/status', CheckoutController.findByIdPedido);
+const checkoutController = new CheckoutController(dbconnection);
 
+router.post('/checkout', checkoutController.store);
+router.post('/checkout/hook', checkoutController.hook);
+router.get('/checkout/:pedido_id/status', checkoutController.findByIdPedido);
 
-export default router;
+return router;
+
+}

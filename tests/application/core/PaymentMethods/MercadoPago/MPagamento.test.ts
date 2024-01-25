@@ -8,7 +8,7 @@ import Cliente from '../../../../../app/entity/cliente';
 import { statusPedido } from '../../../../../app/entity/enum/statusPedido';
 import Produto from '../../../../../app/entity/produto';
 import Categoria from '../../../../../app/entity/categoria';
-import PaymentMethods from '../../../../../app/gateways/paymentsMethods/PaymentoMethods';
+import PaymentMethods from '../../../../../app/entity/enum/PaymentoMethods';
 import Pix from '../../../../../app/entity/pix';
 import Payer from '../../../../../app/entity/payer';
 
