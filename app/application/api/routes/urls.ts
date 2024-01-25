@@ -8,12 +8,11 @@ import { IDataBase } from '../../../interfaces/IDataBase';
 
 export default function urls(dbconnection: IDataBase) {
     const router = express.Router();
-
     router.use("/api/v1/", ClienteRoutes(dbconnection));
     router.use("/api/v1/", categoriesRoutes(dbconnection));
     router.use("/api/v1/", produtoRoutes(dbconnection));
     router.use("/api/v1/", PedidoRoutes(dbconnection));
-    router.use("/api/v1/", checkoutRoutes);
- return router
+    router.use("/api/v1/", checkoutRoutes(dbconnection));
+    return router;
 }
 //export default router;

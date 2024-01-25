@@ -1,17 +1,10 @@
 import * as HttpStatus from 'http-status';
 import ResponseAPI from "../adapters/ResponseAPI"
 import {Request, Response} from 'express';
-import Checkout from '../entity/checkout';
-import Cartao from '../entity/cartao';
-import Payer from '../entity/payer';
 import PedidoRepository from '../gateways/PedidoRepository';
-import MysqlDataBase from '../external/MysqlDataBase';
-import { statusPedido } from '../entity/enum/statusPedido';
 import IPaymentMethods from '../interfaces/IPaymentsMethods';
 import MPagamento from '../gateways/paymentsMethods/MercadoPago/MPagamento';
 import CheckoutPagamentoRepository from '../gateways/CheckoutPagamentoRepository';
-import PaymentoMethods from '../entity/enum/PaymentoMethods';
-import Pix from '../entity/pix';
 import { IDataBase } from '../interfaces/IDataBase';
 import { CheckoutPagamento } from '../cases/checkoutPagamento';
 
