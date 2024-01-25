@@ -8,14 +8,7 @@ import { PedidoCasoDeUso } from '../cases/pedidoCasodeUso';
 import ProdutoRepository from '../gateways/ProdutoRepository';
 
 class PedidoController {
-    /**
-     *
-     * 
-
-    /**
-     * 
-     */
-    private _dbconnection: IDataBase;
+    
     public repository: PedidoRepository;
     public clienteRepository: ClienteRepository;
     public produtoRepository: ProdutoRepository;
@@ -23,9 +16,7 @@ class PedidoController {
     /**
      *
      */
-    constructor(dbconnection: IDataBase) {
-        this._dbconnection = dbconnection;
-        //this.repository = new PedidoRepository(new MysqlDataBase());
+    constructor(readonly dbconnection: IDataBase) {
         this.clienteRepository = new ClienteRepository(dbconnection);
         this.produtoRepository = new ProdutoRepository(dbconnection);
         this.repository = new PedidoRepository(dbconnection);

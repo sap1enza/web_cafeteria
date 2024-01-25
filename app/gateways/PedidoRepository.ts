@@ -17,7 +17,7 @@ class PedidoRepository implements IPedido{
     public getAll = async (params: any) => {
         let CONDITIONS = "";
         let data;
-        if (typeof params.status != 'undefined' && params.status != "") {
+        if (typeof params.status != 'undefined' && params.status != "" && !isNaN(params.status)) {
 
            //console.log(params.status);
             data = await this.db.find(
