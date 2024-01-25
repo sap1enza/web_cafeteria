@@ -544,20 +544,24 @@ paths:
                       example: '0115b81d-067e-4b62-a4c3-253e1b218712'
                   cartao:
                     $ref: '#/components/schemas/Cartao'
-  /checkout/{uuid}/hook:
-    post:
+  /checkout/{id}/hook:
+    put:
       summary: "Recebe um retorno de pagamento do gateway de pagamento escolhido"
       security: []
       tags:
         - "Checkout"
       responses:
-        "201":
+        "200":
           description: "Requisição para pagamento realizada com sucesso."
           content:
             application/json:
               schema:
                 type: object
                 properties:
+                  id:
+                    type: number
+                    format: integer
+                    example: 1
                   payment_method_id:
                     type: number
                     format: integer
@@ -567,14 +571,46 @@ paths:
                     format: integer
                     example: 1
                   status:
-                      type: number
-                      format: integer
-                      example: 2
+                    type: number
+                    format: integer
+                    example: 2
                   uuid:
-                      type: string
-                      example: '0115b81d-067e-4b62-a4c3-253e1b218712'
-                  cartao:
-                    $ref: '#/components/schemas/Cartao'
+                    type: string
+                    example: '0115b81d-067e-4b62-a4c3-253e1b218712'
+                  card_number:
+                    type: string
+                    example: '5482874095004465'
+                  card_cvv:
+                    type: string
+                    example: '111'
+                  card_expiration_date:
+                    type: string
+                    example: '05/2024'
+                  payer_name:
+                    type: string
+                    example: 'José da Silva'
+                  payer_email:
+                    type: string
+                    example: 'josedasilva@teste.com'
+                  payer_document:
+                    type: string
+                    example: '31759487740'
+                  total_value:
+                    type: number
+                    format: float
+                    example: 1.00
+                  payload:
+                    type: string
+                    format: json
+                  external_reference:
+                    type: string
+                    example: '0115b81d-067e-4b62-a4c3-253e1b218712'
+                  created:
+                    type:  string
+                    format: datetime
+                  modified:
+                    type:  string
+                    format: datetime
   /checkout/{pedidoId}/status:
     get:
         summary: Recupera o status de pagamento do pedido pelo ID do pedido

@@ -1,7 +1,7 @@
 import Produto from '../entity/produto';
 import IClienteRepository from '../interfaces/ICliente';
 import IProduto from '../interfaces/IProduto';
-import IRepository from '../interfaces/IReporitory';
+import IRepository from '../interfaces/IRepository';
 import CategoriaRepository from '../gateways/CategoriaRepository';
 
 export class ProdutoCasoDeUso{

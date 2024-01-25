@@ -7,22 +7,33 @@ class CheckoutPagamentoRepository implements ICheckout
     private nomeTabela = "checkout";
     public db: IDataBase;
     constructor(database: IDataBase) {
-       // super(database);
         this.db = database;
-      }
+    }
+
     findById = async(id: any) => {
         let data = await this.db.find(
             this.nomeTabela,
             null,
             [{ campo: "id", valor: id }]);
-        if (data.length > 0) {
-            return new Checkout(data);
-        }
-        else
-            return null;
+        return data != null ? data[0] : null;
     }
-    getAll(params: any) {
-        throw new Error("Method not implemented.");
+
+    findByPedidoId = async (id: any) => {
+        let data = await this.db.find(
+            this.nomeTabela,
+            null,
+            [{ campo: "pedido_id", valor: id }]);
+
+        return data != null ? data[0] : null;
+    }
+
+    getAll = async(params: any) => {
+        let data = await this.db.find(
+            this.nomeTabela,
+            null,
+            [{ campo: "pedido_id", valor: params['id'] }]);
+
+        return data != null ? data : null;
     }
 
     update = async (checkout: Checkout, id) => {
@@ -83,54 +94,6 @@ class CheckoutPagamentoRepository implements ICheckout
             { campo: "total_value", valor: checkout.pedido.getValorTotal() },
             { campo: "created", valor:  new Date()}, 
             { campo: "modified", valor: new Date() }]);
-
-        // let data = await this.db.store(
-        //     `INSERT INTO checkout
-        //         (
-        //             uuid,
-        //             status,
-        //             payment_method_id,
-        //             pedido_id,
-        //             card_number,
-        //             card_cvv,
-        //             card_expiration_date,
-        //             payer_name,
-        //             payer_email,
-        //             payer_document,
-        //             total_value,
-        //             created,
-        //             modified
-        //         )
-        //             VALUES
-        //         (
-        //             ?,
-        //             ?,
-        //             ?,
-        //             ?,
-        //             ?,
-        //             ?,
-        //             ?,
-        //             ?,
-        //             ?,
-        //             ?,
-        //             ?,
-        //             NOW(),
-        //             NOW()
-        //         );
-        //     `, [
-        //         checkout.uuid,
-        //         checkout.getStatus(),
-        //         checkout.getPaymentMethod(),
-        //         checkout.pedido.id,
-        //         checkout.metodoPagamento.number,
-        //         checkout.metodoPagamento.cvv,
-        //         checkout.metodoPagamento.expirationDate,
-        //         checkout.metodoPagamento.payer.name,
-        //         checkout.metodoPagamento.payer.email,
-        //         checkout.metodoPagamento.payer.document ,
-        //         checkout.pedido.getValorTotal()
-        //     ]);
-
         return new Checkout(
             checkout.pedido,
             checkout.metodoPagamento,
@@ -143,41 +106,13 @@ class CheckoutPagamentoRepository implements ICheckout
         throw new Error("Method not implemented.");
     }
 
-    public findByExternalReference = async (id: BigInteger) => {
+    public findByExternalReference = async (uuid: string) => {
         let data = await this.db.find(
             this.nomeTabela,
             null,
-            [{ campo: "external_reference", valor: id }]);
-        if (data.length > 0) {
-            return new data;
-        }
-        else
-            return null;
-
-
-        // let data = await this.db.find(`SELECT * FROM checkout where external_reference = ${id};`);
-
-        // if (data.length > 0) {
-        //     return data[0];
-        // } else {
-        //     return null;
-        // }
+            [{ campo: "external_reference", valor: uuid }]);
+        return data != null ? data[0] : null;
     }
-
-    public findByIdPedido = async (pedido_id: BigInteger) => {
-        let data  = await this.db.find(this.nomeTabela, null ,[{ campo: "pedido_id", valor: pedido_id,}]);
-        console.log(data);
-        if (data.length>0) {
-            return  {
-                id : data[0].status,
-                name : ""
-            }
-        }
-        else{
-            return null;
-        }
-    }
-
 }
 
 export default CheckoutPagamentoRepository;

@@ -4,7 +4,7 @@ import Produto from '../entity/produto';
 import IClienteRepository from '../interfaces/ICliente';
 import IPedido from '../interfaces/IPedido';
 import IProduto from '../interfaces/IProduto';
-import IRepository from '../interfaces/IReporitory';
+import IRepository from '../interfaces/IRepository';
 
 export class PedidoCasoDeUso{
 

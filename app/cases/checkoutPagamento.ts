@@ -9,26 +9,13 @@ import IPaymentMethods from "../interfaces/IPaymentsMethods";
 import MPagamento from "../gateways/paymentsMethods/MercadoPago/MPagamento";
 import PaymentoMethods from '../entity/enum/PaymentoMethods';
 import IPedido from "../interfaces/IPedido";
-import IRepository from "../interfaces/IReporitory";
+import IRepository from "../interfaces/IRepository";
+import ICheckout from "../interfaces/ICheckout";
 
 export class CheckoutPagamento {
 
-
-    static async encontrarPagamentoPorIdPedido(idpedido, checkoutPagamentoRepository: IRepository){
-        const checkout = await checkoutPagamentoRepository.findById(idpedido);
-        return checkout;
-    }
-    public confirmPayment = async (checkout: Checkout, checkoutPagamentoRepository: IRepository) : Promise<Checkout> => {
-        checkout.setStatus(StatusCheckout.PAGAMENTO_EFETUADO);
-        /**
-         * TODO altera o status do pagamento no banco de dados
-         */
-        return await checkoutPagamentoRepository.update(checkout, checkout.id);
-    }
-
-    static async CreateCheckout(request, checkoutPagamentoRepository: IRepository, paymentMethodsRepositorio: IPaymentMethods, repositorioPedido: IPedido){
-        let pedido = await checkoutPagamentoRepository.findById(request.body.pedido_id);
-
+    static instance = async(request, repositorioPedido: IPedido ) : Promise<Checkout> => {
+        let pedido = await repositorioPedido.findById(request.body.pedido_id);
         let payer = new Payer(
             request.body.cartao.payer.name,
             request.body.cartao.payer.email,
@@ -55,13 +42,58 @@ export class CheckoutPagamento {
         
         checkout.setPaymentMethod(request.body.payment_method_id)
         checkout.setStatus(StatusCheckout.AGUARDANDO_PAGAMENTO);
-        checkout = await checkoutPagamentoRepository.store(checkout);
+        return checkout;
+    }
 
+    static async encontrarPagamentoPorIdPedido(
+        idpedido, 
+        checkoutPagamentoRepository: ICheckout,
+        repositorioPedido: IRepository
+    ) : Promise<Checkout> {
+        let data = await checkoutPagamentoRepository.findByPedidoId(idpedido);
+        let pedido = await repositorioPedido.findById(idpedido);
+        let payer = new Payer(
+            data['payer_name'],
+            data['payer_email'],
+            data['payer_document'],
+        )
+        let metodoPagamento = null;
+        if (data['card_cvv'] != null) {
+            metodoPagamento = new Cartao(
+                payer,
+                data['card_number'],
+                data['card_cvv'],
+                data['card_expiration_date'],
+            )
+        } else {
+            metodoPagamento = new Pix(
+                payer
+            )
+        }
+
+        let checkout = new Checkout(
+            pedido,
+            metodoPagamento
+        );
+        return checkout;
+    }
+
+    static confirmPayment = async (
+        checkout: Checkout, 
+        checkoutPagamentoRepository: ICheckout
+    ) : Promise<Checkout> => {
+        checkout.setStatus(StatusCheckout.PAGAMENTO_EFETUADO);
+        /**
+         * TODO altera o status do pagamento no banco de dados
+         */
+        return await checkoutPagamentoRepository.update(checkout, checkout.id);
+    }
+
+    static async CreateCheckout(checkout: Checkout, checkoutPagamentoRepository: IRepository, paymentMethodsRepositorio: IPaymentMethods, repositorioPedido: IPedido)
+    {
         try {
             let response = await paymentMethodsRepositorio.store(checkout);
-
             checkout.payload = JSON.stringify(response);
-            checkout.external_reference = response['id'];
 
             /**
              * atualizo o checkout de pagamento com o retorno de sucesso ou erro do gateway
@@ -71,9 +103,9 @@ export class CheckoutPagamento {
             }
 
             await checkoutPagamentoRepository.update(checkout, checkout.id);
-            pedido.setStatus(statusPedido.EM_PREPARACAO);
-            await repositorioPedido.update(pedido, pedido.id);
-
+            checkout.pedido.setStatus(statusPedido.EM_PREPARACAO);
+            await repositorioPedido.update(checkout.pedido, checkout.pedido.id);
+            
         } catch (err) {
             console.log(err)
             throw new Error("Não foi possível realiza o pagamento na MP.");

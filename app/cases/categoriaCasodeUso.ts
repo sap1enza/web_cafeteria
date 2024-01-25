@@ -1,4 +1,4 @@
-import IRepository from '../interfaces/IReporitory';
+import IRepository from '../interfaces/IRepository';
 export class CategoriaCasoDeUso{
 
     static async getAllCategorias(name, categoriaRepositorio: IRepository){

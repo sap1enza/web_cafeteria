@@ -1,4 +1,4 @@
-import IRepository from "./IReporitory";
+import IRepository from "./IRepository";
 
 export default interface IClienteRepository extends IRepository {
     findByCPF(cpf: string);

@@ -92,7 +92,7 @@ class PedidoRepository implements IPedido{
         let dataPedido  = await this.db.find(this.nomeTabela, null ,[{ campo: "id", valor: id,}]);
         let dataProduto  = await this.db.getProdutosDoPedido(id)
         if (dataPedido != null){
-            let cliente  = await new ClienteRepository(this.db).findById(dataPedido[0].customer_id) 
+            let cliente  = await new ClienteRepository(this.db).findById(dataPedido[0].customer_id);
             
             let pedido = new Pedido(
                 cliente,
@@ -102,9 +102,8 @@ class PedidoRepository implements IPedido{
             );
             dataProduto.forEach(produto => {
                  pedido.adicionarProduto(produto)   
-             });  
-             console.log(` aqui 3 ${dataPedido}`);
-             return pedido;
+            });  
+            return pedido;
         } else {
             return null;
         }

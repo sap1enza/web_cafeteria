@@ -1,5 +1,6 @@
-import IRepository from "./IReporitory";
+import IRepository from "./IRepository";
 
 export default interface ICheckout extends IRepository {
-    findByExternalReference(id: BigInteger)
+    findByExternalReference(uuid: string)
+    findByPedidoId(id: any)
 }
