@@ -1,15 +1,14 @@
 import { describe } from 'node:test';
 import { expect } from '@jest/globals';
 import { test, it, beforeAll, afterAll, jest } from '@jest/globals';
-import CheckoutPagamento from '../../../app/cases/checkoutPagamento';
 import CheckoutPagamentoRepository from '../../../app/gateways/CheckoutPagamentoRepository';
-import MysqlDataBase from '../../../app/application/database/MysqlDataBase';
+import MysqlDataBase from '../../../app/external/MysqlDataBase';
 import MPagamento from '../../../app/gateways/paymentsMethods/MercadoPago/MPagamento';
 import PedidoRepository from '../../../app/gateways/PedidoRepository';
-import Checkout from '../../../app/domain/entity/checkout';
-import Cartao from '../../../app/domain/entity/cartao';
-import Payer from '../../../app/domain/entity/payer';
-import PaymentoMethods from '../../../app/gateways/paymentsMethods/PaymentoMethods';
+import Checkout from '../../../app/entity/checkout';
+import Cartao from '../../../app/entity/cartao';
+import Payer from '../../../app/entity/payer';
+import PaymentoMethods from '../../../app/entity/enum/PaymentoMethods';
 
 
 describe("TEST use case Checkout Pagamento.", () =>{

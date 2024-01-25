@@ -11,11 +11,10 @@ services:
     ports:
       - 3000:3000
     environment:
-      MONGO_HOST: mongo
-      MONGO_USER: root
       MONGO_PASS: projeto-pedido
       MONGO_PORT: 27017
       MONGO_COLLECTION: admin
+
       CHOKIDAR_USEPOLLING: "true"
       MARIADB_HOST: ${MARIADB_HOST}
       MARIADB_USER: ${MARIADB_USER}
@@ -48,10 +47,10 @@ services:
     volumes:
       - mariadb-data:/var/lib/mysql
     environment:
-      MARIADB_DATABASE: ${MARIADB_DATABASE}
-      MARIADB_USER: ${MARIADB_USER}
-      MARIADB_PASSWORD: ${MARIADB_PASS}
-      MARIADB_ROOT_PASSWORD: ${MARIADB_PASS}
+      MARIADB_DATABASE: projeto-pedidos
+      MARIADB_USER: root
+      MARIADB_PASSWORD: 12345678
+      MARIADB_ROOT_PASSWORD: 12345678
     ports:
       - 3321:3306
 

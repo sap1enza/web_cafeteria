@@ -28,7 +28,7 @@ spec:
           - name: MARIADB_USER
             value: root
           - name: MARIADB_PASS
-            value : "123456"
+            value : qwe1234
           - name: MARIADB_DATABASE
             value: projeto-pedidos
           - name: MARIADB_PORT

@@ -1,12 +1,14 @@
 import * as express from "express";
-import PedidoController from "../controllers/PedidoController";
+import PedidoController from "../../../controllers/PedidoController";
+import { IDataBase } from "../../../interfaces/IDataBase";
 
-let router = express.Router();
-
-router.get('/pedidos', PedidoController.all);
-router.post('/pedidos', PedidoController.store);
-router.get('/pedidos/:id', PedidoController.show);
-router.put('/pedidos/update/:id', PedidoController.update);
-router.delete('/pedidos/:id', PedidoController.delete);
-
-export default router;
+export default function PedidoRoutes(dbconnection: IDataBase) {
+    let router = express.Router();
+    const pedidoController = new PedidoController(dbconnection);
+    router.get('/pedidos', pedidoController.all);
+    router.post('/pedidos', pedidoController.store);
+    router.get('/pedidos/:id', pedidoController.show);
+    router.put('/pedidos/update/:id', pedidoController.update);
+    router.delete('/pedidos/:id', pedidoController.delete);
+    return router;
+}

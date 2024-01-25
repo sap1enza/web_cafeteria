@@ -2,11 +2,11 @@ import { describe } from 'node:test';
 import { expect } from '@jest/globals';
 import { test } from '@jest/globals';
 
-import Cliente from '../../../app/domain/entity/cliente';
-import Pedido from '../../../app/domain/entity/pedido';
-import { statusPedido } from '../../../app/domain/entity/enum/statusPedido';
-import Produto from '../../../app/domain/entity/produto';
-import Categoria from '../../../app/domain/entity/categoria';
+import Cliente from '../../../app/entity/cliente';
+import Pedido from '../../../app/entity/pedido';
+import { statusPedido } from '../../../app/entity/enum/statusPedido';
+import Produto from '../../../app/entity/produto';
+import Categoria from '../../../app/entity/categoria';
 
 describe("Validando Pedido", () => {
     test("Cria Pedido sem Cliente", () => {

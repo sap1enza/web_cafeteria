@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken';
-import User from '../../domain/entity/user';
+import User from '../../entity/user';
 
 class JWT{
 

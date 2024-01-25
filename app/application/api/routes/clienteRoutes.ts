@@ -1,14 +1,17 @@
 import * as express from "express";
-import ClienteController from "../controllers/ClienteController";
+import ClienteController from "../../../controllers/ClienteController";
+import { IDataBase } from '../../../interfaces/IDataBase';
 
-let router = express.Router();
+export default function ClienteRoutes(dbconnection: IDataBase) {
+    const router = express.Router();
+    const clienteController = new ClienteController(dbconnection);
+    router.get('/cliente', clienteController.all);
+    router.post('/cliente', clienteController.store);
+    router.get('/cliente/:id', clienteController.show);
+    router.get('/cliente/:cpfcnpj/identify', clienteController.identifyByCPF);
+    router.put('/cliente/:id', clienteController.update);
+    router.delete('/cliente/:id', clienteController.delete);
+    return router;
+}
 
-router.get('/cliente', ClienteController.all);
-router.post('/cliente', ClienteController.store);
-router.get('/cliente/:id', ClienteController.show);
-router.get('/cliente/:cpfcnpj/identify', ClienteController.identifyByCPF);
-router.put('/cliente/:id', ClienteController.update);
-router.delete('/cliente/:id', ClienteController.delete);
-
-
-export default router;
+//export default router;

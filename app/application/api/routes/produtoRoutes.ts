@@ -1,14 +1,19 @@
 import * as express from "express";
-import ProdutoController from "../controllers/ProdutoController";
-
-let router = express.Router();
-
-router.get('/produto', ProdutoController.all);
-router.post('/produto', ProdutoController.store);
-router.get('/produto/:id', ProdutoController.show);
-router.put('/produto/:id', ProdutoController.update);
-router.delete('/produto/:id', ProdutoController.delete);
-router.get('/produto/categoria/:category_id', ProdutoController.getByidCategory);
+import ProdutoController from "../../../controllers/ProdutoController";
+import { IDataBase } from "../../../interfaces/IDataBase";
 
 
-export default router;
+export default function produtoRoutes(dbconnection: IDataBase) {
+    let router = express.Router();
+    const produtoController = new ProdutoController(dbconnection);
+
+    router.get('/produto', produtoController.all);
+    router.post('/produto', produtoController.store);
+    router.get('/produto/:id', produtoController.show);
+    router.put('/produto/:id', produtoController.update);
+    router.delete('/produto/:id', produtoController.delete);
+    router.get('/produto/categoria/:category_id', produtoController.getByidCategory);
+    return router;
+}
+
+//export default router;

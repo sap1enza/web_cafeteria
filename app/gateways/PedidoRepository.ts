@@ -1,46 +1,56 @@
-import Pedido from "../domain/entity/pedido";
+import Pedido from "../entity/pedido";
 import ClienteRepository from "./ClienteRepository";
-import IRepository from "./IReporitory";
-import Produto from '../domain/entity/produto';
+import IPedido from "../interfaces/IPedido";
+import Produto from '../entity/produto';
+import { IDataBase } from "../interfaces/IDataBase";
+import produtoRoutes from '../application/api/routes/produtoRoutes';
 
-class PedidoRepository extends IRepository{
+class PedidoRepository implements IPedido{
+   
+    public db: IDataBase;
+    private nomeTabela = "pedidos";
+    
+    constructor(database: IDataBase) {
+        this.db = database;
+      }
 
     public getAll = async (params: any) => {
         let CONDITIONS = "";
-        console.log(params);
-        if (typeof params.status != 'undefined' && params.status != "") {
-            CONDITIONS += ` status LIKE '%${params.status}%' `;
-        }
+        let data;
+        if (typeof params.status != 'undefined' && params.status != "" && !isNaN(params.status)) {
 
-        if (CONDITIONS != "") {
-            CONDITIONS = ' WHERE ' + CONDITIONS;
-            CONDITIONS +=" AND status != 4 order by status desc, created desc";
+           //console.log(params.status);
+            data = await this.db.find(
+                this.nomeTabela,
+                null,
+                [{ campo: "status", valor: 4, condition:"!=", order: "status desc, created desc"},{
+                    campo: "status",valor: parseInt(params.status)}]);
+
+                    return data;
         }
         else{
-            CONDITIONS =" WHERE status != 4 order by status desc, created desc";
+            data = await this.db.find(
+                this.nomeTabela,
+                null,
+                [{ campo: "status", valor: 4, condition:"!=", order: "status desc, created desc"}]);
+                
+                return data;
+     
         }
-       
-        return await this.db.find(`SELECT * FROM pedidos  ${CONDITIONS};`);
 
-        // return await this.db.find(`SELECT p.id AS pedido_id, p.customer_id, p.status AS pedido_status,
-        // pp.product_id, pp.created, pp.modified FROM pedidos p inner join pedido_produtos pp on p.id=pp.order_id  ${CONDITIONS};`);
     }
 
     public store = async(pedido: Pedido) => {
         console.log(pedido.cliente.id, pedido.getStatus(), pedido.getValorTotal());
-        
         let data = await this.db.store(
-            `INSERT INTO pedidos
-                (customer_id, status, total_value, created, modified)
-             VALUES
-                (
-                    ?,
-                    ?,
-                    ?,
-                    NOW(),
-                    NOW()
-                );
-            `, [pedido.cliente.id, pedido.getStatus(), pedido.getValorTotal()]);
+            this.nomeTabela,
+            [{ campo: "customer_id", valor: pedido.cliente.id }, 
+            { campo: "status", valor: pedido.getStatus() },
+            { campo: "total_value", valor: pedido.getValorTotal() },
+            { campo: "created", valor:  new Date()}, 
+            { campo: "modified", valor: new Date() }]);
+        
+            console.log(data);
         return new Pedido(
             pedido.cliente,
             pedido.getStatus(),
@@ -49,23 +59,22 @@ class PedidoRepository extends IRepository{
     }
 
     public adicionarProdutoAoPedido = async (pedidoId: Pedido, produtoId: Produto) => {
-        let data = await this.db.store( `
-            INSERT INTO pedido_produtos (order_id, product_id, created, modified)
-            VALUES (?, ?, NOW(), NOW());
-        `,[pedidoId, produtoId]);
+        let data =await this.db.store(
+            "pedido_produtos",
+            [{ campo: "order_id", valor: pedidoId },{ campo: "product_id", valor: produtoId }, { campo: "created", valor:  new Date()}, { campo: "modified", valor: new Date() }]);
+        
 
         return data.insertId;
     }
 
     public update = async (pedido: Pedido, id: BigInteger) => {
-        await this.db.store(
-            `UPDATE pedidos SET
-                customer_id = ?,
-                status = ?,
-                total_value = ?,
-                modified = NOW()
-            WHERE id = ?;
-            `, [pedido.cliente.id, pedido.getStatus(), pedido.getValorTotal(), id]);
+        this.db.update(
+            this.nomeTabela,
+            [{ campo: "customer_id", valor: pedido.cliente[0].id }, 
+            { campo: "status", valor: pedido.getStatus() }, 
+            { campo: "total_value", valor: pedido.getValorTotal() } ,
+            { campo: "modified", valor: new Date() }],
+            [{ campo: "id", valor: id }]);  
         return new Pedido(
             pedido.cliente,
             pedido.getStatus(),
@@ -74,26 +83,26 @@ class PedidoRepository extends IRepository{
     }
 
     public delete = async (id: BigInteger) => {
-        return await this.db.delete(`DELETE FROM pedidos where id = ${id};`);
+        return await this.db.delete(
+            this.nomeTabela,
+            [{ campo: "id", valor: id }]);
     }
 
     public findById = async (id: BigInteger) : Promise<Pedido> => {
-        let data = await this.db.find(`SELECT * FROM pedidos where id = ${id};`);
-        let dataPedidos: Produto[] = await this.db.find(`SELECT p.* FROM pedido_produtos pp
-                                                          inner join  produto p 
-                                                          on pp.product_id= p.id
-                                                          where pp.order_id = ${id};`);
-        if (data.length>0) {
-            let cliente = await new ClienteRepository(this.db).findById(data[0].customer_id)
+        let dataPedido  = await this.db.find(this.nomeTabela, null ,[{ campo: "id", valor: id,}]);
+        let dataProduto  = await this.db.getProdutosDoPedido(id)
+        if (dataPedido != null){
+            let cliente  = await new ClienteRepository(this.db).findById(dataPedido[0].customer_id);
+            
             let pedido = new Pedido(
                 cliente,
-                data[0].status,
-                data[0].id,
-                data[0].valorTotal
+                dataPedido[0].status,
+                dataPedido[0].id,
+                dataPedido[0].valorTotal
             );
-             dataPedidos.forEach(produto => {
+            dataProduto.forEach(produto => {
                  pedido.adicionarProduto(produto)   
-             });  
+            });  
             return pedido;
         } else {
             return null;

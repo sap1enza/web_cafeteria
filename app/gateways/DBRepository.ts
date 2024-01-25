@@ -1,4 +1,4 @@
-import IRepository from "./IReporitory";
+import IRepository from "../interfaces/IRepository";
 
 class DBRepository extends IRepository
 {

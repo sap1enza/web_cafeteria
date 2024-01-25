@@ -1,6 +1,6 @@
 import configs from "../application/core/configs";
 import JWT from "../application/core/jwt";
-import User from "../domain/entity/user";
+import User from "../entity/user";
 
 class UsuarioCasoDeUso{
 

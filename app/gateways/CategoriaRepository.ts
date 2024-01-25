@@ -1,42 +1,69 @@
-import Categoria from "../domain/entity/categoria";
-import IRepository from "./IReporitory";
+import Categoria from "../entity/categoria";
+import IRepository from "../interfaces/IRepository";
+import { IDataBase } from "../interfaces/IDataBase";
 
-class CategoriaRepository extends IRepository{
-    
+class CategoriaRepository implements IRepository {
+    public db: IDataBase;
+
+    constructor(database: IDataBase) {
+        // super(database);
+        this.db = database;
+    }
+    private nomeTabela = "categoria";
+
     async getAll(params) {
-        let CONDITIONS = "";
+
+        let CONDITIONS = false;
+        let result;
         if (typeof params.name != 'undefined' && params.name != "") {
-            CONDITIONS += ` name LIKE '%${params.name}%' `;
+            CONDITIONS = true;
         }
 
-        if (CONDITIONS != "") {
-            CONDITIONS = ' WHERE ' + CONDITIONS;
+        if (!CONDITIONS) {
+            result = await this.db.find(
+                this.nomeTabela,
+                null,
+                null
+            );
+        }
+        else {
+            result = await this.db.find(
+                this.nomeTabela,
+                null,
+                [{ campo: "name", valor: params.name}]
+            );
         }
 
-        return await this.db.find(`SELECT * FROM categoria ${CONDITIONS};`);
+        if (result === null || result === undefined) return null;
+        if (result.length < 1) return null;
+
+        const row: Categoria[] = result;
+        return row;
     }
 
     async update(params: Categoria, id) {
-        await this.db.store(
-            `UPDATE categoria SET
-                name = ?,
-                modified = NOW()
-             WHERE id = ?;
-            `, [params.name, id]); 
-        return new Categoria(params.name, id);
+        this.db.update(
+            this.nomeTabela,
+            [{ campo: "name", valor: params.name }, { campo: "modified", valor: new Date() }],
+            [{ campo: "id", valor: id }]);
+        return new Categoria(params.name, id,);
     }
 
     async store(params: Categoria) {
-        let data = await this.db.store(
-            `INSERT INTO categoria 
-                (name,created, modified) 
-             VALUES 
-                (
-                    ?,
-                    NOW(), 
-                    NOW()
-                );
-            `, [params.name]); 
+        let data =await this.db.store(
+            this.nomeTabela,
+            [{ campo: "name", valor: params.name }, { campo: "created", valor:  new Date()}, { campo: "modified", valor: new Date() }]);
+        
+        // let data = await this.db.store(
+        //     `INSERT INTO categoria 
+        //         (name,created, modified) 
+        //      VALUES 
+        //         (
+        //             ?,
+        //             NOW(), 
+        //             NOW()
+        //         );
+        //     `, [params.name], new Date());
         return new Categoria(
             params.name,
             parseInt(data.insertId)
@@ -44,15 +71,21 @@ class CategoriaRepository extends IRepository{
     }
 
     async delete(id) {
-        return await this.db.delete(`DELETE FROM categoria where id = ${id};`);
+        return await this.db.delete(
+            this.nomeTabela,
+            [{ campo: "id", valor: id }]);
     }
 
-    async findById(id) : Promise<Categoria> {
-        let data = await this.db.find(`SELECT * FROM categoria where id = ${id};`);
-        if (data.length>0) {
+    async findById(id): Promise<Categoria> {
+        let data = await this.db.find(
+            this.nomeTabela,
+            null,
+            [{ campo: "id", valor: id }]);
+        if (data.length > 0) {
             return new Categoria(data[0].name, data[0].id);
-        } 
-        return new Categoria();
+        }
+        else
+            return null;
     }
 
 }

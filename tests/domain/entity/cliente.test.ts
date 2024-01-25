@@ -2,7 +2,7 @@ import { describe } from 'node:test';
 import { expect } from '@jest/globals';
 import { test } from '@jest/globals';
 
-import cliente from '../../../app/domain/entity/cliente';
+import cliente from '../../../app/entity/cliente';
 
 describe("Validando Entity Cliente", () => {
     test("Instanciar Cliente", () => {
