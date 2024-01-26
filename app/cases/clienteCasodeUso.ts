@@ -10,7 +10,7 @@ export class ClienteCasoDeUso{
 
     static async criarCliente(cliente : Cliente, clienteRepositorio: ICliente) {
         let cpf_cnpj = await clienteRepositorio.findByCPF(cliente.cpf_cnpj);
-        let email = await clienteRepositorio.findByCPF(cliente.email);
+        let email = await clienteRepositorio.findByEmail(cliente.email);
         if (email != null) {
             throw new BadRequestError("E-mail já cadastrado.");
         } else if (cpf_cnpj != null) {
@@ -21,7 +21,7 @@ export class ClienteCasoDeUso{
 
     static async atualizarCliente(cliente: Cliente, idCliente, clienteRepositorio: ICliente) {
         let dataCliente = await clienteRepositorio.findById(idCliente);
-        
+
         cliente = await clienteRepositorio.update(cliente, idCliente);
         return cliente;
     }
