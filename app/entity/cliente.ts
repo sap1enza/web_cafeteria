@@ -1,4 +1,5 @@
 import {cpf} from 'cpf-cnpj-validator';
+import BadRequestError from '../application/exception/BadRequestError';
 
 class Cliente{
 
@@ -10,21 +11,21 @@ class Cliente{
         readonly cpf_cnpj? : string
     ) {
         if (name==null || name=="") {
-            throw new Error("Nome do cliente é obrigatório.");
+            throw new BadRequestError("Nome do cliente é obrigatório.");
         }
         if (email==null || email=="") {
-            throw new Error("E-mail do cliente é obrigatório.");
+            throw new BadRequestError("E-mail do cliente é obrigatório.");
         }
         if (!this.isValidEmail()) {
-            throw new Error("E-mail do cliente é inválido.");
+            throw new BadRequestError("E-mail do cliente é inválido.");
         }
         if (cpf_cnpj==null || cpf_cnpj=="") {
-            throw new Error("CPF do cliente é obrigatório.");
+            throw new BadRequestError("CPF do cliente é obrigatório.");
         }
         this.cpf_cnpj = String(cpf_cnpj).replace(".", "").replace("-", "").replace(".", "");
 
         if (!this.isValidCpf()) {
-            throw new Error("CPF do cliente é inválido.");
+            throw new BadRequestError("CPF do cliente é inválido.");
         }
     }
 

@@ -23,10 +23,16 @@ class ClienteController{
      */
     public all = async (request, response) => {
         try {
-            let data = await ClienteCasoDeUso.getAllClientes(request.query,this.repository);
-            response.status(HttpStatus.OK).json(ResponseAPI.list(data));
+
+            let cliente = await ClienteCasoDeUso.getAllClientes(request.query,this.repository);
+            response.status(HttpStatus.OK).json(ResponseAPI.list(cliente));
+
         } catch(err) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message)); 
+            if (err instanceof BadRequestError) {
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
+            } else if (err instanceof Error) {
+                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
+            } 
         }
     }
 
@@ -44,13 +50,9 @@ class ClienteController{
                 request.body.cpf_cnpj
             );
             
-            try {
-                cliente = await ClienteCasoDeUso.criarCliente(cliente, this.repository);
-                response.status(HttpStatus.OK).json(cliente);
-                
-            } catch(err) {
-                    response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            }
+            cliente = await ClienteCasoDeUso.criarCliente(cliente, this.repository);
+            response.status(HttpStatus.OK).json(cliente);
+
         } catch (err) {
             if (err instanceof BadRequestError) {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
@@ -67,13 +69,16 @@ class ClienteController{
      */
     public update = async (request, response) => {
         try {
+
             let cliente = new Cliente(
                 request.body.name,
                 request.body.email,
                 request.body.cpf_cnpj,
             );
+
             cliente = await ClienteCasoDeUso.atualizarCliente(cliente, request.params.id,this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(cliente));
+
         } catch (err) {
             if (err instanceof BadRequestError) {
                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
@@ -90,16 +95,20 @@ class ClienteController{
      */
     public show = async (request, response) => {
         try {
-            if (typeof request.params.id == 'undefined') {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
+
+            if (typeof request.params.id == 'undefined' || request.params.id == "") {
+                throw new BadRequestError("ID do registro é requerido.");
             }
-            let data = await ClienteCasoDeUso.encontrarClientePorId(request.params.id,this.repository);
-            response.status(HttpStatus.OK).json(ResponseAPI.data(data));
+
+            let cliente = await ClienteCasoDeUso.encontrarClientePorId(request.params.id, this.repository);
+            response.status(HttpStatus.OK).json(ResponseAPI.data(cliente));
+
         } catch (err) {
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .json(
-                ResponseAPI.error(err.message)
-            );
+            if (err instanceof BadRequestError) {
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
+            } else if (err instanceof Error) {
+                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
+            } 
         }
     }
 
@@ -110,11 +119,14 @@ class ClienteController{
      */
     public identifyByCPF = async (request, response) => {
         try {
-            if (typeof request.params.cpfcnpj == 'undefined' || request.params.cpfcnpj == "") {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "CPF do registro é requerido."));
+
+            if (typeof request.params.id == 'undefined' || request.params.id == "") {
+                throw new BadRequestError("CPF do registro é requerido.");
             }
-            let data = await this.repository.findByCPF(request.params.cpfcnpj);
-            response.status(HttpStatus.OK).json(ResponseAPI.data(data));
+
+            let cliente = await this.repository.findByCPF(request.params.cpfcnpj);
+            response.status(HttpStatus.OK).json(ResponseAPI.data(cliente));
+
         } catch (err) {
             response.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .json(

@@ -80,6 +80,7 @@ export class MysqlDataBase implements IDataBase {
     async query(query: string) {
         return await this.db.conn().query(query)
     }
+    
     async find(nomeTabela: string, campos: string[] | null, parametros: ParametroBd[]){
         const camposBusca = this.ajustarCamposExpressao(campos);
         const parametrosBusca = this.prepararParametrosBusca(parametros);
