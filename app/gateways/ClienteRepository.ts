@@ -7,9 +7,8 @@ class ClienteRepository implements ICliente
     public db: IDataBase;
     private nomeTabela = "cliente";
     constructor(database: IDataBase) {
-       // super(database);
         this.db = database;
-      }
+    }
 
     public getAll = async (params) => {
         let CONDITIONS = false;
@@ -48,8 +47,6 @@ class ClienteRepository implements ICliente
 
         const row: Cliente[] = result;
         return row;
-
-        //return await this.db.find(`SELECT * FROM cliente ${CONDITIONS};`);
     }
 
     public update = async (cliente: Cliente, id: BigInteger) => {
@@ -86,17 +83,50 @@ class ClienteRepository implements ICliente
             this.nomeTabela,
             null,
             [{ campo: "id", valor: id }]);
-           return data;
-
+        if (data!=null && data.length > 0) {
+            let cliente = new Cliente(
+                data[0].name,
+                data[0].email,
+                data[0].cpf_cnpj,
+            );
+            cliente.id = data[0].id;
+            return cliente;
+        } else {
+            return null;
+        }
     }
 
-    public findByCPF = async (cpf_cnpj: String) => {
+    public findByCPF = async (cpf_cnpj: string) : Promise<Cliente> => {
         let data = await this.db.find(
             this.nomeTabela,
             null,
             [{ campo: "cpf_cnpj", valor: cpf_cnpj }]);
-        if (data.length>0) {
-            return data[0];
+        if (data!=null && data.length > 0) {
+            let cliente = new Cliente(
+                data[0].name,
+                data[0].email,
+                data[0].cpf_cnpj,
+            );
+            cliente.id = data[0].id;
+            return cliente;
+        } else {
+            return null;
+        }
+    }
+
+    public findByEmail = async (email: string) : Promise<Cliente> => {
+        let data = await this.db.find(
+            this.nomeTabela,
+            null,
+            [{ campo: "email", valor: email }]);
+        if (data!=null && data.length > 0) {
+            let cliente = new Cliente(
+                data[0].name,
+                data[0].email,
+                data[0].cpf_cnpj,
+            );
+            cliente.id = data[0].id;
+            return cliente;
         } else {
             return null;
         }
