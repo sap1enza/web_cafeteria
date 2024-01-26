@@ -1,10 +1,10 @@
 import Cliente from '../entity/cliente';
+import { statusPedido } from '../entity/enum/statusPedido';
 import Pedido from '../entity/pedido';
 import Produto from '../entity/produto';
 import IClienteRepository from '../interfaces/ICliente';
 import IPedido from '../interfaces/IPedido';
 import IProduto from '../interfaces/IProduto';
-import IRepository from '../interfaces/IRepository';
 
 export class PedidoCasoDeUso{
 
@@ -17,16 +17,25 @@ export class PedidoCasoDeUso{
         const Pedido = await pedidoRepositorio.store(request);
         return Pedido;
     }
+
     static async atualizarPedido(request, idPedido, pedidoRepositorio: IPedido){
         const Pedido = await pedidoRepositorio.update(request, idPedido);
         return Pedido;
     }
+
     static async encontrarPedidoPorId(idPedido, pedidoRepositorio: IPedido){
         const Pedido = await pedidoRepositorio.findById(idPedido);
         return Pedido;
     }
 
-    static async adicionarProdutoPedido(request, clienteRepositorio: IClienteRepository,produtoRepositorio: IProduto, pedidoRepositorio: IPedido){
+    static pedidoEmPreparacao = async (pedido: Pedido, pedidoRepositorio: IPedido) => {
+
+        pedido.setStatus(statusPedido.EM_PREPARACAO);
+        return await pedidoRepositorio.update(pedido, pedido.id);
+
+    }
+
+    static adicionarProdutoPedido = async(request, clienteRepositorio: IClienteRepository,produtoRepositorio: IProduto, pedidoRepositorio: IPedido) => {
         try {
             let customer: Cliente = await clienteRepositorio.findById(request.body.client_id);
             let produtos: Produto[] = await produtoRepositorio.findByMultipleIds(request.body.produtosIds);
@@ -63,6 +72,7 @@ export class PedidoCasoDeUso{
             throw new Error(err.message)
         }
     }
+
     static async deletePedido(idPedido, PedidoRepositorio: IPedido){
                 const Pedido = await PedidoRepositorio.delete(idPedido);
         return Pedido;

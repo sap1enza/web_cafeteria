@@ -86,30 +86,25 @@ export class CheckoutPagamento {
         /**
          * TODO altera o status do pagamento no banco de dados
          */
-        return await checkoutPagamentoRepository.update(checkout, checkout.id);
+        await checkoutPagamentoRepository.update(checkout, checkout.id);
+
+        return checkout;
     }
 
-    static async CreateCheckout(checkout: Checkout, checkoutPagamentoRepository: IRepository, paymentMethodsRepositorio: IPaymentMethods, repositorioPedido: IPedido)
-    {
+    static CreateCheckout = async(
+        checkout: Checkout, 
+        checkoutPagamentoRepository: IRepository, 
+        paymentMethodsRepositorio: IPaymentMethods
+    ) => {
         try {
-            let response = await paymentMethodsRepositorio.store(checkout);
-            checkout.payload = JSON.stringify(response);
+            checkout = await paymentMethodsRepositorio.store(checkout);
 
-            /**
-             * atualizo o checkout de pagamento com o retorno de sucesso ou erro do gateway
-             */
-            if (paymentMethodsRepositorio.aguardandoPagamento()) {
-                checkout.setStatus(StatusCheckout.AGUARDANDO_CONFIMACAO_PAGAMENTO);
-            }
-
-            await checkoutPagamentoRepository.update(checkout, checkout.id);
-            checkout.pedido.setStatus(statusPedido.EM_PREPARACAO);
-            await repositorioPedido.update(checkout.pedido, checkout.pedido.id);
+            await checkoutPagamentoRepository.store(checkout);
             
+            return checkout;
         } catch (err) {
-            console.log(err)
-            throw new Error("Não foi possível realiza o pagamento na MP.");
+            throw new Error(err);
         }
     }
         
-    }
+}

@@ -45,7 +45,7 @@ class MPagamento implements IPaymentMethods {
         return this.response['status_detail'] == 'pending_waiting_transfer';
     }
 
-    public store = async (checkout: Checkout) => {
+    public store = async (checkout: Checkout) : Promise<Checkout> => {
         if (checkout.metodoPagamento.payment_method_id == PaymentoMethods.PIX) {
             return await this.pix(checkout);
         } else if (checkout.metodoPagamento.payment_method_id == PaymentoMethods.CARD_DEBIT) {
@@ -55,7 +55,7 @@ class MPagamento implements IPaymentMethods {
         }
     }
 
-    pix = async (checkout : Checkout) => {
+    pix = async (checkout : Checkout) : Promise<Checkout> => {
         const response =  await fetch(`${this.url}payments`,{
             method: 'POST',
             body: JSON.stringify({
@@ -76,19 +76,27 @@ class MPagamento implements IPaymentMethods {
         });
 
         if (response.status >= 300) {
-            throw new Error(response.statusText);
+            throw new Error("Não foi possível realiza o pagamento na MP.");
         }
 
         this.response = await response.json();
+        checkout.payload = JSON.stringify(this.response);
+
+        /**
+         * atualizo o checkout de pagamento com o retorno de sucesso ou erro do gateway
+         */
+        if (this.aguardandoPagamento()) {
+            checkout.setStatus(StatusCheckout.AGUARDANDO_CONFIMACAO_PAGAMENTO);
+        }
 
         console.log('========================================================================================')
         console.log(`Payment QR Code:`, this.response['point_of_interaction']['transaction_data']['ticket_url'])
         console.log('========================================================================================')
 
-        return this.response;
+        return checkout;
     }
 
-    card = async (checkout : Checkout) => {
+    card = async (checkout : Checkout) : Promise<Checkout> => {
         throw new Error("Method not implemented.");
     }
 

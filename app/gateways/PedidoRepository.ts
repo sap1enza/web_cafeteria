@@ -12,21 +12,20 @@ class PedidoRepository implements IPedido{
     
     constructor(database: IDataBase) {
         this.db = database;
-      }
+    }
 
     public getAll = async (params: any) => {
         let CONDITIONS = "";
         let data;
         if (typeof params.status != 'undefined' && params.status != "" && !isNaN(params.status)) {
 
-           //console.log(params.status);
             data = await this.db.find(
                 this.nomeTabela,
                 null,
                 [{ campo: "status", valor: 4, condition:"!=", order: "status desc, created desc"},{
                     campo: "status",valor: parseInt(params.status)}]);
 
-                    return data;
+                return data;
         }
         else{
             data = await this.db.find(
