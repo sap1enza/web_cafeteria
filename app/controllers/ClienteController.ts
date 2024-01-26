@@ -4,20 +4,16 @@ import ResponseAPI from '../adapters/ResponseAPI';
 import Cliente from '../entity/cliente';
 import { IDataBase } from "../interfaces/IDataBase";
 import { ClienteCasoDeUso } from '../cases/clienteCasodeUso';
+import BadRequestError from '../application/exception/BadRequestError';
 class ClienteController{
 
-    /**
-     * 
-     */
-    private _dbconnection: IDataBase;
     private repository: ClienteRepository;
 
     /**
      * 
      */
     constructor(dbconnection: IDataBase) {
-        this._dbconnection = dbconnection;
-        this.repository = new ClienteRepository(this._dbconnection);
+        this.repository = new ClienteRepository(dbconnection);
     }
 
     /**
@@ -49,14 +45,18 @@ class ClienteController{
             );
             
             try {
-                let data = await ClienteCasoDeUso.criarCliente(cliente, this.repository);
-                response.status(HttpStatus.OK).json({message:'Cliente criado com sucesso!'});
+                cliente = await ClienteCasoDeUso.criarCliente(cliente, this.repository);
+                response.status(HttpStatus.OK).json(cliente);
                 
             } catch(err) {
                     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
             }
         } catch (err) {
-            response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message)); 
+            if (err instanceof BadRequestError) {
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
+            } else if (err instanceof Error) {
+                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
+            } 
         } 
     }
 
@@ -72,13 +72,14 @@ class ClienteController{
                 request.body.email,
                 request.body.cpf_cnpj,
             );
-            let data = await ClienteCasoDeUso.atualizarCliente(cliente, request.params.id,this.repository);
-            response.status(HttpStatus.OK).json(ResponseAPI.data(data));
+            cliente = await ClienteCasoDeUso.atualizarCliente(cliente, request.params.id,this.repository);
+            response.status(HttpStatus.OK).json(ResponseAPI.data(cliente));
         } catch (err) {
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .json(
-                ResponseAPI.error(err.message)
-            );
+            if (err instanceof BadRequestError) {
+                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
+            } else if (err instanceof Error) {
+                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
+            } 
         }
     }
 
