@@ -22,6 +22,10 @@ export class ClienteCasoDeUso{
     static async atualizarCliente(cliente: Cliente, idCliente, clienteRepositorio: ICliente) {
         let dataCliente = await clienteRepositorio.findById(idCliente);
 
+        if (dataCliente == null) {
+            throw new BadRequestError("Cliente não encontrado.");
+        }
+
         cliente = await clienteRepositorio.update(cliente, idCliente);
         return cliente;
     }

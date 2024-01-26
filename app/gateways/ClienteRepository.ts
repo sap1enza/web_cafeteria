@@ -7,9 +7,8 @@ class ClienteRepository implements ICliente
     public db: IDataBase;
     private nomeTabela = "cliente";
     constructor(database: IDataBase) {
-       // super(database);
         this.db = database;
-      }
+    }
 
     public getAll = async (params) => {
         let CONDITIONS = false;
@@ -48,8 +47,6 @@ class ClienteRepository implements ICliente
 
         const row: Cliente[] = result;
         return row;
-
-        //return await this.db.find(`SELECT * FROM cliente ${CONDITIONS};`);
     }
 
     public update = async (cliente: Cliente, id: BigInteger) => {
