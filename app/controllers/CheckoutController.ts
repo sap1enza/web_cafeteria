@@ -7,6 +7,8 @@ import MPagamento from '../gateways/paymentsMethods/MercadoPago/MPagamento';
 import CheckoutPagamentoRepository from '../gateways/CheckoutPagamentoRepository';
 import { IDataBase } from '../interfaces/IDataBase';
 import { CheckoutPagamento } from '../cases/checkoutPagamento';
+import { PedidoCasoDeUso } from '../cases/pedidoCasodeUso';
+import { StatusCheckout } from '../entity/enum/statusCheckout';
 
 
 class CheckoutController {
@@ -29,13 +31,12 @@ class CheckoutController {
     public store = async (request: Request, response: Response) => {
         try {
             let checkout = await CheckoutPagamento.instance(request, this.pedidoRepository)
-            let data = await CheckoutPagamento.CreateCheckout(
+            checkout = await CheckoutPagamento.CreateCheckout(
                 checkout, 
                 this.repository,
-                this.metodoPagamento,
-                this.pedidoRepository
+                this.metodoPagamento
             );
-            response.status(HttpStatus.OK).json(ResponseAPI.data(data));
+            response.status(HttpStatus.OK).json(ResponseAPI.data(checkout));
         } catch(err) {
             if (err instanceof Error) {
                 response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
@@ -49,21 +50,29 @@ class CheckoutController {
      * @param response 
      */
     public hook = async (request: Request, response: Response) => {
-        
-        if (typeof request.params.pedido_id == 'undefined') {
-            response.status(HttpStatus.BAD_REQUEST).json(
-                ResponseAPI.inputError("id", "ID do registro é requerido.")
+        try {
+            if (typeof request.params.pedido_id == 'undefined') {
+                response.status(HttpStatus.BAD_REQUEST).json(
+                    ResponseAPI.inputError("id", "ID do registro é requerido.")
+                );
+            }
+    
+            let checkout = await CheckoutPagamento.encontrarPagamentoPorIdPedido(
+                request.params.pedido_id,
+                this.repository,
+                this.pedidoRepository
             );
+    
+            checkout = await CheckoutPagamento.confirmPayment(checkout ,this.repository);
+            
+            if (checkout.getStatus() == StatusCheckout.PAGAMENTO_EFETUADO) {
+                PedidoCasoDeUso.pedidoEmPreparacao(checkout.pedido, this.pedidoRepository);
+            }
+            
+            response.status(HttpStatus.OK).json(ResponseAPI.data(checkout));
+        } catch (err) {
+            response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err));
         }
-
-        let checkout = await CheckoutPagamento.encontrarPagamentoPorIdPedido(
-            request.params.pedido_id,
-            this.repository,
-            this.pedidoRepository
-        );
-
-        await CheckoutPagamento.confirmPayment(checkout ,this.repository);
-        response.status(HttpStatus.OK).json(ResponseAPI.data(checkout));
     }
 
 
