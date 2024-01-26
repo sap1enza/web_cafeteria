@@ -11,11 +11,15 @@ import PaymentoMethods from '../entity/enum/PaymentoMethods';
 import IPedido from "../interfaces/IPedido";
 import IRepository from "../interfaces/IRepository";
 import ICheckout from "../interfaces/ICheckout";
+import BadRequestError from "../application/exception/BadRequestError";
 
 export class CheckoutPagamento {
 
     static instance = async(request, repositorioPedido: IPedido ) : Promise<Checkout> => {
         let pedido = await repositorioPedido.findById(request.body.pedido_id);
+        if (pedido==null) {
+            throw new BadRequestError("Pedido não existe ou não foi encontrado.");
+        }
         let payer = new Payer(
             request.body.cartao.payer.name,
             request.body.cartao.payer.email,
@@ -103,7 +107,7 @@ export class CheckoutPagamento {
             
             return checkout;
         } catch (err) {
-            throw new Error(err);
+            throw new Error(err.message);
         }
     }
         

@@ -90,7 +90,7 @@ class PedidoRepository implements IPedido{
     public findById = async (id: BigInteger) : Promise<Pedido> => {
         let dataPedido  = await this.db.find(this.nomeTabela, null ,[{ campo: "id", valor: id,}]);
         let dataProduto  = await this.db.getProdutosDoPedido(id)
-        if (dataPedido != null){
+        if (dataPedido != null && dataPedido.length > 0){
             let cliente  = await new ClienteRepository(this.db).findById(dataPedido[0].customer_id);
             
             let pedido = new Pedido(

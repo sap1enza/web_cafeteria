@@ -92,7 +92,6 @@ export class MysqlDataBase implements IDataBase {
         // console.log(sql);
         // console.log(parametrosBusca.valores);
         const rows = await this.db.conn().query(sql, parametrosBusca.valores);
-        //console.log(rows);
         return rows;
     }
     
