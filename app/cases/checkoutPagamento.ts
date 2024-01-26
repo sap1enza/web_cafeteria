@@ -99,12 +99,11 @@ export class CheckoutPagamento {
         try {
             checkout = await paymentMethodsRepositorio.store(checkout);
 
-            await checkoutPagamentoRepository.update(checkout, checkout.id);
+            await checkoutPagamentoRepository.store(checkout);
             
             return checkout;
         } catch (err) {
-            console.log(err)
-            throw new Error("Não foi possível realiza o pagamento na MP.");
+            throw new Error(err);
         }
     }
         

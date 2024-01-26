@@ -92,6 +92,7 @@ class CheckoutPagamentoRepository implements ICheckout
             { campo: "payer_email", valor: checkout.metodoPagamento.payer.email },
             { campo: "payer_document", valor: checkout.metodoPagamento.payer.document },
             { campo: "total_value", valor: checkout.pedido.getValorTotal() },
+            { campo: "payload", valor: checkout.payload },
             { campo: "created", valor:  new Date()}, 
             { campo: "modified", valor: new Date() }]);
         return new Checkout(

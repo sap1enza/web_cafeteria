@@ -76,16 +76,15 @@ class MPagamento implements IPaymentMethods {
         });
 
         if (response.status >= 300) {
-            throw new Error(response.statusText);
+            throw new Error("Não foi possível realiza o pagamento na MP.");
         }
 
         this.response = await response.json();
-
         checkout.payload = JSON.stringify(this.response);
 
         /**
-             * atualizo o checkout de pagamento com o retorno de sucesso ou erro do gateway
-             */
+         * atualizo o checkout de pagamento com o retorno de sucesso ou erro do gateway
+         */
         if (this.aguardandoPagamento()) {
             checkout.setStatus(StatusCheckout.AGUARDANDO_CONFIMACAO_PAGAMENTO);
         }
