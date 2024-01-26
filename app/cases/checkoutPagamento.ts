@@ -16,10 +16,16 @@ import BadRequestError from "../application/exception/BadRequestError";
 export class CheckoutPagamento {
 
     static instance = async(request, repositorioPedido: IPedido ) : Promise<Checkout> => {
+
+        if ([PaymentoMethods.PIX, PaymentoMethods.CARD_DEBIT].indexOf(request.body.payment_method_id) < 0) {
+            throw new BadRequestError(`Metodo de pagamento ${request.body.payment_method_id} não é aceito ou não encontrado.`);
+        }
+
         let pedido = await repositorioPedido.findById(request.body.pedido_id);
         if (pedido==null) {
             throw new BadRequestError("Pedido não existe ou não foi encontrado.");
         }
+        
         let payer = new Payer(
             request.body.cartao.payer.name,
             request.body.cartao.payer.email,
