@@ -7,6 +7,7 @@ import { IDataBase } from "../interfaces/IDataBase";
 import { PedidoCasoDeUso } from '../cases/pedidoCasodeUso';
 import ProdutoRepository from '../gateways/ProdutoRepository';
 import BadRequestError from '../application/exception/BadRequestError';
+import ResponseErrors from '../adapters/ResponseErrors';
 
 class PedidoController {
     
@@ -33,11 +34,7 @@ class PedidoController {
             let data = await PedidoCasoDeUso.getAllPedidos(request.query,this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.list(data));
         } catch(err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            } 
+            ResponseErrors.err(response, err);
         }
     }
 
@@ -57,11 +54,7 @@ class PedidoController {
             )
             response.status(HttpStatus.OK).json(ResponseAPI.data(orderResultId));
         } catch(err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            } 
+            ResponseErrors.err(response, err);
         }
     }
 
@@ -77,11 +70,7 @@ class PedidoController {
             let data = await PedidoCasoDeUso.atualizarPedido(order, request.params.id,this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            } 
+            ResponseErrors.err(response, err);
         }
     }
 
@@ -98,11 +87,7 @@ class PedidoController {
             let data = await PedidoCasoDeUso.encontrarPedidoPorId(request.params.id,this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            } 
+            ResponseErrors.err(response, err);
         }
     }
 
@@ -119,11 +104,7 @@ class PedidoController {
             await PedidoCasoDeUso.deletePedido(request.params.id,this.repository);
             response.status(HttpStatus.NO_CONTENT).json({});
         } catch (err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            } 
+            ResponseErrors.err(response, err);
         }
     }
 

@@ -6,6 +6,7 @@ import Categoria from '../entity/categoria';
 import { IDataBase } from "../interfaces/IDataBase";
 import { CategoriaCasoDeUso } from '../cases/categoriaCasodeUso';
 import BadRequestError from '../application/exception/BadRequestError';
+import ResponseErrors from '../adapters/ResponseErrors';
 
 
 
@@ -33,11 +34,7 @@ import BadRequestError from '../application/exception/BadRequestError';
             const data= await CategoriaCasoDeUso.getAllCategorias(request.query, this.repository)
             response.status(HttpStatus.OK).json(ResponseAPI.list(data));
         } catch (err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            }
+            ResponseErrors.err(response, err);
         }
     }
 
@@ -52,11 +49,7 @@ import BadRequestError from '../application/exception/BadRequestError';
             let data = await CategoriaCasoDeUso.criarCategoria(categoria, this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            }
+            ResponseErrors.err(response, err);
         } 
     }
 
@@ -71,11 +64,7 @@ import BadRequestError from '../application/exception/BadRequestError';
             let data = await CategoriaCasoDeUso.atualizarCategoria(categoria, request.params.id, this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.list(data));
         } catch (err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            }
+            ResponseErrors.err(response, err);
         } 
     }
 
@@ -92,11 +81,7 @@ import BadRequestError from '../application/exception/BadRequestError';
             let data = await CategoriaCasoDeUso.encontrarCategoriaPorId(request.params.id,this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            }
+            ResponseErrors.err(response, err);
         }
     }
 
@@ -113,11 +98,7 @@ import BadRequestError from '../application/exception/BadRequestError';
             await CategoriaCasoDeUso.deleteCategoria(request.params.id,this.repository);
             response.status(HttpStatus.NO_CONTENT).json({});
         } catch (err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            }
+            ResponseErrors.err(response, err);
         }
     }
 }
