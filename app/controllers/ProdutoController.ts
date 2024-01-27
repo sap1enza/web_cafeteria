@@ -120,7 +120,7 @@ class ProdutoController{
         } catch (err) {
             ResponseErrors.err(response, err);
         }
-}
+    }
 }
 
 export default ProdutoController;
