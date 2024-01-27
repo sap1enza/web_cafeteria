@@ -40,7 +40,6 @@ class PedidoRepository implements IPedido{
     }
 
     public store = async(pedido: Pedido) => {
-        console.log(pedido.cliente.id, pedido.getStatus(), pedido.getValorTotal());
         let data = await this.db.store(
             this.nomeTabela,
             [{ campo: "customer_id", valor: pedido.cliente.id }, 
@@ -48,8 +47,6 @@ class PedidoRepository implements IPedido{
             { campo: "total_value", valor: pedido.getValorTotal() },
             { campo: "created", valor:  new Date()}, 
             { campo: "modified", valor: new Date() }]);
-        
-            console.log(data);
         return new Pedido(
             pedido.cliente,
             pedido.getStatus(),
@@ -61,8 +58,6 @@ class PedidoRepository implements IPedido{
         let data =await this.db.store(
             "pedido_produtos",
             [{ campo: "order_id", valor: pedidoId },{ campo: "product_id", valor: produtoId }, { campo: "created", valor:  new Date()}, { campo: "modified", valor: new Date() }]);
-        
-
         return data.insertId;
     }
 
@@ -92,7 +87,6 @@ class PedidoRepository implements IPedido{
         let dataProduto  = await this.db.getProdutosDoPedido(id)
         if (dataPedido != null && dataPedido.length > 0){
             let cliente  = await new ClienteRepository(this.db).findById(dataPedido[0].customer_id);
-            
             let pedido = new Pedido(
                 cliente,
                 dataPedido[0].status,

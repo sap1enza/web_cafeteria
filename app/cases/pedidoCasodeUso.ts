@@ -9,30 +9,24 @@ import IProduto from '../interfaces/IProduto';
 export class PedidoCasoDeUso{
 
     static async getAllPedidos(request, pedidoRepositorio: IPedido){
-        const Pedidos = await pedidoRepositorio.getAll(request);
-        return Pedidos;
+        return await pedidoRepositorio.getAll(request);
     }
 
     static async criarPedido(request, pedidoRepositorio: IPedido){
-        const Pedido = await pedidoRepositorio.store(request);
-        return Pedido;
+        return await pedidoRepositorio.store(request);
     }
 
     static async atualizarPedido(request, idPedido, pedidoRepositorio: IPedido){
-        const Pedido = await pedidoRepositorio.update(request, idPedido);
-        return Pedido;
+        return await pedidoRepositorio.update(request, idPedido);
     }
 
     static async encontrarPedidoPorId(idPedido, pedidoRepositorio: IPedido){
-        const Pedido = await pedidoRepositorio.findById(idPedido);
-        return Pedido;
+        return await pedidoRepositorio.findById(idPedido);
     }
 
     static pedidoEmPreparacao = async (pedido: Pedido, pedidoRepositorio: IPedido) => {
-
         pedido.setStatus(statusPedido.EM_PREPARACAO);
         return await pedidoRepositorio.update(pedido, pedido.id);
-
     }
 
     static adicionarProdutoPedido = async(request, clienteRepositorio: IClienteRepository,produtoRepositorio: IProduto, pedidoRepositorio: IPedido) => {
