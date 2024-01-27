@@ -7,6 +7,7 @@ import CategoriaRepository from '../gateways/CategoriaRepository';
 import { IDataBase } from '../interfaces/IDataBase';
 import { ProdutoCasoDeUso } from '../cases/produtoCasodeUso';
 import BadRequestError from '../application/exception/BadRequestError';
+import ResponseErrors from '../adapters/ResponseErrors';
 
 
 class ProdutoController{
@@ -34,11 +35,7 @@ class ProdutoController{
              let data = await ProdutoCasoDeUso.getAllProdutos(request.query,this.repository);
              response.status(HttpStatus.OK).json(ResponseAPI.list(data));
          } catch(err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            } 
+            ResponseErrors.err(response, err);
          }
      }
 
@@ -53,11 +50,7 @@ class ProdutoController{
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
 
         } catch(err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            } 
+            ResponseErrors.err(response, err);
         }
      }
  
@@ -72,11 +65,7 @@ class ProdutoController{
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
 
         } catch(err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            } 
+            ResponseErrors.err(response, err);
         }
         
      }
@@ -94,11 +83,7 @@ class ProdutoController{
              let data = await ProdutoCasoDeUso.encontrarProdutoPorId(request.params.id,this.repository);
              response.status(HttpStatus.OK).json(ResponseAPI.data(data));
          } catch (err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            } 
+            ResponseErrors.err(response, err);
          }
      }
  
@@ -115,11 +100,7 @@ class ProdutoController{
              await ProdutoCasoDeUso.deleteProduto(request.params.id, this.repository);
              response.status(HttpStatus.NO_CONTENT).json({});
          } catch (err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            } 
+            ResponseErrors.err(response, err);
          }
      }
 
@@ -137,11 +118,7 @@ class ProdutoController{
             let data = await ProdutoCasoDeUso.findByCategory(request.params.category_id, this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            } 
+            ResponseErrors.err(response, err);
         }
 }
 }
