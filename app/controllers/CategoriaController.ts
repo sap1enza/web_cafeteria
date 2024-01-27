@@ -14,15 +14,13 @@ import BadRequestError from '../application/exception/BadRequestError';
     /**
      * 
      */
-    private _dbconnection: IDataBase;
     private repository: CategoriaRepository;
 
     /**
      * 
      */
     constructor(dbconnection: IDataBase) {
-        this._dbconnection = dbconnection;
-        this.repository = new CategoriaRepository(this._dbconnection);
+        this.repository = new CategoriaRepository(dbconnection);
     }
 
     /**
@@ -51,7 +49,7 @@ import BadRequestError from '../application/exception/BadRequestError';
     public store = async (request: Request, response: Response) => {
         try {
             let categoria = new Categoria(request.body.name);
-            let data = await CategoriaCasoDeUso.criarCategoria(categoria,this.repository);
+            let data = await CategoriaCasoDeUso.criarCategoria(categoria, this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
             if (err instanceof BadRequestError) {

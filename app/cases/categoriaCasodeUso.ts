@@ -1,25 +1,25 @@
+import Categoria from '../entity/categoria';
 import IRepository from '../interfaces/IRepository';
-export class CategoriaCasoDeUso{
+export class CategoriaCasoDeUso {
 
-    static async getAllCategorias(name, categoriaRepositorio: IRepository){
-        const categorias = await categoriaRepositorio.getAll(name);
+    static async getAllCategorias(query, categoriaRepositorio: IRepository){
+        const categorias = await categoriaRepositorio.getAll(query);
         return categorias;
     }
 
-    static async criarCategoria(name, categoriaRepositorio: IRepository){
-        const categorias = await categoriaRepositorio.store(name);
+    static async criarCategoria(categoria : Categoria, categoriaRepositorio: IRepository){
+        return await categoriaRepositorio.store(categoria);
+    }
+    static async atualizarCategoria(categoria : Categoria, id, categoriaRepositorio: IRepository){
+        const categorias = await categoriaRepositorio.update(categoria, id);
         return categorias;
     }
-    static async atualizarCategoria(name, idCategoria, categoriaRepositorio: IRepository){
-        const categorias = await categoriaRepositorio.update(name, idCategoria);
+    static async encontrarCategoriaPorId(id, categoriaRepositorio: IRepository){
+        const categorias = await categoriaRepositorio.findById(id);
         return categorias;
     }
-    static async encontrarCategoriaPorId(idCategoria, categoriaRepositorio: IRepository){
-        const categorias = await categoriaRepositorio.findById(idCategoria);
-        return categorias;
-    }
-    static async deleteCategoria(idCategoria, categoriaRepositorio: IRepository){
-        const categorias = await categoriaRepositorio.delete(idCategoria);
+    static async deleteCategoria(id, categoriaRepositorio: IRepository){
+        const categorias = await categoriaRepositorio.delete(id);
         return categorias;
     }
 
