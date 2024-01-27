@@ -64,7 +64,7 @@ class PedidoRepository implements IPedido{
     public update = async (pedido: Pedido, id: BigInteger) => {
         this.db.update(
             this.nomeTabela,
-            [{ campo: "customer_id", valor: pedido.cliente[0].id }, 
+            [{ campo: "customer_id", valor: pedido.cliente.id }, 
             { campo: "status", valor: pedido.getStatus() }, 
             { campo: "total_value", valor: pedido.getValorTotal() } ,
             { campo: "modified", valor: new Date() }],

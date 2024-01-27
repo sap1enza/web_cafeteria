@@ -111,7 +111,7 @@ class ProdutoRepository implements IProduto{
             null,
             [{ campo: "category_id", valor: category_id }]);
         if (data.length>0) {
-            return data[0];
+            return data;
         } else {
             return null;
         }

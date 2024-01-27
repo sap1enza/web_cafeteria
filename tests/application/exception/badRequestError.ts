@@ -8,7 +8,7 @@ describe("Teste de exception", () => {
         try {
             throw new BadRequestError("Deu Erro aqui");
         } catch (err) {
-            expect('BadRequestError').toBe(err instanceof BadRequestError);
+            expect(err).toBeInstanceOf(BadRequestError);
         }
     });
 });
