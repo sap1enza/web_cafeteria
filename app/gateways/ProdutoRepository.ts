@@ -26,16 +26,12 @@ class ProdutoRepository implements IProduto{
                 null,
                 null
             );
-        }
-        else{
+        } else{
             return await this.db.find(
                 this.nomeTabela,
                 null,
                 [{ campo: "title", valor: params.title }]);
-
         }
-
-        
     }
 
     public store = async(produto: Produto) => {
