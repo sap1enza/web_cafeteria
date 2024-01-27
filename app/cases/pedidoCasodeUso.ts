@@ -39,9 +39,8 @@ export class PedidoCasoDeUso{
         try {
             let customer: Cliente = await clienteRepositorio.findById(request.body.client_id);
             let produtos: Produto[] = await produtoRepositorio.findByMultipleIds(request.body.produtosIds);
-            
             let order = new Pedido(
-                customer[0],
+                customer,
                 request.body.status
             );
             try {
