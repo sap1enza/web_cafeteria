@@ -19,8 +19,8 @@ export class ClienteCasoDeUso{
         return await clienteRepositorio.store(cliente);
     }
 
-    static async atualizarCliente(cliente: Cliente, idCliente, clienteRepositorio: ICliente) {
-        let dataCliente = await clienteRepositorio.findById(idCliente);
+    static async atualizarCliente(cliente: Cliente, id, clienteRepositorio: ICliente) {
+        let dataCliente = await clienteRepositorio.findById(id);
 
         if (dataCliente == null) {
             throw new BadRequestError("Cliente não encontrado.");
@@ -40,21 +40,18 @@ export class ClienteCasoDeUso{
             }
         }
 
-        cliente = await clienteRepositorio.update(cliente, idCliente);
+        cliente = await clienteRepositorio.update(cliente, id);
         return cliente;
     }
-    static async encontrarClientePorId(idCliente, clienteRepositorio: ICliente){
-        const cliente = await clienteRepositorio.findById(idCliente);
-        return cliente;
+    static async encontrarClientePorId(id, clienteRepositorio: ICliente){
+        return await clienteRepositorio.findById(id);
     }
 
-    static async encontrarClientePorCPF(idCliente, clienteRepositorio: ICliente){
-        const cliente = await clienteRepositorio.findByCPF(idCliente);
-        return cliente;
+    static async encontrarClientePorCPF(id, clienteRepositorio: ICliente){
+        return await clienteRepositorio.findByCPF(id);
     }
-    static async deleteCliente(idCliente, clienteRepositorio: ICliente){
-        const cliente = await clienteRepositorio.delete(idCliente);
-        return cliente;
+    static async deleteCliente(id, clienteRepositorio: ICliente){
+        return await clienteRepositorio.delete(id);
     }
 
 }

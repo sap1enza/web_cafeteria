@@ -96,7 +96,7 @@ class ClienteController{
     public show = async (request, response) => {
         try {
 
-            if (typeof request.params.id == 'undefined' || request.params.id == "") {
+            if (typeof request.params.id == 'undefined' || request.params.id == "" || request.params.id == null) {
                 throw new BadRequestError("ID do registro é requerido.");
             }
 
@@ -120,7 +120,7 @@ class ClienteController{
     public identifyByCPF = async (request, response) => {
         try {
 
-            if (typeof request.params.id == 'undefined' || request.params.id == "") {
+            if (typeof request.params.cpfcnpj == 'undefined' || request.params.cpfcnpj == "") {
                 throw new BadRequestError("CPF do registro é requerido.");
             }
 
