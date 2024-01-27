@@ -27,6 +27,11 @@ spec:
           volumeMounts:
             - name: mariadb-data
               mountPath: /var/lib/mysql
+          resources:
+            limits:
+              cpu: "0.5"
+            requests:
+              cpu: 10m
       volumes:
         - name: mariadb-data
           persistentVolumeClaim:
