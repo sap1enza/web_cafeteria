@@ -62,14 +62,15 @@ class ClienteRepository implements ICliente
     }
 
     public store = async (cliente: Cliente) => {
-        return await this.db.store(
+        let data = await this.db.store(
             this.nomeTabela,
             [{ campo: "name", valor: cliente.name }, 
             { campo: "email", valor: cliente.email },
             { campo: "cpf_cnpj", valor: cliente.cpf_cnpj },
             { campo: "created", valor:  new Date()}, 
             { campo: "modified", valor: new Date() }]);
-         
+        cliente.id = parseInt(data.insertId);
+        return cliente;
     }
 
     public delete = async (id: BigInteger) => {
