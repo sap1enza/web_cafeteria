@@ -20,6 +20,7 @@ class Checkout {
     constructor(readonly pedido: Pedido, readonly metodoPagamento?: IMetodoPagamento, readonly id?) {
         this.uuid = uuidv4();
         this.status = StatusCheckout.AGUARDANDO_PAGAMENTO;
+        this.setPaymentMethod(metodoPagamento.payment_method_id);
     }
 
     public setPaymentMethod = (value: number) => {

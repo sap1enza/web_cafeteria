@@ -83,7 +83,8 @@ export class CheckoutPagamento {
 
         let checkout = new Checkout(
             pedido,
-            metodoPagamento
+            metodoPagamento,
+            data['id'],
         );
         return checkout;
     }
@@ -97,7 +98,6 @@ export class CheckoutPagamento {
          * TODO altera o status do pagamento no banco de dados
          */
         await checkoutPagamentoRepository.update(checkout, checkout.id);
-
         return checkout;
     }
 
