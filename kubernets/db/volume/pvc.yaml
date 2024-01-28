@@ -7,6 +7,6 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi  # Adjust the size based on your requirements
-  storageClassName: default  # Defina o nome da sua classe de armazenamento
-  volumeName: mariadb-data-volume  # Adicionado para referenciar o PersistentVolume correto
+      storage: 1Gi  
+  storageClassName: default 
+  volumeName: mariadb-data-volume 
