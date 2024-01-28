@@ -44,7 +44,7 @@ class PedidoController {
     public store = async (request, response) => {
         
         try {
-            const orderResultId = PedidoCasoDeUso.adicionarProdutoPedido(
+            const orderResultId =  await PedidoCasoDeUso.adicionarProdutoPedido(
                 request,
                 this.clienteRepository,
                 this.produtoRepository,

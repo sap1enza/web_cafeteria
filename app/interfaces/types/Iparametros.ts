@@ -1,6 +1,6 @@
 export interface parametros {
     restricao: string;
     valores: any[];
-    order: string;
+    order?: string;
     condition: string;
   }

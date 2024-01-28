@@ -45,22 +45,22 @@ export class PedidoCasoDeUso{
             );
             try {
 
-                produtos.forEach(produto => {
-                    order.adicionarProduto(produto);
-                       
-                });
-                
-                const orderResult
+                let orderResult
                  = await pedidoRepositorio.store(order);
                 
-                const promises = order.getProdutos().map(async (produto) => {
+                produtos.forEach(produto => {
+                    orderResult.adicionarProduto(produto);
+                });
+                
+                
+                const promises = orderResult.getProdutos().map(async (produto) => {
                     const data = await pedidoRepositorio.adicionarProdutoAoPedido(orderResult.id, produto.id);
                     return data;
                 });
 
                 await Promise.all(promises);
             
-        return orderResult.id;
+        return orderResult;
             } 
             catch(err) {
                 throw new Error(err.message)

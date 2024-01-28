@@ -22,7 +22,7 @@ class PedidoRepository implements IPedido{
             data = await this.db.find(
                 this.nomeTabela,
                 null,
-                [{ campo: "status", valor: 4, condition:"!=", order: "status desc, created desc"},{
+                [{ campo: "status", valor: 4, condition:"!=", order: "status desc, created asc"},{
                     campo: "status",valor: parseInt(params.status)}]);
 
                 return data;
@@ -31,7 +31,7 @@ class PedidoRepository implements IPedido{
             data = await this.db.find(
                 this.nomeTabela,
                 null,
-                [{ campo: "status", valor: 4, condition:"!=", order: "status desc, created desc"}]);
+                [{ campo: "status", valor: 4, condition:"!=", order: "status desc, created asc"}]);
                 
                 return data;
      
@@ -77,7 +77,8 @@ class PedidoRepository implements IPedido{
         return new Pedido(
             pedido.cliente,
             pedido.getStatus(),
-            id
+            id,
+            pedido.getValorTotal()
         );
     }
 
@@ -88,7 +89,7 @@ class PedidoRepository implements IPedido{
     }
 
     public findById = async (id: BigInteger) : Promise<Pedido> => {
-        let dataPedido  = await this.db.find(this.nomeTabela, null ,[{ campo: "id", valor: id,}]);
+        let dataPedido  = await this.db.find(this.nomeTabela, null ,[{ campo: "id", valor: id}]);
         let dataProduto  = await this.db.getProdutosDoPedido(id)
         if (dataPedido != null && dataPedido.length > 0){
             let cliente  = await new ClienteRepository(this.db).findById(dataPedido[0].customer_id);
