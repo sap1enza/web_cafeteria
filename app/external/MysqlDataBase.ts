@@ -57,7 +57,7 @@ export class MysqlDataBase implements IDataBase {
           ${parametrosBusca.restricao}
         `;
         nomesValores.push(parametrosBusca.valores);
-        
+        //console.log(sql);
         const rows = await this.db.conn().query(sql, nomesValores);
         return rows;
     }
@@ -77,15 +77,21 @@ export class MysqlDataBase implements IDataBase {
     }
     
     async find(nomeTabela: string, campos: string[] | null, parametros: ParametroBd[]){
+
         const camposBusca = this.ajustarCamposExpressao(campos);
         const parametrosBusca = this.prepararParametrosBusca(parametros);
+
+        //valida se o sql tera order by ou não 
+        let order = parametrosBusca.order === "Order by "? "":parametrosBusca.order;
 
         const sql = `
           SELECT ${camposBusca} 
           FROM ${nomeTabela}
           ${parametrosBusca.restricao}
+          ${order}
         `;
         const rows = await this.db.conn().query(sql, parametrosBusca.valores);
+
         return rows;
     }
     
@@ -114,7 +120,7 @@ export class MysqlDataBase implements IDataBase {
         const camposRestricao: string[] = [];
         const valores: any[] = [];
         const order: string[] = [];
-
+        
         params.forEach(function (item) {
 
           item.condition= item.condition === undefined ? "=": item.condition;
