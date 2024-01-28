@@ -606,8 +606,8 @@ components:
                 type: number
                 format: integer
                 example: 1
-              cartao:
-                $ref: '#/components/schemas/Cartao'
+              payer:
+                $ref: '#/components/schemas/Payer'
   schemas:
     Auth:
       properties:
