@@ -165,7 +165,7 @@ A porta para para o ambiente externo está na 30336 e referenciada para o ambien
 
 ### Link do Video no Youtube
 
-https://youtu.be/ZM_izHBFEX8
+https://youtu.be/b9Ba6yJ4wlA
 
 ### Para atualizar a aplicação
 
