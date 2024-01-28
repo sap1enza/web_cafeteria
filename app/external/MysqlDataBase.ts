@@ -15,19 +15,17 @@ export class MysqlDataBase implements IDataBase {
     
 
     constructor(){
-        //super();
         this.db = new MysqlConnection();
     }
 
     async store(nomeTabela: string, parametros: ParametroBd[]) {
       const nomesCampos: string[] = [];
-      const Valores: string[] = [];
+      const valores: string[] = [];
       const alias: string[] = [];
-      // const valores: Record<string, any> = {};
 
       parametros.forEach(function (item) {
         nomesCampos.push(item.campo);
-        Valores.push(item.valor);
+        valores.push(item.valor);
         alias.push("?");
       });
 
@@ -37,11 +35,10 @@ export class MysqlDataBase implements IDataBase {
         VALUES 
         (${alias.join(",")})
         `;
-        
-      const rows = await this.db.conn().query(sql, Valores);
-      return rows;
-        //return await this.db.conn().query(query, data);
+
+      return await this.db.conn().query(sql, valores);
     }
+
     async update(nomeTabela: string, campos: ParametroBd[] | null, parametros: ParametroBd[]) {
         const parametrosBusca = this.prepararParametrosBusca(parametros);
 
@@ -60,10 +57,11 @@ export class MysqlDataBase implements IDataBase {
           ${parametrosBusca.restricao}
         `;
         nomesValores.push(parametrosBusca.valores);
-      
+        //console.log(sql);
         const rows = await this.db.conn().query(sql, nomesValores);
         return rows;
     }
+
     async delete(nomeTabela: string, parametros: ParametroBd[]) {
         const parametrosBusca = this.prepararParametrosBusca(parametros);
         const sql = `
@@ -73,9 +71,7 @@ export class MysqlDataBase implements IDataBase {
         const rows = await this.db.conn().query(sql, parametrosBusca.valores);
         return rows;
     }
-    // async find(query: string) {
-    //     return await this.db.conn().query(query);
-    // }
+    
     async query(query: string) {
         return await this.db.conn().query(query)
     }
