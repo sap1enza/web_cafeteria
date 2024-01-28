@@ -10,18 +10,24 @@ class Cliente{
         readonly email?: string, 
         readonly cpf_cnpj? : string
     ) {
+        
         if (name==null || name=="") {
             throw new BadRequestError("Nome do cliente é obrigatório.");
         }
         if (email==null || email=="") {
             throw new BadRequestError("E-mail do cliente é obrigatório.");
         }
+        
+        this.email = email.toLocaleLowerCase();
+
         if (!this.isValidEmail()) {
             throw new BadRequestError("E-mail do cliente é inválido.");
         }
+
         if (cpf_cnpj==null || cpf_cnpj=="") {
             throw new BadRequestError("CPF do cliente é obrigatório.");
         }
+        
         this.cpf_cnpj = String(cpf_cnpj).replace(".", "").replace("-", "").replace(".", "");
 
         if (!this.isValidCpf()) {

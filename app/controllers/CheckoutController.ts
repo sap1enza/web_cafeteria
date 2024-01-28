@@ -10,6 +10,7 @@ import { CheckoutPagamento } from '../cases/checkoutPagamento';
 import { PedidoCasoDeUso } from '../cases/pedidoCasodeUso';
 import { StatusCheckout } from '../entity/enum/statusCheckout';
 import BadRequestError from '../application/exception/BadRequestError';
+import ResponseErrors from '../adapters/ResponseErrors';
 
 
 class CheckoutController {
@@ -39,11 +40,7 @@ class CheckoutController {
             );
             response.status(HttpStatus.OK).json(ResponseAPI.data(checkout));
         } catch(err) {
-            if (err instanceof BadRequestError) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            } else if (err instanceof Error) {
-                response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            }
+            ResponseErrors.err(response, err);
         } 
     }
 
@@ -74,7 +71,7 @@ class CheckoutController {
             
             response.status(HttpStatus.OK).json(ResponseAPI.data(checkout));
         } catch (err) {
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err));
+            ResponseErrors.err(response, err);
         }
     }
 
@@ -95,10 +92,7 @@ class CheckoutController {
             );
             response.status(HttpStatus.OK).json(ResponseAPI.data(checkout));
         } catch (err) {
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .json(
-                ResponseAPI.error(err.message)
-            );
+            ResponseErrors.err(response, err);
         }
     }
 

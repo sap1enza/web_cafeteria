@@ -6,6 +6,8 @@ import Categoria from '../entity/categoria';
 import CategoriaRepository from '../gateways/CategoriaRepository';
 import { IDataBase } from '../interfaces/IDataBase';
 import { ProdutoCasoDeUso } from '../cases/produtoCasodeUso';
+import BadRequestError from '../application/exception/BadRequestError';
+import ResponseErrors from '../adapters/ResponseErrors';
 
 
 class ProdutoController{
@@ -13,14 +15,12 @@ class ProdutoController{
      * 
      */
      public repository: ProdutoRepository;
-     private _dbconnection: IDataBase;
      public categoryRepository: CategoriaRepository;
 
      /**
       * 
       */
      constructor(dbconnection: IDataBase) {
-        this._dbconnection = dbconnection;
          this.repository = new ProdutoRepository(dbconnection);
          this.categoryRepository = new CategoriaRepository(dbconnection);
      }
@@ -35,7 +35,7 @@ class ProdutoController{
              let data = await ProdutoCasoDeUso.getAllProdutos(request.query,this.repository);
              response.status(HttpStatus.OK).json(ResponseAPI.list(data));
          } catch(err) {
-                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message)); 
+            ResponseErrors.err(response, err);
          }
      }
 
@@ -45,15 +45,13 @@ class ProdutoController{
       * @param response 
       */
      public store = async (request, response) => {
-    
-            try {
-                const data = await ProdutoCasoDeUso.criarProduto(request,this.categoryRepository,this.repository);
-                response.status(HttpStatus.OK).json(ResponseAPI.data(data));
+        try {
+            const data = await ProdutoCasoDeUso.criarProduto(request,this.categoryRepository,this.repository);
+            response.status(HttpStatus.OK).json(ResponseAPI.data(data));
 
-            } catch(err) {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
-            }
-
+        } catch(err) {
+            ResponseErrors.err(response, err);
+        }
      }
  
      /**
@@ -67,7 +65,7 @@ class ProdutoController{
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
 
         } catch(err) {
-            response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message));
+            ResponseErrors.err(response, err);
         }
         
      }
@@ -80,15 +78,12 @@ class ProdutoController{
      public show = async (request, response) => {
          try {
              if (typeof request.params.id == 'undefined') {
-                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
+                 throw new BadRequestError("ID do registro é requerido.");
              }
              let data = await ProdutoCasoDeUso.encontrarProdutoPorId(request.params.id,this.repository);
              response.status(HttpStatus.OK).json(ResponseAPI.data(data));
          } catch (err) {
-             response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-             .json(
-                 ResponseAPI.error(err.message)
-             );
+            ResponseErrors.err(response, err);
          }
      }
  
@@ -99,16 +94,13 @@ class ProdutoController{
       */
      public delete = async (request, response) => {
          try {
-             if (typeof request.params.id == 'undefined') {
-                 response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID do registro é requerido."));
-             }
-             let data = await ProdutoCasoDeUso.deleteProduto(request.params.id, this.repository);
+            if (typeof request.params.id == 'undefined') {
+                throw new BadRequestError("ID do registro é requerido.");
+            }
+             await ProdutoCasoDeUso.deleteProduto(request.params.id, this.repository);
              response.status(HttpStatus.NO_CONTENT).json({});
          } catch (err) {
-             response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-             .json(
-                 ResponseAPI.error(err.message)
-             );
+            ResponseErrors.err(response, err);
          }
      }
 
@@ -119,18 +111,16 @@ class ProdutoController{
       */
      public getByidCategory = async (request, response) => {
         try {
+            
             if (typeof request.params.category_id  == 'undefined' || request.params.category_id == "") {
-                response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.inputError("id", "ID da Categoria é requerido."));
+                throw new BadRequestError("ID da Categoria é requerido.");
             }
             let data = await ProdutoCasoDeUso.findByCategory(request.params.category_id, this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .json(
-                ResponseAPI.error(err.message)
-            );
+            ResponseErrors.err(response, err);
         }
-}
+    }
 }
 
 export default ProdutoController;

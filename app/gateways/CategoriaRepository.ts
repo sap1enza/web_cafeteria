@@ -3,12 +3,9 @@ import IRepository from "../interfaces/IRepository";
 import { IDataBase } from "../interfaces/IDataBase";
 
 class CategoriaRepository implements IRepository {
-    public db: IDataBase;
 
-    constructor(database: IDataBase) {
-        // super(database);
-        this.db = database;
-    }
+    constructor(readonly db: IDataBase) {}
+    
     private nomeTabela = "categoria";
 
     async getAll(params) {
@@ -46,24 +43,13 @@ class CategoriaRepository implements IRepository {
             this.nomeTabela,
             [{ campo: "name", valor: params.name }, { campo: "modified", valor: new Date() }],
             [{ campo: "id", valor: id }]);
-        return new Categoria(params.name, id,);
+        return new Categoria(params.name, id);
     }
 
     async store(params: Categoria) {
         let data =await this.db.store(
             this.nomeTabela,
             [{ campo: "name", valor: params.name }, { campo: "created", valor:  new Date()}, { campo: "modified", valor: new Date() }]);
-        
-        // let data = await this.db.store(
-        //     `INSERT INTO categoria 
-        //         (name,created, modified) 
-        //      VALUES 
-        //         (
-        //             ?,
-        //             NOW(), 
-        //             NOW()
-        //         );
-        //     `, [params.name], new Date());
         return new Categoria(
             params.name,
             parseInt(data.insertId)

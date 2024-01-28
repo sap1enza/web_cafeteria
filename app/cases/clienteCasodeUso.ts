@@ -19,28 +19,39 @@ export class ClienteCasoDeUso{
         return await clienteRepositorio.store(cliente);
     }
 
-    static async atualizarCliente(cliente: Cliente, idCliente, clienteRepositorio: ICliente) {
-        let dataCliente = await clienteRepositorio.findById(idCliente);
+    static async atualizarCliente(cliente: Cliente, id, clienteRepositorio: ICliente) {
+        let dataCliente = await clienteRepositorio.findById(id);
 
         if (dataCliente == null) {
             throw new BadRequestError("Cliente não encontrado.");
         }
 
-        cliente = await clienteRepositorio.update(cliente, idCliente);
+        if (dataCliente['cpf_cnpj'] != cliente.cpf_cnpj) {
+            let cpf_cnpj = await clienteRepositorio.findByCPF(cliente.cpf_cnpj);
+            if (cpf_cnpj) {
+                throw new BadRequestError("CPF ou CNPJ já cadastrado.");
+            }
+        }
+
+        if (dataCliente['email'].toLocaleLowerCase() != cliente.email.toLocaleLowerCase()) {
+            let email = await clienteRepositorio.findByEmail(cliente.email);
+            if (email) {
+                throw new BadRequestError("E-mail já cadastrado.");
+            }
+        }
+
+        cliente = await clienteRepositorio.update(cliente, id);
         return cliente;
     }
-    static async encontrarClientePorId(idCliente, clienteRepositorio: ICliente){
-        const cliente = await clienteRepositorio.findById(idCliente);
-        return cliente;
+    static async encontrarClientePorId(id, clienteRepositorio: ICliente){
+        return await clienteRepositorio.findById(id);
     }
 
-    static async encontrarClientePorCPF(idCliente, clienteRepositorio: ICliente){
-        const cliente = await clienteRepositorio.findByCPF(idCliente);
-        return cliente;
+    static async encontrarClientePorCPF(id, clienteRepositorio: ICliente){
+        return await clienteRepositorio.findByCPF(id);
     }
-    static async deleteCliente(idCliente, clienteRepositorio: ICliente){
-        const cliente = await clienteRepositorio.delete(idCliente);
-        return cliente;
+    static async deleteCliente(id, clienteRepositorio: ICliente){
+        return await clienteRepositorio.delete(id);
     }
 
 }

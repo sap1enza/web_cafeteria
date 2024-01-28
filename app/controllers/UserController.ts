@@ -3,6 +3,7 @@ import ResponseAPI from "../adapters/ResponseAPI"
 import UsuarioCasoDeUso from '../cases/usuarioCasoDeUso';
 import User from '../entity/user';
 import { IDataBase } from '../interfaces/IDataBase';
+import ResponseErrors from '../adapters/ResponseErrors';
 
 export default class UserController{
 
@@ -18,8 +19,7 @@ export default class UserController{
             response.status(HttpStatus.OK).send(ResponseAPI.data(token));
 
         } catch (err) {
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .send(ResponseAPI.error(err.message));
+            ResponseErrors.err(response, err);
         }
     }
 }

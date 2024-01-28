@@ -5,6 +5,8 @@ import CategoriaRepository from '../gateways/CategoriaRepository';
 import Categoria from '../entity/categoria';
 import { IDataBase } from "../interfaces/IDataBase";
 import { CategoriaCasoDeUso } from '../cases/categoriaCasodeUso';
+import BadRequestError from '../application/exception/BadRequestError';
+import ResponseErrors from '../adapters/ResponseErrors';
 
 
 
@@ -13,15 +15,13 @@ import { CategoriaCasoDeUso } from '../cases/categoriaCasodeUso';
     /**
      * 
      */
-    private _dbconnection: IDataBase;
     private repository: CategoriaRepository;
 
     /**
      * 
      */
     constructor(dbconnection: IDataBase) {
-        this._dbconnection = dbconnection;
-        this.repository = new CategoriaRepository(this._dbconnection);
+        this.repository = new CategoriaRepository(dbconnection);
     }
 
     /**
@@ -31,14 +31,10 @@ import { CategoriaCasoDeUso } from '../cases/categoriaCasodeUso';
      */
     public all = async (request: Request, response: Response) => {
         try {
-            //let data = await this.repository.getAll(request.query);
-            //const categoriaRepo = new CategoriaRepository( this._dbconnection );
             const data= await CategoriaCasoDeUso.getAllCategorias(request.query, this.repository)
             response.status(HttpStatus.OK).json(ResponseAPI.list(data));
         } catch (err) {
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-
-            .send(ResponseAPI.error(err.message));
+            ResponseErrors.err(response, err);
         }
     }
 
@@ -50,15 +46,10 @@ import { CategoriaCasoDeUso } from '../cases/categoriaCasodeUso';
     public store = async (request: Request, response: Response) => {
         try {
             let categoria = new Categoria(request.body.name);
-            try {
-                let data = await CategoriaCasoDeUso.criarCategoria(categoria,this.repository);
-                response.status(HttpStatus.OK).json(ResponseAPI.data(data));
-            } catch(err) {
-                    response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            }
-
+            let data = await CategoriaCasoDeUso.criarCategoria(categoria, this.repository);
+            response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
-            response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message)); 
+            ResponseErrors.err(response, err);
         } 
     }
 
@@ -70,15 +61,10 @@ import { CategoriaCasoDeUso } from '../cases/categoriaCasodeUso';
     public update = async (request: Request, response: Response) => {
         try {
             let categoria = new Categoria(request.body.name);
-            try {
-                let data = await CategoriaCasoDeUso.atualizarCategoria(categoria, request.params.id, this.repository);
-                response.status(HttpStatus.OK).json(ResponseAPI.list(data));
-            } catch(err) {
-                    response.status(HttpStatus.INTERNAL_SERVER_ERROR).json(ResponseAPI.error(err.message)); 
-            }
-            
+            let data = await CategoriaCasoDeUso.atualizarCategoria(categoria, request.params.id, this.repository);
+            response.status(HttpStatus.OK).json(ResponseAPI.list(data));
         } catch (err) {
-            response.status(HttpStatus.BAD_REQUEST).json(ResponseAPI.error(err.message)); 
+            ResponseErrors.err(response, err);
         } 
     }
 
@@ -95,8 +81,7 @@ import { CategoriaCasoDeUso } from '../cases/categoriaCasodeUso';
             let data = await CategoriaCasoDeUso.encontrarCategoriaPorId(request.params.id,this.repository);
             response.status(HttpStatus.OK).json(ResponseAPI.data(data));
         } catch (err) {
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .send(ResponseAPI.error(err.message));
+            ResponseErrors.err(response, err);
         }
     }
 
@@ -113,10 +98,7 @@ import { CategoriaCasoDeUso } from '../cases/categoriaCasodeUso';
             await CategoriaCasoDeUso.deleteCategoria(request.params.id,this.repository);
             response.status(HttpStatus.NO_CONTENT).json({});
         } catch (err) {
-            response.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .json(
-                ResponseAPI.error(err.message)
-            );
+            ResponseErrors.err(response, err);
         }
     }
 }
