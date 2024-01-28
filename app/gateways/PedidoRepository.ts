@@ -48,7 +48,6 @@ class PedidoRepository implements IPedido{
             { campo: "created", valor:  new Date()}, 
             { campo: "modified", valor: new Date() }]);
         
-            console.log(data);
         return new Pedido(
             pedido.cliente,
             pedido.getStatus(),

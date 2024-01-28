@@ -57,7 +57,6 @@ export class MysqlDataBase implements IDataBase {
           ${parametrosBusca.restricao}
         `;
         nomesValores.push(parametrosBusca.valores);
-        //console.log(sql);
         const rows = await this.db.conn().query(sql, nomesValores);
         return rows;
     }
