@@ -163,9 +163,17 @@ A porta para para o ambiente externo está na 30336 e referenciada para o ambien
 
 ![plot](arquitetura.jpg)
 
-### Link do Video TECH CHALLENGE no Youtube
+#### - ARQUITETURA TECH CHALLENGE
 
-https://youtu.be/b9Ba6yJ4wlA
+Aqui iremos mostrar o desenho da arquitetura e como desenvolvemos a solução.
+
+https://www.loom.com/share/d3dee296f478469498f8517de8f3d615?sid=f3df19b9-9f5b-4999-a402-cc458089aa9d
+
+#### - KUBERNETS TECH CHALLENGE
+
+Nessa parte estaremos mostrando o projeto em execução tanto no POSTMAN quando no SGBD e o autoescaling da aplicação e a permanencia dos dados mesmo quando a pod foi excluida e reiniciada novamente.
+
+https://www.loom.com/share/88256ad46d1842c8905884578b9627bd?sid=d1436399-221c-481e-83a1-cb232861e02b
 
 ### Para atualizar a aplicação
 
