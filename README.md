@@ -163,6 +163,10 @@ A porta para para o ambiente externo está na 30336 e referenciada para o ambien
 
 ![plot](arquitetura.jpg)
 
+### Link do Video no Youtube
+
+https://youtu.be/ZM_izHBFEX8
+
 ### Para atualizar a aplicação
 
 DEVE ser criada uma nova imagem no DockerHub e atualizar o arquivo de deployment no diretório kubernets/api/ arquivo dep-api.yaml
