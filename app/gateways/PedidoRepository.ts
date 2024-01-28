@@ -40,7 +40,7 @@ class PedidoRepository implements IPedido{
     }
 
     public store = async(pedido: Pedido) => {
-        console.log(pedido.cliente.id, pedido.getStatus(), pedido.getValorTotal());
+        
         let data = await this.db.store(
             this.nomeTabela,
             [{ campo: "customer_id", valor: pedido.cliente.id }, 
@@ -49,7 +49,7 @@ class PedidoRepository implements IPedido{
             { campo: "created", valor:  new Date()}, 
             { campo: "modified", valor: new Date() }]);
         
-            console.log(data);
+          
         return new Pedido(
             pedido.cliente,
             pedido.getStatus(),

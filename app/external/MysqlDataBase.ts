@@ -37,8 +37,7 @@ export class MysqlDataBase implements IDataBase {
         VALUES 
         (${alias.join(",")})
         `;
-        console.log(sql);
-        console.log(Valores);
+        
       const rows = await this.db.conn().query(sql, Valores);
       return rows;
         //return await this.db.conn().query(query, data);
@@ -61,7 +60,7 @@ export class MysqlDataBase implements IDataBase {
           ${parametrosBusca.restricao}
         `;
         nomesValores.push(parametrosBusca.valores);
-        //console.log(sql);
+      
         const rows = await this.db.conn().query(sql, nomesValores);
         return rows;
     }

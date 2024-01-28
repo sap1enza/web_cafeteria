@@ -16,7 +16,7 @@ import BadRequestError from "../application/exception/BadRequestError";
 export class CheckoutPagamento {
 
     static instance = async(request, repositorioPedido: IPedido ) : Promise<Checkout> => {
-        console.log(request.body.payment_method_id);
+        
         if ([PaymentoMethods.PIX, PaymentoMethods.CARD_DEBIT].indexOf(request.body.payment_method_id) < 0) {
             throw new BadRequestError(`Metodo de pagamento ${request.body.payment_method_id} não é aceito ou não encontrado.`);
         }
